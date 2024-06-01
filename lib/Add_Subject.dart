@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:app1/Sections.dart';
-import 'package:app1/ui_components/util.dart';
+import 'package:attend_ease/Sections.dart';
+import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -74,7 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
         (current_cycle == "Even")) {
       sem = [2, 4];
       dropdownvalue_semester = 2;
-      setState(() {});
+      setState(() {
+        print("sdfw");
+      });
     }
   }
 
