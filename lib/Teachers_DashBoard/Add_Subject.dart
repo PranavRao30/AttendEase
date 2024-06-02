@@ -359,72 +359,67 @@ class _MyHomePageState extends State<MyHomePage> {
 
               // Submit
               ElevatedButton(
-                 
                   onPressed: () {
                     print(
                         "Course_name: ${course_name.text.toString()} \nCourse Code: ${course_code.text.toString()}");
                   },
                   child: Text("ADD")),
             ],
-
           ),
         ));
   }
 }
-
-
-
 
 // Separate Widgets of Course Details
 class Get_Course_Name extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Course Name:",
-                      style: font_details(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 23),
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(radius_12()),
-                        color: Colors.white60,
-                      ),
-                      child: TextField(
-                        // Extracting course name from the text field
-                        controller: course_name,
+      padding: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            "Course Name:",
+            style: font_details(),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 23),
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(radius_12()),
+              color: Colors.white60,
+            ),
+            child: TextField(
+              // Extracting course name from the text field
+              controller: course_name,
 
-                        // Restriction to alphabets
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
-                        ],
+              // Restriction to alphabets
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+              ],
 
-                        decoration: InputDecoration(
-                            hintText: "Enter Course Name..",
-                            // Initial border
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )),
+              decoration: InputDecoration(
+                  hintText: "Enter Course Name..",
+                  // Initial border
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      )),
 
-                            // After selecting
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Colors.purple,
-                                ))),
-                      ),
-                    ),
-                  ],
-                ),
-              );
+                  // After selecting
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.purple,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
