@@ -427,23 +427,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
 
                         decoration: InputDecoration(
-
-                            // Password Visibility
-
-                            // suffixIcon: InkWell(
-                            //     child: Icon(Icons.remove_red_eye),
-                            //     onTap: () {
-                            //       if (c % 2 == 0) {
-                            //         c++;
-                            //         flag = false;
-                            //         setState(() {});
-                            //       }
-                            //       else {
-                            //         c++;
-                            //         flag = true;
-                            //         setState(() {});
-                            //       }
-                            //     }),
                             hintText: "Enter Course Code..",
 
                             // Initial border
