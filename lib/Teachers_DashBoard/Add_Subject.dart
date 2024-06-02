@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/widgets.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -46,6 +47,42 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// Variables Required
+
+var branch_codes = [
+  'AE',
+  'AIDS',
+  'AIML',
+  'BT',
+  'CH',
+  'CSBS',
+  'CSDS',
+  'CSE',
+  'CSIOT',
+  'CV',
+  'EC',
+  'EEE',
+  'EI',
+  'ET',
+  'IEM',
+  'ISE',
+  'MD',
+  'ME'
+];
+
+var dropdownvalue_branch = "CSE";
+var dropdownvalue_semester = 2;
+var current_cycle = "Even";
+var dropdownvalue_section = 'A';
+// var semester = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+var sem = [2, 4, 6, 8];
+var section = ['A', 'B'];
+var course_name = TextEditingController();
+var course_code = TextEditingController();
+var classes_held = TextEditingController();
+
+bool enable_section = false;
+
 class _MyHomePageState extends State<MyHomePage> {
   check(current_cycle) {
     if (current_cycle == "Even") {
@@ -74,48 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
         (current_cycle == "Even")) {
       sem = [2, 4];
       dropdownvalue_semester = 2;
-      setState(() {
-        print("sdfw");
-      });
+      setState(() {});
     }
   }
 
-  var branch_codes = [
-    'AE',
-    'AIDS',
-    'AIML',
-    'BT',
-    'CH',
-    'CSBS',
-    'CSDS',
-    'CSE',
-    'CSIOT',
-    'CV',
-    'EC',
-    'EEE',
-    'EI',
-    'ET',
-    'IEM',
-    'ISE',
-    'MD',
-    'ME'
-  ];
-
-  var dropdownvalue_branch = "CSE";
-  var dropdownvalue_semester = 2;
-  var current_cycle = "Even";
-  var dropdownvalue_section = 'A';
-  // var semester = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
-  var sem = [2, 4, 6, 8];
-  var section = ['A', 'B'];
-  var course_name = TextEditingController();
-  var course_code = TextEditingController();
-  var classes_held = TextEditingController();
-
-  bool enable_section = false;
-
-  // var flag = true;
-  // var c = 0;
+// Start
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,7 +291,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         if (dropdownvalue_branch != "CSIOT" ||
                                             dropdownvalue_branch != "AIDS" ||
                                             dropdownvalue_branch != "CSDS") {
-                                         
                                           select_sections(dropdownvalue_branch,
                                               current_cycle);
                                         }
@@ -351,153 +350,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               // Course Name
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Course Name:",
-                      style: font_details(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 23),
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(radius_12()),
-                        color: Colors.white60,
-                      ),
-                      child: TextField(
-                        // Extracting course name from the text field
-                        controller: course_name,
-
-                        // Restriction to alphabets
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
-                        ],
-
-                        decoration: InputDecoration(
-                            hintText: "Enter Course Name..",
-                            // Initial border
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )),
-
-                            // After selecting
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Colors.purple,
-                                ))),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Get_Course_Name(),
 
               // Course code
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Course Code:",
-                      style: font_details(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 27),
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(radius_12()),
-                        color: Colors.white60,
-                      ),
-                      child: TextField(
-                        // obscureText: flag,
-                        // obscuringCharacter: "*",
-
-                        // Extracting course code
-                        controller: course_code,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'[a-zA-Z0-9]'))
-                        ],
-
-                        decoration: InputDecoration(
-                            hintText: "Enter Course Code..",
-
-                            // Initial border
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )),
-
-                            // Border after selecting
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Colors.purple,
-                                ))),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Get_Course_Code(),
 
               // Classes Held
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Classes Held:",
-                      style: font_details(),
-                    ),
-                    //
-                    Container(
-                      margin: EdgeInsets.only(left: 23),
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(radius_12()),
-                        color: Colors.white60,
-                      ),
-                      child: TextField(
-                        // Extracting course name from the text field
-                        controller: classes_held,
+              Get_Classes_Held(),
 
-                        // Restriction to alphabets
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        keyboardType: TextInputType.number,
-
-                        decoration: InputDecoration(
-                            hintText: "Enter number of classes held..",
-                            // Initial border
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                )),
-
-                            // After selecting
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(radius_12()),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Colors.purple,
-                                ))),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Submit
               ElevatedButton(
                   onPressed: () {
                     print(
@@ -507,5 +368,166 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ));
+  }
+}
+
+// Separate Widgets of Course Details
+class Get_Course_Name extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            "Course Name:",
+            style: font_details(),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 23),
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(radius_12()),
+              color: Colors.white60,
+            ),
+            child: TextField(
+              // Extracting course name from the text field
+              controller: course_name,
+
+              // Restriction to alphabets
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+              ],
+
+              decoration: InputDecoration(
+                  hintText: "Enter Course Name..",
+                  // Initial border
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      )),
+
+                  // After selecting
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.purple,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Get_Course_Code extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            "Course Code:",
+            style: font_details(),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 27),
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(radius_12()),
+              color: Colors.white60,
+            ),
+            child: TextField(
+              // obscureText: flag,
+              // obscuringCharacter: "*",
+
+              // Extracting course code
+              controller: course_code,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))
+              ],
+
+              decoration: InputDecoration(
+                  hintText: "Enter Course Code..",
+
+                  // Initial border
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      )),
+
+                  // Border after selecting
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.purple,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Get_Classes_Held extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            "Classes Held:",
+            style: font_details(),
+          ),
+          //
+          Container(
+            margin: EdgeInsets.only(left: 23),
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(radius_12()),
+              color: Colors.white60,
+            ),
+            child: TextField(
+              // Extracting course name from the text field
+              controller: classes_held,
+
+              // Restriction to alphabets
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              keyboardType: TextInputType.number,
+
+              decoration: InputDecoration(
+                  hintText: "Enter number of classes held..",
+                  // Initial border
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      )),
+
+                  // After selecting
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(radius_12()),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.purple,
+                      ))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
