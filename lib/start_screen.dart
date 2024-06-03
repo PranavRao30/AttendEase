@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
 class StartScreen extends StatelessWidget {
-  const StartScreen(this.getStarted, {super.key});
-  
-  final void Function() getStarted;
+  const StartScreen({super.key});
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -20,14 +19,18 @@ class StartScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 30),
-          // Use a placeholder in case the image fails to load
           Image.asset(
             'assets/images/MAD.png',
             width: 300,
           ),
           const SizedBox(height: 50),
           OutlinedButton.icon(
-            onPressed: getStarted,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage(title: 'AttendEase')),
+              );
+            },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
             ),
