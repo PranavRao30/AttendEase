@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:attend_ease/start_screen.dart';
-import 'package:attend_ease/gradient_container.dart'; 
+import 'package:attend_ease/gradient_container.dart';
 
 void main() {
   runApp(
@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: GradientContainerWithStartScreen(),
       ),
@@ -27,12 +28,9 @@ class GradientContainerWithStartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GradientContainer(
-      Color.fromARGB(255, 255, 255, 255),
-      Color.fromARGB(255, 150, 67, 183),
-      child: StartScreen(
-        () {
-        },
-      ),
+      const Color.fromARGB(255, 255, 255, 255),
+      const Color.fromARGB(255, 150, 67, 183),
+      child: StartScreen(),
     );
   }
 }
