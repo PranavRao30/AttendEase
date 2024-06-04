@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
