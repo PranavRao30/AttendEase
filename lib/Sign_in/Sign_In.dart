@@ -30,7 +30,9 @@ class GoogleSignInProvider extends ChangeNotifier {
 
       // Retrieve the user's display name
       final userName = userCredential.user!.displayName;
+      final emaiName = userCredential.user!.displayName;
       print('User name: $userName');
+
 
       notifyListeners();
     } catch (error) {
