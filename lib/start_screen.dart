@@ -1,6 +1,7 @@
-
+import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:flutter/material.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
+import 'package:provider/provider.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -27,10 +28,18 @@ class StartScreen extends StatelessWidget {
           const SizedBox(height: 50),
           OutlinedButton.icon(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
-              );
+              // calling c
+              final provider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.googleLogin();
+              if (provider.user != null) {
+                // User is signed in
+                // Navigate to the next screen or perform any other action
+              }
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
+              // );
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
