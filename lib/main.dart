@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/gradient_container.dart';
 
-Future main() async  {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyAssxds3OW3obpQorBTiqDfFJv_4BXN2Vo",
+          appId: "1:814534653957:android:d087e6d377e21aaa0b446c",
+          messagingSenderId: "814534653957",
+          projectId: "attendease-f1528"));
   runApp(
     const MyApp(),
   );
