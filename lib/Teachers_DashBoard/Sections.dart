@@ -1,3 +1,5 @@
+import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+
 var sections = Map();
 var sem;
 select_sections(dropdownvalue_branch, current_cycle) {
@@ -10,7 +12,6 @@ select_sections(dropdownvalue_branch, current_cycle) {
 
   // print(sections);
 }
-
 
 // Getting Sections
 get_sections(dropdownvalue_branch, c) {
@@ -41,8 +42,6 @@ get_sections(dropdownvalue_branch, c) {
   }
 }
 
-
-
 new_Arrival(dropdownvalue_branch, current_cycle) {
   if ((dropdownvalue_branch == "CSIOT" ||
           dropdownvalue_branch == "AIDS" ||
@@ -57,6 +56,18 @@ new_Arrival(dropdownvalue_branch, current_cycle) {
     sem = [1, 3];
     return sem;
   }
+}
+
+check_duplicates(
+    add_course_code, sem_sec_branch, Course_Code, sections_branch_list) {
+  for (int i = 0; i < Course_Code.length; i++) {
+    if (add_course_code == Course_Code[i]) {
+      if (sections_branch_list[i] == sem_sec_branch) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 void main() {

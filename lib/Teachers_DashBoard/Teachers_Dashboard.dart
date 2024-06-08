@@ -34,21 +34,10 @@ class MyApp extends StatelessWidget {
 var flag = 0;
 // Variables
 var Course_Names = [
-  // "Database Management System",
-  // "Operating Systems",
-  // "Data Structures using C",
-  // "Cryptography",
-  // "Principles of Programming in C",
-  // "Analysis and Design of Algorithms"
 ];
 
 var Course_Code = [
-  // "23CS3PCDBM",
-  // "23CS4PCOPS",
-  // "23CS3PCDST",
-  // "23CS4PCCRP",
-  // "23CS2PCPOP",
-  // "23CS2PCADA"
+
 ];
 
 var classesHeld = [];
