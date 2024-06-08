@@ -6,11 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp1());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp1 extends StatelessWidget {
+  const MyApp1({super.key});
 
   // This widget is the root of your application.
   @override
@@ -211,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp1()));
+                        MaterialPageRoute(builder: (context) => MyApp2()));
                   },
                   child: Icon(
                     Icons.add,

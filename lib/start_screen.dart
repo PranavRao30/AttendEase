@@ -1,3 +1,4 @@
+import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
@@ -28,7 +29,7 @@ class StartScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MyHomePage(title: 'AttendEase')),
+                MaterialPageRoute(builder: (context) => MyApp1()),
               );
             },
             style: OutlinedButton.styleFrom(

@@ -15,11 +15,11 @@ import 'package:flutter/widgets.dart';
 import 'package:info_popup/info_popup.dart';
 
 void main() {
-  runApp(const MyApp1());
+  runApp(const MyApp2());
 }
 
-class MyApp1 extends StatelessWidget {
-  const MyApp1({super.key});
+class MyApp2 extends StatelessWidget {
+  const MyApp2({super.key});
 
   // This widget is the root of your application.
   @override
@@ -520,7 +520,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MyApp(),
+                                  builder: (context) => MyApp1(),
                                 ));
                           } else {
                             // Text(
@@ -556,7 +556,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MyApp(),
+                                  builder: (context) => MyApp1(),
                                 ));
                           } else {
                             // Text(
