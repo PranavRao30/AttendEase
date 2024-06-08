@@ -6,11 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
 void main() {
-  runApp(const MyApp1());
+  runApp(const Teachers_Dashboard());
 }
 
-class MyApp1 extends StatelessWidget {
-  const MyApp1({super.key});
+class Teachers_Dashboard extends StatelessWidget {
+  const Teachers_Dashboard({super.key});
 
   // This widget is the root of your application.
   @override
@@ -33,12 +33,9 @@ class MyApp1 extends StatelessWidget {
 
 var flag = 0;
 // Variables
-var Course_Names = [
-];
+var Course_Names = [];
 
-var Course_Code = [
-
-];
+var Course_Code = [];
 
 var classesHeld = [];
 var total_class = [18, 22, 26, 16, 23, 26];
@@ -210,8 +207,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp2()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => add_a_subjet()));
                   },
                   child: Icon(
                     Icons.add,
@@ -230,211 +229,212 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ]),
     );
+  }
+}
+// Separator
 
-    // Separator
+// separatorBuilder: (context, index) {
+//   return Divider(
+//     height: 30,
+//     // thickness: 0,
+//     // color: Colors.red,
+//   );
+// },
 
-    // separatorBuilder: (context, index) {
-    //   return Divider(
-    //     height: 30,
-    //     // thickness: 0,
-    //     // color: Colors.red,
-    //   );
-    // },
+// itemExtent: 100,
 
-    // itemExtent: 100,
+// List View
 
-    // List View
+// ListView(
+//   scrollDirection: Axis.horizontal,
+//   children: [
+//     Text(
+//       "A",
+//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+//     ),
 
-    // ListView(
-    //   scrollDirection: Axis.horizontal,
-    //   children: [
-    //     Text(
-    //       "A",
-    //       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-    //     ),
+//     Padding(padding: EdgeInsets.all(60)),
 
-    //     Padding(padding: EdgeInsets.all(60)),
+//     Text(
+//       "B",
+//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+//     ),
 
-    //     Text(
-    //       "B",
-    //       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-    //     ),
+//     Padding(padding: EdgeInsets.all(60)),
 
-    //     Padding(padding: EdgeInsets.all(60)),
+//     Text(
+//       "C",
+//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+//     ),
 
-    //     Text(
-    //       "C",
-    //       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-    //     ),
+//     Padding(padding: EdgeInsets.fromLTRB(60)),
 
-    //     Padding(padding: EdgeInsets.fromLTRB(60)),
+//     Text(
+//       "D",
+//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+//     ),
+//   ],
+// )
 
-    //     Text(
-    //       "D",
-    //       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-    //     ),
-    //   ],
-    // )
+// Columns and Rows, margin, border, inkWell,
 
-    // Columns and Rows, margin, border, inkWell,
+//  SingleChildScrollView(
+//     child: Column(children: [
+//   SingleChildScrollVColor.fromARGB(255, 37, 36, 36)  //       scrollDirection: Axis.horizontal,
+//       child: Row(
+//         children: [
+//         Container(
+//             height: 140,
+//             width: 300,
+//             decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: Colors.black,
+//                 width: 2,
+//               ),
+//               borderRadius: BorderRadius.circular(10),
+//             ),
 
-    //  SingleChildScrollView(
-    //     child: Column(children: [
-    //   SingleChildScrollVColor.fromARGB(255, 37, 36, 36)  //       scrollDirection: Axis.horizontal,
-    //       child: Row(
-    //         children: [
-    //         Container(
-    //             height: 140,
-    //             width: 300,
-    //             decoration: BoxDecoration(
-    //               border: Border.all(
-    //                 color: Colors.black,
-    //                 width: 2,
-    //               ),
-    //               borderRadius: BorderRadius.circular(10),
-    //             ),
+//             // Margin
+//             margin: EdgeInsets.all(35),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               crossAxisAlignment: CrossAxisAlignment.center,
 
-    //             // Margin
-    //             margin: EdgeInsets.all(35),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //               crossAxisAlignment: CrossAxisAlignment.center,
+//               // <WIDGET> allows to insert all widgets
+//               // <Text> means specific to Text widget.
 
-    //               // <WIDGET> allows to insert all widgets
-    //               // <Text> means specific to Text widget.
+//               children: <Widget>[
+//                 Text('A', style: TextStyle(fontSize: 100)),
+//                 InkWell(
+//                     onTap: () {
+//                       print("Pressed B");
+//                     },
+//                     child: Text('B', style: TextStyle(fontSize: 100))),
+//                 Text('C', style: TextStyle(fontSize: 100)),
+//               ],
+//             )),
+//         Container(
+//             height: 140,
+//             width: 300,
+//             decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: Colors.black,
+//                 width: 2,
+//               ),
+//               borderRadius: BorderRadius.circular(10),
+//             ),
 
-    //               children: <Widget>[
-    //                 Text('A', style: TextStyle(fontSize: 100)),
-    //                 InkWell(
-    //                     onTap: () {
-    //                       print("Pressed B");
-    //                     },
-    //                     child: Text('B', style: TextStyle(fontSize: 100))),
-    //                 Text('C', style: TextStyle(fontSize: 100)),
-    //               ],
-    //             )),
-    //         Container(
-    //             height: 140,
-    //             width: 300,
-    //             decoration: BoxDecoration(
-    //               border: Border.all(
-    //                 color: Colors.black,
-    //                 width: 2,
-    //               ),
-    //               borderRadius: BorderRadius.circular(10),
-    //             ),
+//             // Margin
+//             margin: EdgeInsets.all(35),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               crossAxisAlignment: CrossAxisAlignment.center,
 
-    //             // Margin
-    //             margin: EdgeInsets.all(35),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //               crossAxisAlignment: CrossAxisAlignment.center,
+//               // <WIDGET> allows to insert all widgets
+//               // <Text> means specific to Text widget.
 
-    //               // <WIDGET> allows to insert all widgets
-    //               // <Text> means specific to Text widget.
+//               children: <Widget>[
+//                 Text('A', style: TextStyle(fontSize: 100)),
+//                 InkWell(
+//                     onTap: () {
+//                       print("Pressed B");
+//                     },
+//                     child: Text('B', style: TextStyle(fontSize: 100))),
+//                 Text('C', style: TextStyle(fontSize: 100)),
+//               ],
+//             ))
+//       ])),
+//   Container(
+//       height: 140,
+//       width: 300,
+//       decoration: BoxDecoration(
+//         border: Border.all(
+//           color: Colors.black,
+//           width: 2,
+//         ),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
 
-    //               children: <Widget>[
-    //                 Text('A', style: TextStyle(fontSize: 100)),
-    //                 InkWell(
-    //                     onTap: () {
-    //                       print("Pressed B");
-    //                     },
-    //                     child: Text('B', style: TextStyle(fontSize: 100))),
-    //                 Text('C', style: TextStyle(fontSize: 100)),
-    //               ],
-    //             ))
-    //       ])),
-    //   Container(
-    //       height: 140,
-    //       width: 300,
-    //       decoration: BoxDecoration(
-    //         border: Border.all(
-    //           color: Colors.black,
-    //           width: 2,
-    //         ),
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
+//       // Margin
+//       margin: EdgeInsets.all(35),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         crossAxisAlignment: CrossAxisAlignment.center,
 
-    //       // Margin
-    //       margin: EdgeInsets.all(35),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
+//         // <WIDGET> allows to insert all widgets
+//         // <Text> means specific to Text widget.
 
-    //         // <WIDGET> allows to insert all widgets
-    //         // <Text> means specific to Text widget.
+//         children: <Widget>[
+//           Text('A', style: TextStyle(fontSize: 100)),
+//           InkWell(
+//               onTap: () {
+//                 print("Pressed B");
+//               },
+//               child: Text('B', style: TextStyle(fontSize: 100))),
+//           Text('C', style: TextStyle(fontSize: 100)),
+//         ],
+//       )),
+//   Container(
+//       height: 140,
+//       width: 300,
+//       decoration: BoxDecoration(
+//         border: Border.all(
+//           color: Colors.black,
+//           width: 2,
+//         ),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
 
-    //         children: <Widget>[
-    //           Text('A', style: TextStyle(fontSize: 100)),
-    //           InkWell(
-    //               onTap: () {
-    //                 print("Pressed B");
-    //               },
-    //               child: Text('B', style: TextStyle(fontSize: 100))),
-    //           Text('C', style: TextStyle(fontSize: 100)),
-    //         ],
-    //       )),
-    //   Container(
-    //       height: 140,
-    //       width: 300,
-    //       decoration: BoxDecoration(
-    //         border: Border.all(
-    //           color: Colors.black,
-    //           width: 2,
-    //         ),
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
+//       // Margin
+//       margin: EdgeInsets.all(35),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         crossAxisAlignment: CrossAxisAlignment.center,
 
-    //       // Margin
-    //       margin: EdgeInsets.all(35),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
+//         // <WIDGET> allows to insert all widgets
+//         // <Text> means specific to Text widget.
 
-    //         // <WIDGET> allows to insert all widgets
-    //         // <Text> means specific to Text widget.
+//         children: <Widget>[
+//           Text('A', style: TextStyle(fontSize: 100)),
+//           InkWell(
+//               onTap: () {
+//                 print("Pressed B");
+//               },
+//               child: Text('B', style: TextStyle(fontSize: 100))),
+//           Text('C', style: TextStyle(fontSize: 100)),
+//         ],
+//       )),
+//   Container(
+//       height: 140,
+//       width: 300,
+//       decoration: BoxDecoration(
+//         border: Border.all(
+//           color: Colors.black,
+//           width: 2,
+//         ),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
 
-    //         children: <Widget>[
-    //           Text('A', style: TextStyle(fontSize: 100)),
-    //           InkWell(
-    //               onTap: () {
-    //                 print("Pressed B");
-    //               },
-    //               child: Text('B', style: TextStyle(fontSize: 100))),
-    //           Text('C', style: TextStyle(fontSize: 100)),
-    //         ],
-    //       )),
-    //   Container(
-    //       height: 140,
-    //       width: 300,
-    //       decoration: BoxDecoration(
-    //         border: Border.all(
-    //           color: Colors.black,
-    //           width: 2,
-    //         ),
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
+//       // Margin
+//       margin: EdgeInsets.all(35),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         crossAxisAlignment: CrossAxisAlignment.center,
 
-    //       // Margin
-    //       margin: EdgeInsets.all(35),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
+//         // <WIDGET> allows to insert all widgets
+//         // <Text> means specific to Text widget.
 
-    //         // <WIDGET> allows to insert all widgets
-    //         // <Text> means specific to Text widget.
-
-    //         children: <Widget>[
-    //           Text('A', style: TextStyle(fontSize: 100)),
-    //           InkWell(
-    //               onTap: () {
-    //                 print("Pressed B");
-    //               },
-    //               child: Text('B', style: TextStyle(fontSize: 100))),
-    //           Text('C', style: TextStyle(fontSize: 100)),
-    //         ],
-    //       )),
-    // ]))
+//         children: <Widget>[
+//           Text('A', style: TextStyle(fontSize: 100)),
+//           InkWell(
+//               onTap: () {
+//                 print("Pressed B");
+//               },
+//               child: Text('B', style: TextStyle(fontSize: 100))),
+//           Text('C', style: TextStyle(fontSize: 100)),
+//         ],
+//       )),
+// ]))
 
 // Center(
 //           child: Image.asset('assets/images/f2.png',
@@ -442,31 +442,29 @@ class _MyHomePageState extends State<MyHomePage> {
 //         )
 // );
 
-    // ElevatedButton(
-    //   child: Text("click me"),
-    //   onPressed: () {
-    //     print("B is pressed");
-    //   },
-    //   onLongPress: () {
-    //     print("LP");
-    //   },
-    // ),
+// ElevatedButton(
+//   child: Text("click me"),
+//   onPressed: () {
+//     print("B is pressed");
+//   },
+//   onLongPress: () {
+//     print("LP");
+//   },
+// ),
 
-    // Center(
-    //     child: Container(
-    //   height: 100,
-    //   width: 100,
-    //   color: Colors.blue[400],
-    //   child: Center(
-    //     child: Text(
-    //       "Hello",
-    //       style: TextStyle(
-    //           fontSize: 20,
-    //           color: Colors.amberAccent,
-    //           fontWeight: FontWeight.bold,
-    //           backgroundColor: Colors.brown[700]),
-    //     ),
-    //   ),
-    // )),
-  }
-}
+// Center(
+//     child: Container(
+//   height: 100,
+//   width: 100,
+//   color: Colors.blue[400],
+//   child: Center(
+//     child: Text(
+//       "Hello",
+//       style: TextStyle(
+//           fontSize: 20,
+//           color: Colors.amberAccent,
+//           fontWeight: FontWeight.bold,
+//           backgroundColor: Colors.brown[700]),
+//     ),
+//   ),
+// )),
