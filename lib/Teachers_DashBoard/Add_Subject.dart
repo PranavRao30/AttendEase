@@ -109,7 +109,11 @@ bool enable_section = false;
 bool enable_Course = true;
 bool enable_manual_course_name = false;
 bool disable_dropdown_cse = true;
+
+// to catch the index of duplicate entry
 var position;
+
+var Section;
 
 class _MyHomePageState extends State<MyHomePage> {
   check(current_cycle) {
@@ -504,14 +508,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             !validate_course_code &&
                             !validate_course_name &&
                             dropdownvalue_branch != "CSE") {
-                          add_course_code = course_code.text.toString();
+                          Store_Course_Name = course_name.text.toString();
                           sem_sec_branch =
                               "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}";
 
                           if (!check_duplicates(add_course_code, sem_sec_branch,
                               Course_Code, sections_branch_list)) {
-                            Course_Names.add(course_name.text.toString());
-                            Course_Code.add(add_course_code);
+                            Course_Names.add(Store_Course_Name);
+                            Course_Code.add(Store_Course_Code);
                             classesHeld.add(
                                 "Classes Held: ${classes_held.text.toString()}");
 
@@ -519,7 +523,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
 
                             // Adding Data to firebase
-                            add_data();
+                            add_course_data();
 
                             // Navigating
                             Navigator.push(
@@ -559,7 +563,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
 
                             // Adding Data to firebase
-                            add_data();
+                            add_course_data();
 
                             Navigator.push(
                                 context,
@@ -567,10 +571,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   builder: (context) => Teachers_Dashboard(),
                                 ));
                           } else {
-                            // Text(
-                            //   "Course Already Exists!!",
-                            //   style: TextStyle(fontSize: 10, color: Colors.red),
-                            // );
                             print("D");
                           }
                         }
