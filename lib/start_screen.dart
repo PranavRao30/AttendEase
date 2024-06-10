@@ -27,19 +27,22 @@ class StartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 50),
           OutlinedButton.icon(
-            onPressed: () {
-              // calling c
+            onPressed: () async {
+              // Provider is used to call google signin methods
+              // listen = false indicates the widget in signin screen does not rebuild
               final provider =
                   Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.googleLogin();
+              await provider.googleLogin();
               if (provider.user != null) {
                 // User is signed in
-                // Navigate to the next screen or perform any other action
+                // Navigate to the next screen.
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
+                );
+                print("Inside button:${emailName.toString()}");
               }
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
-              // );
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,

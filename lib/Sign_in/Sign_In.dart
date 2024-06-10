@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:attend_ease/start_screen.dart';
+
+var userName, emailName, email_validate;
 
 class GoogleSignInProvider extends ChangeNotifier {
   final GoogleSignIn googleSignIn;
@@ -28,11 +31,12 @@ class GoogleSignInProvider extends ChangeNotifier {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Retrieve the user's display name
-      final userName = userCredential.user!.displayName;
-      final emaiName = userCredential.user!.displayName;
+      // Retrieve the user's details
+      userName = userCredential.user!.displayName;
+      emailName = userCredential.user!.email;
+      // email_validate = emailName!.split('.');
       print('User name: $userName');
-
+      print('Email: ${emailName.toString().contains("cs")}');
 
       notifyListeners();
     } catch (error) {

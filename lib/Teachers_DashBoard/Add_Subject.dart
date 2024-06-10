@@ -1,6 +1,7 @@
 // import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
+import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Sections.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
@@ -517,6 +518,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             sections_branch_list.add(
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
 
+                            // Adding Data to firebase
+                            add_data();
+
+                            // Navigating
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -552,6 +557,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
                             sections_branch_list.add(
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
+
+                            // Adding Data to firebase
+                            add_data();
 
                             Navigator.push(
                                 context,
