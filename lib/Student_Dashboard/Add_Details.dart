@@ -1,16 +1,7 @@
-import 'dart:io';
-import 'dart:ui';
 import 'package:attend_ease/Student_DashBoard/Sections_student.dart';
 import 'package:attend_ease/ui_components/util.dart';
-import 'package:attend_ease/Student_DashBoard/Student_Dashboard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/widgets.dart';
-import 'package:info_popup/info_popup.dart';
 
 void main() {
   runApp(const AddASubject());
@@ -27,7 +18,7 @@ class AddASubject extends StatelessWidget {
       theme: ThemeData(
         canvasColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromRGBO(215, 130, 255, 1),
+          seedColor: const Color.fromRGBO(215, 130, 255, 1),
         ),
         useMaterial3: true,
       ),
@@ -79,13 +70,13 @@ bool enable_section = false;
 bool enable_Course = true;
 
 class _MyHomePageState extends State<MyHomePage> {
-  check(current_cycle) {
-    if (current_cycle == "Even") {
+  check(currentCycle) {
+    if (currentCycle == "Even") {
       sem = [2, 4, 6, 8];
       dropdownvalue_semester = 2;
       setState(() {});
     }
-    if (current_cycle == "Odd") {
+    if (currentCycle == "Odd") {
       sem = [1, 3, 5, 7];
       dropdownvalue_semester = 1;
       setState(() {});
@@ -94,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if ((dropdownvalue_branch == "CSIOT" ||
             dropdownvalue_branch == "AIDS" ||
             dropdownvalue_branch == "CSDS") &&
-        (current_cycle == "Odd")) {
+        (currentCycle == "Odd")) {
       sem = [1, 3];
       dropdownvalue_semester = 1;
       setState(() {});
@@ -103,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if ((dropdownvalue_branch == "CSIOT" ||
             dropdownvalue_branch == "AIDS" ||
             dropdownvalue_branch == "CSDS") &&
-        (current_cycle == "Even")) {
+        (currentCycle == "Even")) {
       sem = [2, 4];
       dropdownvalue_semester = 2;
       setState(() {});
@@ -115,21 +106,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Center(
+            title: const Center(
               child: Text('AttendEase'),
             )),
 
         // Background Color of the home page.
-        backgroundColor: Color.fromRGBO(255, 246, 254, 1),
+        backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
 
         // UI
         body: Column(children: [
-          SingleChildScrollView(
+          const SingleChildScrollView(
             scrollDirection: Axis.vertical,
           ),
           Container(
             width: 400,
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -142,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Branch Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     children: [
                       Align(
@@ -156,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 46),
+                          padding: const EdgeInsets.only(left: 46),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -166,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_branch,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: branch_codes.map((String s) {
                                         return DropdownMenuItem(
@@ -209,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Cycle Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -220,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 50),
+                          padding: const EdgeInsets.only(left: 50),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -230,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: current_cycle,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: ['Even', "Odd"].map((String s) {
                                         return DropdownMenuItem(
@@ -248,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Semester Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -259,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 30),
+                          padding: const EdgeInsets.only(left: 30),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -269,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_semester,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
 
                                       // Items from the array
                                       items: sem.map((int s) {
@@ -302,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Section Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -313,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 43),
+                          padding: const EdgeInsets.only(left: 43),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -323,7 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                 value: dropdownvalue_section,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 // Items from the array
                                 items: section.map((String s) {
                                   return DropdownMenuItem(

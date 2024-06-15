@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
           apiKey: "AIzaSyAssxds3OW3obpQorBTiqDfFJv_4BXN2Vo",
           appId: "1:814534653957:android:d087e6d377e21aaa0b446c",
           messagingSenderId: "814534653957",
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                   ? iosClientId
                   : webClientId,
         ),
-        child: MaterialApp(
+        child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             body: GradientContainerWithStartScreen(),
@@ -63,9 +63,9 @@ class GradientContainerWithStartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GradientContainer(
-      const Color.fromARGB(255, 255, 255, 255),
-      const Color.fromARGB(255, 150, 67, 183),
+    return const GradientContainer(
+      Color.fromARGB(255, 255, 255, 255),
+      Color.fromARGB(255, 150, 67, 183),
       child: StartScreen(),
     );
   }

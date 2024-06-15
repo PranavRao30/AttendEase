@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
@@ -29,10 +28,11 @@ initialize_data() {
   Store_Semester = dropdownvalue_semester;
   Store_Section = dropdownvalue_section;
 
-  if (Store_Branch == "CSE")
+  if (Store_Branch == "CSE") {
     Store_Course_Name = dropdown_course;
-  else
+  } else {
     Store_Course_Name = course_name.text.toString();
+  }
 
   add_courses_map = {
     "Course_Name": Store_Course_Name,
@@ -61,7 +61,7 @@ add_Teachers_data() {
   // Writes data
   FirebaseFirestore.instance
       .collection("Teachers")
-      .doc("${email}")
+      .doc("$email")
       .set(add_teacher_map)
       .then((value) => print("Teacher data inserted"));
 }

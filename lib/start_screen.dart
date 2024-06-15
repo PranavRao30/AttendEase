@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Backend/add_data.dart';
-
+import  'package:google_fonts/google_fonts.dart';
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
 
@@ -13,10 +13,10 @@ class StartScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+           Text(
             'AttendEase',
-            style: TextStyle(
-              color: Color.fromARGB(255, 195, 106, 203),
+            style: GoogleFonts.ptSans(
+              color: const Color.fromARGB(255, 195, 106, 203),
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
@@ -34,18 +34,16 @@ class StartScreen extends StatelessWidget {
               final provider =
                   Provider.of<GoogleSignInProvider>(context, listen: false);
               await provider.googleLogin();
-              if (provider.user != null) {
-                // User is signed in
-                // Navigate to the next screen.
-                add_Teachers_data();
+              // User is signed in
+              // Navigate to the next screen.
+              add_Teachers_data();
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
-                );
-                print("Inside button:${emailName.toString()}");
-              }
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Teachers_Dashboard()),
+              );
+              print("Inside button:${emailName.toString()}");
+                        },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
             ),
