@@ -16,15 +16,15 @@ Future main() async {
           projectId: "attendease-f1528"));
 
   const String androidClientId =
-      '814534653957-sohpr687be1snd1brolorci10fs22nsg.apps.googleusercontent.com';
+      "814534653957-sohpr687be1snd1brolorci10fs22nsg.apps.googleusercontent.com";
   const String iosClientId =
-      '814534653957-ellhmoefk28i6h9klq3b7ppsdsvc8167.apps.googleusercontent.com';
+      "814534653957-ellhmoefk28i6h9klq3b7ppsdsvc8167.apps.googleusercontent.com";
 
   const String webClientId =
       "814534653957-2uccgqsjhg9dfuc8hro2e7q6rpm9di8d.apps.googleusercontent.com";
   runApp(
     const MyApp(
-        androidClientId: androidClientId,
+        androidClientId: webClientId,
         iosClientId: iosClientId,
         webClientId: webClientId),
   );
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => GoogleSignInProvider(
           clientId: defaultTargetPlatform == TargetPlatform.android
-              ? androidClientId
+              ? webClientId
               : defaultTargetPlatform == TargetPlatform.iOS
                   ? iosClientId
                   : webClientId,

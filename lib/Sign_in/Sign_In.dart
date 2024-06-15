@@ -12,14 +12,20 @@ class GoogleSignInProvider extends ChangeNotifier {
 
   GoogleSignInAccount? _user;
 
-  GoogleSignInAccount get user => _user!;
+  GoogleSignInAccount? get user => _user;
 
   Future googleLogin() async {
     try {
+      print('Attempting Google login...');
       final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return; // User canceled the login
+      print('Google user: $googleUser');
+      if (googleUser == null) {
+        print('User canceled the login');
+        return;
+      }
 
       _user = googleUser;
+      print('Google user authenticated');
 
       final googleAuth = await googleUser.authentication;
 
@@ -32,13 +38,14 @@ class GoogleSignInProvider extends ChangeNotifier {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Retrieve the user's details
-      userName = userCredential.user?.displayName;
-      print(userName);
-      emailName = userCredential.user?.email;
+      final firebaseUser = userCredential.user;
+      print('Firebase user: $firebaseUser');
+      userName = firebaseUser?.displayName;
+      emailName = firebaseUser?.email;
       emailValidate = emailName?.split('.');
 
       print('User name: $userName');
-      print('Email contains "cs": ${emailName.toString().contains("cs")}');
+      print('Email contains "cs": ${emailName?.contains("cs") ?? false}');
 
       notifyListeners();
     } catch (error) {
@@ -47,18 +54,27 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   Future googleLogout() async {
-    await googleSignIn.disconnect();
-    await FirebaseAuth.instance.signOut();
-    notifyListeners();
+    try {
+      print('Logging out from Google...');
+      await googleSignIn.disconnect();
+      await FirebaseAuth.instance.signOut();
+      _user = null; // Clear the user on logout
+      print('Logout successful');
+      notifyListeners();
+    } catch (error) {
+      print('Google Sign-Out error: $error');
+    }
   }
 
   Future<void> signInSilently() async {
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signInSilently();
+      print('Attempting silent sign-in...');
+      final googleUser = await googleSignIn.signInSilently();
+      print('Silent sign-in user: $googleUser');
       if (googleUser != null) {
         _user = googleUser;
 
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        final googleAuth = await googleUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
@@ -66,14 +82,14 @@ class GoogleSignInProvider extends ChangeNotifier {
 
         await FirebaseAuth.instance.signInWithCredential(credential);
 
-        final User? firebaseUser = FirebaseAuth.instance.currentUser;
+        final firebaseUser = FirebaseAuth.instance.currentUser;
         if (firebaseUser != null) {
           userName = firebaseUser.displayName;
           emailName = firebaseUser.email;
           emailValidate = emailName?.split('.');
 
           print('User name: $userName');
-          print('Email contains "cs": ${emailName.toString().contains("cs")}');
+          print('Email contains "cs": ${emailName?.contains("cs") ?? false}');
         }
 
         notifyListeners();
