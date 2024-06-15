@@ -16,11 +16,11 @@ import 'package:flutter/widgets.dart';
 import 'package:info_popup/info_popup.dart';
 
 void main() {
-  runApp(const add_a_subjet());
+  runApp(const add_a_subject());
 }
 
-class add_a_subjet extends StatelessWidget {
-  const add_a_subjet({super.key});
+class add_a_subject extends StatelessWidget {
+  const add_a_subject({super.key});
 
   // This widget is the root of your application.
   @override
@@ -523,8 +523,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
 
                             // Adding Data to firebase
-                            add_course_data();
-
+                            // add_course_data("");
+                            add_Teachers_data(1);
                             // Navigating
                             Navigator.push(
                                 context,
@@ -563,7 +563,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
 
                             // Adding Data to firebase
-                            add_course_data();
+                            // add_course_data("");
+                            add_Teachers_data(1);
 
                             Navigator.push(
                                 context,

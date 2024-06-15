@@ -1,8 +1,14 @@
 import 'package:attend_ease/Sign_in/Sign_In.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
+import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Backend/fetch_data.dart';
+
+int student_flag = 0;
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -37,12 +43,30 @@ class StartScreen extends StatelessWidget {
               if (provider.user != null) {
                 // User is signed in
                 // Navigate to the next screen.
-                add_Teachers_data();
+                if (emailName.toString().contains("cse")) {
+                  add_Teachers_data(0);
+                  // if (get_teachers_data())
+                  // {
+                  // Variables
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Teachers_Dashboard()),
-                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Teachers_Dashboard()),
+                  );
+                }
+                // }
+                //  else if (emailName.toString().contains("cs") &&
+                //     student_flag == 0) {
+
+                //   student_flag = 1;
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => AddASubject()),
+                //   );
+                // }
+
                 print("Inside button:${emailName.toString()}");
               }
             },
