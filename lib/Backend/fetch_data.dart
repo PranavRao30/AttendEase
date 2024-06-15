@@ -11,7 +11,9 @@ var Teachers_data;
 // var course_list = [];
 
 fetch_Teachers_Data(course_id) async {
-  
+  // var fetch_initial_Teachers =
+  //     await FirebaseFirestore.instance.collection("Teachers").doc(email).get();
+  // Teachers_data = fetch_initial_Teachers.data();
   print("inside fect");
   print(course_id);
 

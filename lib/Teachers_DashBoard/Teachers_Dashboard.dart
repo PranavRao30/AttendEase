@@ -62,7 +62,7 @@ class Teacher_Home_Page extends StatefulWidget {
 class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
   @override
   Widget build(BuildContext context) {
-    
+    print(Course_Code);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
