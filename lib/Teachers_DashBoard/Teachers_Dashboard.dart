@@ -1,6 +1,12 @@
+import 'dart:io';
+import 'package:attend_ease/Backend/fetch_data.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:attend_ease/start_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const Teachers_Dashboard());
@@ -21,7 +27,7 @@ class Teachers_Dashboard extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(
+      home: const Teacher_Home_Page(
         title: 'Flutter Demo Home Page',
       ),
     );
@@ -35,25 +41,27 @@ var Course_Names = [];
 var Course_Code = [];
 
 var classesHeld = [];
-var total_class = [18, 22, 26, 16, 23, 26];
-var attended_class = [18, 20, 23, 16, 20, 25];
+
 var sections_branch_list = [];
+// var total_class = [18, 22, 26, 16, 23, 26];
+// var attended_class = [18, 20, 23, 16, 20, 25];
 // var section = "4D";
 // var branch = "CSE";
 // var sec_branch = section + " | " + branch;
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Teacher_Home_Page extends StatefulWidget {
+  const Teacher_Home_Page({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Teacher_Home_Page> createState() => _MyHomePageState_Teacher();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
   @override
   Widget build(BuildContext context) {
+    print(Course_Code);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -212,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const add_a_subjet()));
+                            builder: (context) => add_a_subject()));
                   },
                   child: const Icon(
                     Icons.add,
