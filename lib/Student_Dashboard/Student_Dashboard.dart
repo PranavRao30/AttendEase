@@ -1,10 +1,5 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/widgets.dart';
-import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
-import 'package:attend_ease/Student_Dashboard/Sections_student.dart';
 
 
 void main() {
@@ -22,7 +17,7 @@ class Student_Dashboard extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromRGBO(215, 130, 255, 1),
+          seedColor: const Color.fromRGBO(215, 130, 255, 1),
         ),
         useMaterial3: true,
       ),
@@ -62,29 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Center(
+          title: const Center(
             child: Text('AttendEase'),
           )),
 
       // Background Color of the home page.
-      backgroundColor: Color.fromRGBO(255, 246, 254, 1),
+      backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
 
       // UI
       body: Column(children: [
-         SizedBox(
+         const SizedBox(
           height: 10,
         ),
         Container(
-          child: Center(
-             child: Text(
-              "Your Courses",
-              style: GoogleFonts.poppins(
-                textStyle: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
-            ),
-          ),
           margin: const EdgeInsets.fromLTRB(0, 20, 0, 45),
           height: 70,
           width: 330,
@@ -104,6 +89,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Color.fromRGBO(224, 210, 230, 1),
                 ),
               ]),
+          child: Center(
+             child: Text(
+              "Your Courses",
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+            ),
+          ),
         ),
 
         // Utilizing the remaining child space using expanded
@@ -118,8 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         print("Pressed Card");
                       },
                       child: Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(boxShadow: [
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(boxShadow: const [
                           BoxShadow(
                               color: Color.fromRGBO(215, 130, 255, 1),
                               offset: Offset(6, 6),
@@ -129,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // Card
                         child: Card(
                           // Border of the card and its shadow
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             side: BorderSide(
                               color: Color.fromRGBO(
@@ -138,11 +133,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               // Border width
                             ),
                           ),
+                          color: const Color.fromRGBO(255, 255, 255, 1),
                           // elevation: 10,
 
                           // columnwise arrangement of the details
                           child: Padding(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             child: Column(
 
                                 // Course Names
@@ -151,18 +147,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       Course_Names[index],
-                                      style: TextStyle(fontSize: 18),
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
 
                                   // Course Code
                                   Padding(
-                                    padding: EdgeInsets.only(top: 5),
+                                    padding: const EdgeInsets.only(top: 5),
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         Course_Code[index],
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ),
                                   ),
@@ -171,19 +167,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                      padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             sections_branch_list[index],
-                                            style: TextStyle(fontSize: 12),
+                                            style: const TextStyle(fontSize: 12),
                                           ),
                                           Text(
                                             classesHeld[index],
                                             // "Classes Held: ${attended_class[index]}/${total_class[index]}",
-                                            style: TextStyle(fontSize: 12),
+                                            style: const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -191,7 +187,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ]),
                           ),
-                          color: Color.fromRGBO(255, 255, 255, 1),
                         ),
                       ));
                 },

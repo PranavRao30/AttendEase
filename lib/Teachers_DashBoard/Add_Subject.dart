@@ -1,18 +1,12 @@
 // import 'dart:ffi';
-import 'dart:io';
-import 'dart:ui';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Sections.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Teachers_DashBoard/Subjects.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/widgets.dart';
 import 'package:info_popup/info_popup.dart';
 
 void main() {
@@ -31,7 +25,7 @@ class add_a_subject extends StatelessWidget {
       theme: ThemeData(
         canvasColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromRGBO(215, 130, 255, 1),
+          seedColor: const Color.fromRGBO(215, 130, 255, 1),
         ),
         useMaterial3: true,
       ),
@@ -116,13 +110,13 @@ var position;
 var Section;
 
 class _MyHomePageState extends State<MyHomePage> {
-  check(current_cycle) {
-    if (current_cycle == "Even") {
+  check(currentCycle) {
+    if (currentCycle == "Even") {
       sem = [2, 4, 6, 8];
       dropdownvalue_semester = 2;
       setState(() {});
     }
-    if (current_cycle == "Odd") {
+    if (currentCycle == "Odd") {
       sem = [1, 3, 5, 7];
       dropdownvalue_semester = 1;
       setState(() {});
@@ -131,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if ((dropdownvalue_branch == "CSIOT" ||
             dropdownvalue_branch == "AIDS" ||
             dropdownvalue_branch == "CSDS") &&
-        (current_cycle == "Odd")) {
+        (currentCycle == "Odd")) {
       sem = [1, 3];
       dropdownvalue_semester = 1;
       setState(() {});
@@ -140,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if ((dropdownvalue_branch == "CSIOT" ||
             dropdownvalue_branch == "AIDS" ||
             dropdownvalue_branch == "CSDS") &&
-        (current_cycle == "Even")) {
+        (currentCycle == "Even")) {
       sem = [2, 4];
       dropdownvalue_semester = 2;
       setState(() {});
@@ -153,21 +147,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Center(
+            title: const Center(
               child: Text('AttendEase'),
             )),
 
         // Background Color of the home page.
-        backgroundColor: Color.fromRGBO(255, 246, 254, 1),
+        backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
 
         // UI
         body: Column(children: [
-          SingleChildScrollView(
+          const SingleChildScrollView(
             scrollDirection: Axis.vertical,
           ),
           Container(
             width: 400,
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -185,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Branch Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     children: [
                       Align(
@@ -199,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 46),
+                          padding: const EdgeInsets.only(left: 46),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -209,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_branch,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: branch_codes.map((String s) {
                                         return DropdownMenuItem(
@@ -265,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Cycle Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -276,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 50),
+                          padding: const EdgeInsets.only(left: 50),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -286,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: current_cycle,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: ['Even', "Odd"].map((String s) {
                                         return DropdownMenuItem(
@@ -311,7 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Semester Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -322,7 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 30),
+                          padding: const EdgeInsets.only(left: 30),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -332,12 +326,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_semester,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
 
                                       // Items from the array
                                       items: sem.map((int s) {
                                         return DropdownMenuItem(
-                                            value: s, child: Text("${s}"));
+                                            value: s, child: Text("$s"));
                                       }).toList(),
 
                                       //
@@ -354,7 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                           //Extracting section
                                           section = sections[
-                                              '${dropdownvalue_semester}'];
+                                              '$dropdownvalue_semester'];
 
                                           enable_section = newVal != null;
 
@@ -371,7 +365,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 // Section Selection
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 10),
+                  padding: const EdgeInsets.only(top: 20, left: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -382,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       // options
                       Padding(
-                          padding: EdgeInsets.only(left: 43),
+                          padding: const EdgeInsets.only(left: 43),
                           child: Container(
                               height: 21,
                               decoration: BoxDecoration(
@@ -392,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                 value: dropdownvalue_section,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 // Items from the array
                                 items: section.map((String s) {
                                   return DropdownMenuItem(
@@ -416,7 +410,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Course Selection
                 if (dropdownvalue_branch == "CSE")
                   Padding(
-                    padding: EdgeInsets.only(top: 20, left: 10),
+                    padding: const EdgeInsets.only(top: 20, left: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -428,7 +422,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // options
 
                         Padding(
-                            padding: EdgeInsets.only(left: 40),
+                            padding: const EdgeInsets.only(left: 40),
                             child: Container(
                                 height: 25,
                                 decoration: BoxDecoration(
@@ -440,13 +434,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                         alignedDropdown: true,
                                         child: DropdownButton(
                                           value: dropdown_course,
-                                          icon: Icon(Icons.keyboard_arrow_down),
+                                          icon: const Icon(Icons.keyboard_arrow_down),
                                           // Items from the array
                                           items: cse_courses.map((String s) {
                                             return DropdownMenuItem(
                                                 value: s,
                                                 child: Row(children: [
-                                                  SingleChildScrollView(
+                                                  const SingleChildScrollView(
                                                     scrollDirection:
                                                         Axis.horizontal,
                                                   ),
@@ -480,13 +474,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
 
                 // Course Name
-                if (dropdownvalue_branch != "CSE") Get_Course_Name(),
+                if (dropdownvalue_branch != "CSE") const Get_Course_Name(),
 
                 // Course code
-                Get_Course_Code(),
+                const Get_Course_Code(),
 
                 // Classes Held
-                Get_Classes_Held(),
+                const Get_Classes_Held(),
 
                 Container(
                   height: 10,
@@ -510,7 +504,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             dropdownvalue_branch != "CSE") {
                           Store_Course_Name = course_name.text.toString();
                           sem_sec_branch =
-                              "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}";
+                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
 
                           if (!check_duplicates(add_course_code, sem_sec_branch,
                               Course_Code, sections_branch_list)) {
@@ -520,7 +514,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "Classes Held: ${classes_held.text.toString()}");
 
                             sections_branch_list.add(
-                                "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
+                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
 
                             // Adding Data to firebase
                             // add_course_data("");
@@ -529,7 +523,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Teachers_Dashboard(),
+                                  builder: (context) => const Teachers_Dashboard(),
                                 ));
                           } else {
                             // Text(
@@ -543,24 +537,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         // For CSE
                         if (!validate_classes_held &&
                             !validate_course_code &&
-                            dropdown_course != null &&
                             dropdownvalue_branch == "CSE") {
                           //
-                          var sem_sec_branch =
-                              "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}";
-                          var add_course_code = course_code.text.toString();
+                          var semSecBranch =
+                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                          var addCourseCode = course_code.text.toString();
 
                           // Checking Duplicates
 
-                          if (!check_duplicates(add_course_code, sem_sec_branch,
+                          if (!check_duplicates(addCourseCode, semSecBranch,
                               Course_Code, sections_branch_list)) {
                             Course_Names.add(dropdown_course);
-                            Course_Code.add(add_course_code);
+                            Course_Code.add(addCourseCode);
                             classesHeld.add(
                                 "Classes Held: ${classes_held.text.toString()}");
 
                             sections_branch_list.add(
-                                "${dropdownvalue_semester}${dropdownvalue_section} | ${dropdownvalue_branch}");
+                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
 
                             // Adding Data to firebase
                             // add_course_data("");
@@ -569,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Teachers_Dashboard(),
+                                  builder: (context) => const Teachers_Dashboard(),
                                 ));
                           } else {
                             print("D");
@@ -594,7 +587,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // }
                         setState(() {});
                       },
-                      child: Text("ADD")),
+                      child: const Text("ADD")),
                 )
               ],
             ),
@@ -612,10 +605,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // Separate Widgets of Course Details
 class Get_Course_Name extends StatelessWidget {
+  const Get_Course_Name({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -624,7 +619,7 @@ class Get_Course_Name extends StatelessWidget {
             style: font_details(),
           ),
           Container(
-            margin: EdgeInsets.only(left: 23),
+            margin: const EdgeInsets.only(left: 23),
             width: 200,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(radius_12()),
@@ -647,14 +642,14 @@ class Get_Course_Name extends StatelessWidget {
                   // Initial border
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Colors.black,
                       )),
 
                   // After selecting
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 2,
                         color: Colors.purple,
                       ))),
@@ -667,10 +662,12 @@ class Get_Course_Name extends StatelessWidget {
 }
 
 class Get_Course_Code extends StatelessWidget {
+  const Get_Course_Code({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -679,7 +676,7 @@ class Get_Course_Code extends StatelessWidget {
             style: font_details(),
           ),
           Container(
-            margin: EdgeInsets.only(left: 27),
+            margin: const EdgeInsets.only(left: 27),
             width: 200,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(radius_12()),
@@ -719,14 +716,14 @@ class Get_Course_Code extends StatelessWidget {
                   // Initial border
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Colors.black,
                       )),
 
                   // Border after selecting
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 2,
                         color: Colors.purple,
                       ))),
@@ -739,10 +736,12 @@ class Get_Course_Code extends StatelessWidget {
 }
 
 class Get_Classes_Held extends StatelessWidget {
+  const Get_Classes_Held({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -752,7 +751,7 @@ class Get_Classes_Held extends StatelessWidget {
           ),
           //
           Container(
-            margin: EdgeInsets.only(left: 23),
+            margin: const EdgeInsets.only(left: 23),
             width: 200,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(radius_12()),
@@ -775,14 +774,14 @@ class Get_Classes_Held extends StatelessWidget {
                   // Initial border
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Colors.black,
                       )),
 
                   // After selecting
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(radius_12()),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 2,
                         color: Colors.purple,
                       ))),

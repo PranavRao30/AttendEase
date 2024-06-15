@@ -1,68 +1,67 @@
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
-var sections = Map();
+var sections = {};
 var sem;
-select_sections(dropdownvalue_branch, current_cycle) {
+select_sections(dropdownvalueBranch, currentCycle) {
   //Even Cycle
-  if (current_cycle == "Even") {
-    get_sections(dropdownvalue_branch, 2);
-  } else if (current_cycle == "Odd") {
-    get_sections(dropdownvalue_branch, 1);
+  if (currentCycle == "Even") {
+    get_sections(dropdownvalueBranch, 2);
+  } else if (currentCycle == "Odd") {
+    get_sections(dropdownvalueBranch, 1);
   }
 
   // print(sections);
 }
 
 // Getting Sections
-get_sections(dropdownvalue_branch, c) {
-  if (dropdownvalue_branch == "CSE") {
+get_sections(dropdownvalueBranch, c) {
+  if (dropdownvalueBranch == "CSE") {
     for (int i = c; i <= 8; i += 2) {
-      sections['${i}'] = ['A', 'B', 'C', 'D', 'E', 'F'];
+      sections['$i'] = ['A', 'B', 'C', 'D', 'E', 'F'];
     }
-  } else if (dropdownvalue_branch == "AIML") {
+  } else if (dropdownvalueBranch == "AIML") {
     for (int i = c; i <= 8; i += 2) {
-      sections['${i}'] = ['A', 'B', 'C'];
+      sections['$i'] = ['A', 'B', 'C'];
     }
-  } else if (dropdownvalue_branch == "EC") {
+  } else if (dropdownvalueBranch == "EC") {
     for (int i = c; i <= 8; i += 2) {
-      sections['${i}'] = ['A', 'B', 'C', 'D', 'E'];
+      sections['$i'] = ['A', 'B', 'C', 'D', 'E'];
     }
-  } else if (dropdownvalue_branch == "EI" ||
-      dropdownvalue_branch == 'ET' ||
-      dropdownvalue_branch == "BT") {
+  } else if (dropdownvalueBranch == "EI" ||
+      dropdownvalueBranch == 'ET' ||
+      dropdownvalueBranch == "BT") {
     for (int i = c; i <= 8; i += 2) {
-      sections['${i}'] = ['A'];
+      sections['$i'] = ['A'];
     }
-  } else if (dropdownvalue_branch == "CSIOT" ||
-      dropdownvalue_branch == "AIDS" ||
-      dropdownvalue_branch == "CSDS") {
+  } else if (dropdownvalueBranch == "CSIOT" ||
+      dropdownvalueBranch == "AIDS" ||
+      dropdownvalueBranch == "CSDS") {
     for (int i = c; i <= 4; i += 2) {
-      sections['${i}'] = ['A'];
+      sections['$i'] = ['A'];
     }
   }
 }
 
-new_Arrival(dropdownvalue_branch, current_cycle) {
-  if ((dropdownvalue_branch == "CSIOT" ||
-          dropdownvalue_branch == "AIDS" ||
-          dropdownvalue_branch == "CSDS") &&
-      (current_cycle == "Even")) {
+new_Arrival(dropdownvalueBranch, currentCycle) {
+  if ((dropdownvalueBranch == "CSIOT" ||
+          dropdownvalueBranch == "AIDS" ||
+          dropdownvalueBranch == "CSDS") &&
+      (currentCycle == "Even")) {
     sem = [2, 4];
     return sem;
-  } else if ((dropdownvalue_branch == "CSIOT" ||
-          dropdownvalue_branch == "AIDS" ||
-          dropdownvalue_branch == "CSDS") &&
-      (current_cycle == "Odd")) {
+  } else if ((dropdownvalueBranch == "CSIOT" ||
+          dropdownvalueBranch == "AIDS" ||
+          dropdownvalueBranch == "CSDS") &&
+      (currentCycle == "Odd")) {
     sem = [1, 3];
     return sem;
   }
 }
 
 check_duplicates(
-    add_course_code, sem_sec_branch, Course_Code, sections_branch_list) {
-  for (int i = 0; i < Course_Code.length; i++) {
-    if (add_course_code == Course_Code[i]) {
-      if (sections_branch_list[i] == sem_sec_branch) {
+    addCourseCode, semSecBranch, courseCode, sectionsBranchList) {
+  for (int i = 0; i < courseCode.length; i++) {
+    if (addCourseCode == courseCode[i]) {
+      if (sectionsBranchList[i] == semSecBranch) {
         return true;
       }
     }

@@ -116,29 +116,29 @@ var cse8 = [
   "MOOCs Course -2",
 ];
 
-get_courses(dropdownvalue_branch, dropdownvalue_semester) {
-  if (dropdownvalue_semester == 1) {
+get_courses(dropdownvalueBranch, dropdownvalueSemester) {
+  if (dropdownvalueSemester == 1) {
     dropdown_course = "Applied Chemistry for Computer Science Stream";
     return cse1;
-  } else if (dropdownvalue_semester == 2) {
+  } else if (dropdownvalueSemester == 2) {
     dropdown_course = "Applied Physics for Computer Science Stream";
     return cse2;
-  } else if (dropdownvalue_semester == 3) {
+  } else if (dropdownvalueSemester == 3) {
     dropdown_course = "Logic Design";
     return cse3;
-  } else if (dropdownvalue_semester == 4) {
+  } else if (dropdownvalueSemester == 4) {
     dropdown_course = "Cryptography";
     return cse4;
-  } else if (dropdownvalue_semester == 5) {
+  } else if (dropdownvalueSemester == 5) {
     dropdown_course = "Internet of Things";
     return cse5;
-  } else if (dropdownvalue_semester == 6) {
+  } else if (dropdownvalueSemester == 6) {
     dropdown_course = "Blockchain";
     return cse6;
-  } else if (dropdownvalue_semester == 7) {
+  } else if (dropdownvalueSemester == 7) {
     dropdown_course = "Machine Learning";
     return cse7;
-  } else if (dropdownvalue_semester == 8) {
+  } else if (dropdownvalueSemester == 8) {
     dropdown_course = "Deep Learning";
     return cse8;
   }

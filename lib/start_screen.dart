@@ -7,8 +7,8 @@ import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
+import  'package:google_fonts/google_fonts.dart';
 
-int student_flag = 0;
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -19,10 +19,10 @@ class StartScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+           Text(
             'AttendEase',
-            style: TextStyle(
-              color: Color.fromARGB(255, 195, 106, 203),
+            style: GoogleFonts.ptSans(
+              color: const Color.fromARGB(255, 195, 106, 203),
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
