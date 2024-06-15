@@ -15,8 +15,8 @@ class StartScreen extends StatelessWidget {
         children: [
            Text(
             'AttendEase',
-            style: GoogleFonts.ptSans(
-              color: const Color.fromARGB(255, 195, 106, 203),
+            style: GoogleFonts.poppins(
+              color: Color.fromARGB(255, 255, 255, 255),
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
@@ -46,9 +46,17 @@ class StartScreen extends StatelessWidget {
                         },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
+              side: BorderSide(width: 2.0, color: Colors.white),
             ),
             icon: const Icon(Icons.arrow_right_alt),
-            label: const Text('Get Started'),
+            label: Text(
+            'Get Started',
+            style: GoogleFonts.poppins(
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           ),
         ],
       ),

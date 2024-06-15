@@ -64,7 +64,7 @@ class GradientContainerWithStartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GradientContainer(
-      Color.fromARGB(255, 255, 255, 255),
+      Color.fromARGB(255, 150, 120, 255),
       Color.fromARGB(255, 150, 67, 183),
       child: StartScreen(),
     );

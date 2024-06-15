@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-var userName, emailName, email_validate;
+var userName, emailName, emailValidate;
 
 class GoogleSignInProvider extends ChangeNotifier {
   final GoogleSignIn googleSignIn;
@@ -17,7 +17,8 @@ class GoogleSignInProvider extends ChangeNotifier {
   Future googleLogin() async {
     try {
       final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return;
+      if (googleUser == null) return; // User canceled the login
+
       _user = googleUser;
 
       final googleAuth = await googleUser.authentication;
@@ -31,11 +32,13 @@ class GoogleSignInProvider extends ChangeNotifier {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       // Retrieve the user's details
-      userName = userCredential.user!.displayName;
-      emailName = userCredential.user!.email;
-      // email_validate = emailName!.split('.');
+      userName = userCredential.user?.displayName;
+      print(userName);
+      emailName = userCredential.user?.email;
+      emailValidate = emailName?.split('.');
+
       print('User name: $userName');
-      print('Email: ${emailName.toString().contains("cs")}');
+      print('Email contains "cs": ${emailName.toString().contains("cs")}');
 
       notifyListeners();
     } catch (error) {
@@ -45,23 +48,34 @@ class GoogleSignInProvider extends ChangeNotifier {
 
   Future googleLogout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
     notifyListeners();
   }
 
   Future<void> signInSilently() async {
     try {
-      final GoogleSignInAccount? googleUser =
-          await googleSignIn.signInSilently();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signInSilently();
       if (googleUser != null) {
         _user = googleUser;
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
+
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
+
         await FirebaseAuth.instance.signInWithCredential(credential);
+
+        final User? firebaseUser = FirebaseAuth.instance.currentUser;
+        if (firebaseUser != null) {
+          userName = firebaseUser.displayName;
+          emailName = firebaseUser.email;
+          emailValidate = emailName?.split('.');
+
+          print('User name: $userName');
+          print('Email contains "cs": ${emailName.toString().contains("cs")}');
+        }
+
         notifyListeners();
       }
     } catch (error) {
