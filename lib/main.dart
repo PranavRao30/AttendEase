@@ -5,6 +5,7 @@ import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,27 +46,47 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => GoogleSignInProvider(
           clientId: defaultTargetPlatform == TargetPlatform.android
-              ? androidClientId
+              ? webClientId
               : defaultTargetPlatform == TargetPlatform.iOS
                   ? iosClientId
                   : webClientId,
         ),
-        child: const MaterialApp(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: GradientContainerWithStartScreen(),
+          home: Consumer<GoogleSignInProvider>(
+            builder: (context, provider, _) {
+              print(provider.user);
+              if (provider.user != null) {
+                // User is signed in
+                final emailName = provider.user!.email.split('@').first;
+
+                if (emailName.contains("cse")) {
+                  return Teachers_Dashboard(); // Navigate to Teachers Dashboard
+                } else {
+                  // Handle other conditions or show appropriate screen
+                  return Scaffold(
+                    body: GradientContainerWithStartScreen(),
+                  );
+                }
+              } else {
+                // User is not signed in
+                return Scaffold(
+                  body: GradientContainerWithStartScreen(),
+                );
+              }
+            },
           ),
         ),
       );
 }
 
 class GradientContainerWithStartScreen extends StatelessWidget {
-  const GradientContainerWithStartScreen({super.key});
+  const GradientContainerWithStartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const GradientContainer(
-      Color.fromARGB(255, 255, 255, 255),
+      Color.fromARGB(255, 150, 120, 255),
       Color.fromARGB(255, 150, 67, 183),
       child: StartScreen(),
     );

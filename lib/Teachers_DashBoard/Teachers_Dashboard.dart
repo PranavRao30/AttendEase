@@ -1,65 +1,122 @@
-import 'dart:io';
-import 'package:attend_ease/Backend/fetch_data.dart';
-import 'package:attend_ease/Sign_in/Sign_In.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
-import 'package:attend_ease/start_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const Teachers_Dashboard());
 }
 
-class Teachers_Dashboard extends StatelessWidget {
-  const Teachers_Dashboard({super.key});
+// Dummy data fetching function (replace with actual backend fetch)
+Future<List<CourseData>> fetchCourseData(String teacherId) async {
+  List<CourseData> courseDataList = [];
 
-  // This widget is the root of your application.
+  try {
+    // Step 1: Retrieve the teacher document using teacherId
+    DocumentSnapshot teacherSnapshot = await FirebaseFirestore.instance
+        .collection('Teachers')
+        .doc(teacherId)
+        .get();
+
+    if (teacherSnapshot.exists) {
+      // Step 2: Extract course IDs from the teacher document
+      List<String> courseIds = List<String>.from(teacherSnapshot['Course_id'] ?? []);
+
+      // Step 3: Iterate through course IDs and fetch course data
+      for (String courseId in courseIds) {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+            .collection('Courses')
+            .doc(courseId)
+            .get();
+
+        if (documentSnapshot.exists) {
+          Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          CourseData courseData = CourseData(
+            name: data['Course_Name'] ?? '',
+            code: data['Course_Code'] ?? '',
+            section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
+            classesHeld: data['Classes_Held'] ?? '',
+          );
+          courseDataList.add(courseData);
+        } else {
+          print('Document does not exist for course ID: $courseId');
+        }
+      }
+    } else {
+      print('Teacher document not found for ID: $teacherId');
+    }
+  } catch (e) {
+    print('Error fetching course data: $e');
+  }
+
+  return courseDataList;
+}
+
+class CourseData {
+  final String name;
+  final String code;
+  final String section;
+  final String classesHeld;
+
+  CourseData({
+    required this.name,
+    required this.code,
+    required this.section,
+    required this.classesHeld,
+  });
+}
+
+// Global lists for course data
+var Course_Names = <String>[];
+var Course_Code = <String>[];
+var classesHeld = <String>[];
+var sections_branch_list = <String>[];
+
+class Teachers_Dashboard extends StatelessWidget {
+  const Teachers_Dashboard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(215, 130, 255, 1),
+          seedColor: const Color.fromRGBO(184, 163, 255, 1),
         ),
         useMaterial3: true,
       ),
-      home: const Teacher_Home_Page(
-        title: 'Flutter Demo Home Page',
-      ),
+      home: BottomNavigationExample(),
     );
   }
 }
 
-var flag = 0;
-// Variables
-var Course_Names = [];
-
-var Course_Code = [];
-
-var classesHeld = [];
-
-var sections_branch_list = [];
-// var total_class = [18, 22, 26, 16, 23, 26];
-// var attended_class = [18, 20, 23, 16, 20, 25];
-// var section = "4D";
-// var branch = "CSE";
-// var sec_branch = section + " | " + branch;
-
 class Teacher_Home_Page extends StatefulWidget {
-  const Teacher_Home_Page({super.key, required this.title});
-
-  final String title;
+  const Teacher_Home_Page({Key? key}) : super(key: key);
 
   @override
-  State<Teacher_Home_Page> createState() => _MyHomePageState_Teacher();
+  _TeacherHomePageState createState() => _TeacherHomePageState();
 }
 
-class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
+class _TeacherHomePageState extends State<Teacher_Home_Page> {
+  late Future<List<CourseData>> _courseDataFuture;
+
+  @override
+   void initState() {
+    super.initState();
+    // Example of fetching teacher ID from Firebase Authentication
+    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    if (teacherId != null) {
+      _courseDataFuture = fetchCourseData(teacherId); // Initialize _courseDataFuture with teacherId
+    } else {
+      print('User not logged in');
+      // Handle the case where user is not logged in
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,117 +137,98 @@ class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
 
   @override
   Widget build(BuildContext context) {
-    print(Course_Code);
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Center(
-            child: Text('AttendEase'),
-          )),
-
-      // Background Color of the home page.
-      backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
-
-      // UI
-      body: Column(children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 45),
-          height: 70,
-          width: 330,
-
-          // Decoration
-          decoration: const BoxDecoration(
-              color: Color.fromRGBO(233, 187, 255, 1),
-              // border: Border.all(width: 2, color: Colors.black),
+      backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+      body: Column(
+        children: [
+          const SizedBox(height: 25),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            height: 70,
+            width: 330,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(184, 163, 255, 1),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
-              boxShadow: [
-                BoxShadow(
-                  spreadRadius: 3,
-                  blurRadius: 11,
-                  color: Color.fromRGBO(224, 210, 230, 1),
-                ),
-              ]),
-          child: Center(
-            child: Text(
-              "Your Courses",
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 25,
+            ),
+            child: Center(
+              child: Text(
+                "Your Courses",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-
-        // Utilizing the remaining child space using expanded
-        Expanded(
+          Expanded(
             flex: 5,
-            child: ListTile(
-              title: ListView.builder(
-                // Dynaimic Builder
-                itemBuilder: (context, index) {
-                  return InkWell(
-                      onTap: () {
-                        print("Pressed Card");
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(boxShadow: const [
-                          BoxShadow(
-                              color: Color.fromRGBO(215, 130, 255, 1),
-                              offset: Offset(6, 6),
-                              blurRadius: 0),
-                        ], borderRadius: BorderRadius.circular(20)),
-
-                        // Card
-                        child: Card(
-                          // Border of the card and its shadow
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            side: BorderSide(
-                              color: Color.fromRGBO(
-                                  215, 196, 223, 1), // Border color
-                              width: 2.0,
-                              // Border width
-                            ),
+            child: FutureBuilder<List<CourseData>>(
+              future: _courseDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No courses available'));
+                } else {
+                  List<CourseData> courseDataList = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: courseDataList.length,
+                    itemBuilder: (context, index) {
+                      CourseData courseData = courseDataList[index];
+                      return InkWell(
+                        onTap: () {
+                          print("Pressed Card: ${courseData.name}");
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(184, 163, 255, 1),
+                                offset: Offset(4, 4),
+                                blurRadius: 0,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          color: const Color.fromRGBO(255, 255, 255, 1),
-                          // elevation: 10,
-
-                          // columnwise arrangement of the details
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-
-                                // Course Names
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              side: BorderSide(
+                                color: Color.fromRGBO(215, 196, 223, 1),
+                                width: 2.0,
+                              ),
+                            ),
+                            color: const Color.fromRGBO(255, 255, 255, 1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Column(
                                 children: [
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      Course_Names[index],
+                                      courseData.name,
                                       style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
-
-                                  // Course Code
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5),
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        Course_Code[index],
+                                        courseData.code,
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ),
                                   ),
-
-                                  // Section | Branch | Attended
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Padding(
@@ -201,13 +239,12 @@ class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            sections_branch_list[index],
+                                            "Section: " + courseData.section,
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            classesHeld[index],
-                                            // "Classes Held: ${attended_class[index]}/${total_class[index]}",
+                                            "Classes Held: " + courseData.classesHeld,
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),
@@ -215,283 +252,115 @@ class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
                                       ),
                                     ),
                                   ),
-                                ]),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ));
-                },
-                itemCount: Course_Names.length,
-              ),
-            )
-            // Dynamic Fetching of data using listview.builder
+                      );
+                    },
+                  );
+                }
+              },
             ),
-
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 2),
-                  color: const Color.fromRGBO(169, 36, 231, 1),
-                  shape: BoxShape.circle,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => add_a_subject()));
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    size: 50,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
-// Separator
 
-// separatorBuilder: (context, index) {
-//   return Divider(
-//     height: 30,
-//     // thickness: 0,
-//     // color: Colors.red,
-//   );
-// },
+class BottomNavigationExample extends StatefulWidget {
+  @override
+  _BottomNavigationExampleState createState() =>
+      _BottomNavigationExampleState();
+}
 
-// itemExtent: 100,
+class _BottomNavigationExampleState extends State<BottomNavigationExample> {
+  int _currentIndex = 1;
+  late PageController _pageController;
+  late List<Widget> _screens;
 
-// List View
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(
+        initialPage: 1); // Initialize _pageController in initState
 
-// ListView(
-//   scrollDirection: Axis.horizontal,
-//   children: [
-//     Text(
-//       "A",
-//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-//     ),
+    _screens = [
+      add_a_subject(controller: _pageController),
+      Teacher_Home_Page(),
+      ProfileScreen(), // Make sure to define ProfileScreen or any other screen you intend to navigate to
+    ];
+  }
 
-//     Padding(padding: EdgeInsets.all(60)),
+  @override
+  void dispose() {
+    _pageController
+        .dispose(); // Dispose _pageController when it's no longer needed
+    super.dispose();
+  }
 
-//     Text(
-//       "B",
-//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-//     ),
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
-//     Padding(padding: EdgeInsets.all(60)),
+  void _onItemTapped(int index) {
+    _pageController.jumpToPage(index);
+  }
 
-//     Text(
-//       "C",
-//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-//     ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: _screens,
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _currentIndex, // The currently selected index.
+        color: Color.fromRGBO(
+            184, 163, 255, 1), // Background color of the bottom navigation bar.
+        buttonBackgroundColor: const Color.fromRGBO(
+            184, 163, 255, 0), // Background color of the active item.
+        backgroundColor: const Color.fromRGBO(
+            184, 163, 255, 0.1), // Background color of the navigation bar.
+        animationDuration: const Duration(
+            milliseconds: 300), // Duration of animation when switching tabs.
+        height: 70.0, // Height of the bottom navigation bar.
+        items: const <Widget>[
+          Icon(Icons.add, size: 35), // Icon for the Home tab.
+          Icon(Icons.home, size: 35), // Icon for the Access Time tab.
+          Icon(Icons.person, size: 35), // Icon for the Person tab.
+        ],
+        onTap: (index) {
+          // Callback function when a tab is tapped.
+          setState(() {
+            _currentIndex = index; // Update the current index.
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.ease,
+            ); // Animate to the selected page.
+          });
+        },
+      ),
+    );
+  }
+}
 
-//     Padding(padding: EdgeInsets.fromLTRB(60)),
-
-//     Text(
-//       "D",
-//       style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
-//     ),
-//   ],
-// )
-
-// Columns and Rows, margin, border, inkWell,
-
-//  SingleChildScrollView(
-//     child: Column(children: [
-//   SingleChildScrollVColor.fromARGB(255, 37, 36, 36)  //       scrollDirection: Axis.horizontal,
-//       child: Row(
-//         children: [
-//         Container(
-//             height: 140,
-//             width: 300,
-//             decoration: BoxDecoration(
-//               border: Border.all(
-//                 color: Colors.black,
-//                 width: 2,
-//               ),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-
-//             // Margin
-//             margin: EdgeInsets.all(35),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-
-//               // <WIDGET> allows to insert all widgets
-//               // <Text> means specific to Text widget.
-
-//               children: <Widget>[
-//                 Text('A', style: TextStyle(fontSize: 100)),
-//                 InkWell(
-//                     onTap: () {
-//                       print("Pressed B");
-//                     },
-//                     child: Text('B', style: TextStyle(fontSize: 100))),
-//                 Text('C', style: TextStyle(fontSize: 100)),
-//               ],
-//             )),
-//         Container(
-//             height: 140,
-//             width: 300,
-//             decoration: BoxDecoration(
-//               border: Border.all(
-//                 color: Colors.black,
-//                 width: 2,
-//               ),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-
-//             // Margin
-//             margin: EdgeInsets.all(35),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-
-//               // <WIDGET> allows to insert all widgets
-//               // <Text> means specific to Text widget.
-
-//               children: <Widget>[
-//                 Text('A', style: TextStyle(fontSize: 100)),
-//                 InkWell(
-//                     onTap: () {
-//                       print("Pressed B");
-//                     },
-//                     child: Text('B', style: TextStyle(fontSize: 100))),
-//                 Text('C', style: TextStyle(fontSize: 100)),
-//               ],
-//             ))
-//       ])),
-//   Container(
-//       height: 140,
-//       width: 300,
-//       decoration: BoxDecoration(
-//         border: Border.all(
-//           color: Colors.black,
-//           width: 2,
-//         ),
-//         borderRadius: BorderRadius.circular(10),
-//       ),
-
-//       // Margin
-//       margin: EdgeInsets.all(35),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-
-//         // <WIDGET> allows to insert all widgets
-//         // <Text> means specific to Text widget.
-
-//         children: <Widget>[
-//           Text('A', style: TextStyle(fontSize: 100)),
-//           InkWell(
-//               onTap: () {
-//                 print("Pressed B");
-//               },
-//               child: Text('B', style: TextStyle(fontSize: 100))),
-//           Text('C', style: TextStyle(fontSize: 100)),
-//         ],
-//       )),
-//   Container(
-//       height: 140,
-//       width: 300,
-//       decoration: BoxDecoration(
-//         border: Border.all(
-//           color: Colors.black,
-//           width: 2,
-//         ),
-//         borderRadius: BorderRadius.circular(10),
-//       ),
-
-//       // Margin
-//       margin: EdgeInsets.all(35),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-
-//         // <WIDGET> allows to insert all widgets
-//         // <Text> means specific to Text widget.
-
-//         children: <Widget>[
-//           Text('A', style: TextStyle(fontSize: 100)),
-//           InkWell(
-//               onTap: () {
-//                 print("Pressed B");
-//               },
-//               child: Text('B', style: TextStyle(fontSize: 100))),
-//           Text('C', style: TextStyle(fontSize: 100)),
-//         ],
-//       )),
-//   Container(
-//       height: 140,
-//       width: 300,
-//       decoration: BoxDecoration(
-//         border: Border.all(
-//           color: Colors.black,
-//           width: 2,
-//         ),
-//         borderRadius: BorderRadius.circular(10),
-//       ),
-
-//       // Margin
-//       margin: EdgeInsets.all(35),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-
-//         // <WIDGET> allows to insert all widgets
-//         // <Text> means specific to Text widget.
-
-//         children: <Widget>[
-//           Text('A', style: TextStyle(fontSize: 100)),
-//           InkWell(
-//               onTap: () {
-//                 print("Pressed B");
-//               },
-//               child: Text('B', style: TextStyle(fontSize: 100))),
-//           Text('C', style: TextStyle(fontSize: 100)),
-//         ],
-//       )),
-// ]))
-
-// Center(
-//           child: Image.asset('assets/images/f2.png',
-//               width: 100, height: 100, fit: BoxFit.cover),
-//         )
-// );
-
-// ElevatedButton(
-//   child: Text("click me"),
-//   onPressed: () {
-//     print("B is pressed");
-//   },
-//   onLongPress: () {
-//     print("LP");
-//   },
-// ),
-
-// Center(
-//     child: Container(
-//   height: 100,
-//   width: 100,
-//   color: Colors.blue[400],
-//   child: Center(
-//     child: Text(
-//       "Hello",
-//       style: TextStyle(
-//           fontSize: 20,
-//           color: Colors.amberAccent,
-//           fontWeight: FontWeight.bold,
-//           backgroundColor: Colors.brown[700]),
-//     ),
-//   ),
-// )),
+class ProfileScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: Center(
+        child: const Text('Profile Screen'),
+      ),
+    );
+  }
+}
