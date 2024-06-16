@@ -169,13 +169,26 @@ class BottomNavigationExample extends StatefulWidget {
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   int _currentIndex = 1;
-  final PageController _pageController = PageController(initialPage: 1);
+  late PageController _pageController;
+  late List<Widget> _screens;
 
-  final List<Widget> _screens = [
-    add_a_subject(),
-    Teacher_Home_Page(),
-    ProfileScreen(), // Make sure to define ProfileScreen or any other screen you intend to navigate to
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 1); // Initialize _pageController in initState
+
+    _screens = [
+      add_a_subject(controller: _pageController),
+      Teacher_Home_Page(),
+      ProfileScreen(), // Make sure to define ProfileScreen or any other screen you intend to navigate to
+    ];
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose(); // Dispose _pageController when it's no longer needed
+    super.dispose();
+  }
 
   void _onPageChanged(int index) {
     setState(() {
@@ -195,15 +208,12 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         onPageChanged: _onPageChanged,
         children: _screens,
       ),
-       bottomNavigationBar: CurvedNavigationBar(
+      bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex, // The currently selected index.
         color: Color.fromRGBO(184, 163, 255, 1), // Background color of the bottom navigation bar.
-        buttonBackgroundColor: const Color.fromRGBO(
-            184, 163, 255, 0), // Background color of the active item.
-        backgroundColor: const Color.fromRGBO(
-            184, 163, 255, 0.1), // Background color of the navigation bar.
-        animationDuration: Duration(
-            milliseconds: 300), // Duration of animation when switching tabs.
+        buttonBackgroundColor: const Color.fromRGBO(184, 163, 255, 0), // Background color of the active item.
+        backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1), // Background color of the navigation bar.
+        animationDuration: Duration(milliseconds: 300), // Duration of animation when switching tabs.
         height: 70.0, // Height of the bottom navigation bar.
         items: const <Widget>[
           Icon(Icons.add, size: 35), // Icon for the Home tab.

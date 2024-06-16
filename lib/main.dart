@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               print(provider.user);
               if (provider.user != null) {
                 // User is signed in
-                final emailName = provider.user!.email?.split('@').first ?? '';
+                final emailName = provider.user!.email.split('@').first;
 
                 if (emailName.contains("cse")) {
                   return Teachers_Dashboard(); // Navigate to Teachers Dashboard

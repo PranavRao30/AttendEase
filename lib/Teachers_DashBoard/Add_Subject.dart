@@ -9,12 +9,15 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info_popup/info_popup.dart';
 
-void main() {
-  runApp(const add_a_subject());
-}
+// void main() {
+//   runApp(add_a_subject());
+// }
 
 class add_a_subject extends StatelessWidget {
-  const add_a_subject({super.key});
+
+  add_a_subject({super.key, required this.controller});
+
+  final PageController controller;
 
   // This widget is the root of your application.
   @override
@@ -29,17 +32,20 @@ class add_a_subject extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(
+      home: MyHomePage(
         title: 'Flutter Demo Home Page',
+        controller: controller
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.controller});
 
   final String title;
+  final PageController controller;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -666,7 +672,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const Teachers_Dashboard(),
+                                                        const Teacher_Home_Page(),
                                                   ));
                                             } else {
                                               // Text(
@@ -706,12 +712,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               // add_course_data("");
                                               add_Teachers_data(1);
 
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Teachers_Dashboard(),
-                                                  ));
+                                              widget.controller.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.ease);
                                             } else {
                                               print("D");
                                             }
