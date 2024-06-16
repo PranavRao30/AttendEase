@@ -35,8 +35,6 @@ class GoogleSignInProvider extends ChangeNotifier {
       emailName = userCredential.user!.email;
       // email_validate = emailName!.split('.');
       print('User name: $userName');
-      print('Email: ${emailName.toString().contains("cs")}');
-
       notifyListeners();
     } catch (error) {
       print('Google Sign-In error: $error');

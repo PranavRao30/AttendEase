@@ -45,9 +45,7 @@ class StartScreen extends StatelessWidget {
                 // Navigate to the next screen.
                 if (emailName.toString().contains("cse")) {
                   add_Teachers_data(0);
-                  // if (get_teachers_data())
-                  // {
-                  // Variables
+                  
 
                   Navigator.push(
                     context,

@@ -203,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_branch,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: branch_codes.map((String s) {
                                         return DropdownMenuItem(
@@ -280,7 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: current_cycle,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: ['Even', "Odd"].map((String s) {
                                         return DropdownMenuItem(
@@ -326,7 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_semester,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
 
                                       // Items from the array
                                       items: sem.map((int s) {
@@ -434,7 +437,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         alignedDropdown: true,
                                         child: DropdownButton(
                                           value: dropdown_course,
-                                          icon: const Icon(Icons.keyboard_arrow_down),
+                                          icon: const Icon(
+                                              Icons.keyboard_arrow_down),
                                           // Items from the array
                                           items: cse_courses.map((String s) {
                                             return DropdownMenuItem(
@@ -506,9 +510,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           sem_sec_branch =
                               "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
 
-                          if (!check_duplicates(add_course_code, sem_sec_branch,
-                              Course_Code, sections_branch_list)) {
+                          if (!check_duplicates(
+                              course_code.text.toString(),
+                              sem_sec_branch,
+                              Course_Code,
+                              sections_branch_list)) {
                             Course_Names.add(Store_Course_Name);
+                            print("INSIDE DUP${Store_Course_Code}");
                             Course_Code.add(Store_Course_Code);
                             classesHeld.add(
                                 "Classes Held: ${classes_held.text.toString()}");
@@ -523,7 +531,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Teachers_Dashboard(),
+                                  builder: (context) =>
+                                      const Teachers_Dashboard(),
                                 ));
                           } else {
                             // Text(
@@ -562,7 +571,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Teachers_Dashboard(),
+                                  builder: (context) =>
+                                      const Teachers_Dashboard(),
                                 ));
                           } else {
                             print("D");

@@ -28,14 +28,15 @@ fetch_Teachers_Data(course_id) async {
     print(course_data);
 
     Course_Names.add(course_data["Course_Name"]);
+
     Course_Code.add(course_data['Course_Code']);
     sections_branch_list.add(
         "${course_data['Semester']}${course_data['Section']} | ${course_data['Branch']}");
-    classesHeld.add(course_data['Classes_Held']);
+    classesHeld.add("Classes Held: ${course_data['Classes_Held']}");
   }
 
-  print(Course_Names);
-  // _MyHomePageState_Teacher()
+  print(Course_Code);
+  
   // Navigator.push(
   //     context, MaterialPageRoute(builder: (context) => Teachers_Dashboard()));
   // Teacher_Home_Page(

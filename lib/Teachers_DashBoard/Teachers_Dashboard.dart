@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:attend_ease/Backend/fetch_data.dart';
+import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -59,6 +60,24 @@ class Teacher_Home_Page extends StatefulWidget {
 }
 
 class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var fetch_initial_Teachers = await FirebaseFirestore.instance
+          .collection("Teachers")
+          .doc(emailName)
+          .get();
+      if (fetch_initial_Teachers.exists) {
+        Teachers_data = fetch_initial_Teachers.data();
+        await fetch_Teachers_Data(Teachers_data[
+            'Course_id']); // Call the fetch_Teachers_Data function here
+        setState(
+            () {}); // Call setState to rebuild the widget tree with the new data
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print(Course_Code);
@@ -175,19 +194,22 @@ class _MyHomePageState_Teacher extends State<Teacher_Home_Page> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 6, 0, 0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             sections_branch_list[index],
-                                            style: const TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
                                           Text(
                                             classesHeld[index],
                                             // "Classes Held: ${attended_class[index]}/${total_class[index]}",
-                                            style: const TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       ),
