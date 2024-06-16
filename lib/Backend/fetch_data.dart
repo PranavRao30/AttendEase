@@ -1,22 +1,11 @@
-import 'package:attend_ease/Backend/add_data.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:attend_ease/Sign_in/Sign_In.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-var Teachers_data;
-// var course_list = [];
+var Course_Names = <String>[];
+var Course_Code = <String>[];
+var classesHeld = <String>[];
+var sections_branch_list = <String>[];
 
-fetch_Teachers_Data(course_id) async {
-  // var fetch_initial_Teachers =
-  //     await FirebaseFirestore.instance.collection("Teachers").doc(email).get();
-  // Teachers_data = fetch_initial_Teachers.data();
-  print("inside fect");
-  print(course_id);
-
+fetch_Teachers_Data(List<String> course_id) async {
   var course_data;
   for (int i = 0; i < course_id.length; i++) {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
@@ -24,25 +13,19 @@ fetch_Teachers_Data(course_id) async {
         .doc(course_id[i])
         .get();
     course_data = documentSnapshot.data();
-    print("Cour ${i + 1}");
-    print(course_data);
-
     Course_Names.add(course_data["Course_Name"]);
     Course_Code.add(course_data['Course_Code']);
     sections_branch_list.add(
         "${course_data['Semester']}${course_data['Section']} | ${course_data['Branch']}");
     classesHeld.add(course_data['Classes_Held']);
   }
-
-  print(Course_Names);
+}
   // _MyHomePageState_Teacher()
   // Navigator.push(
   //     context, MaterialPageRoute(builder: (context) => Teachers_Dashboard()));
   // Teacher_Home_Page(
   //   title: "Teacher_Home_Page",
   // );
-}
-
 // get_teachers_data() async {
 //   var querySnapshot =
 //       await FirebaseFirestore.instance.collection('Teachers').get();

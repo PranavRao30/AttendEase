@@ -1,24 +1,83 @@
+import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:attend_ease/Backend/fetch_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const Teachers_Dashboard());
 }
 
-var flag = 0;
-// Variables
-var Course_Names = [];
+// Dummy data fetching function (replace with actual backend fetch)
+Future<List<CourseData>> fetchCourseData(String teacherId) async {
+  List<CourseData> courseDataList = [];
 
-var Course_Code = [];
+  try {
+    // Step 1: Retrieve the teacher document using teacherId
+    DocumentSnapshot teacherSnapshot = await FirebaseFirestore.instance
+        .collection('Teachers')
+        .doc(teacherId)
+        .get();
 
-var classesHeld = [];
+    if (teacherSnapshot.exists) {
+      // Step 2: Extract course IDs from the teacher document
+      List<String> courseIds = List<String>.from(teacherSnapshot['Course_id'] ?? []);
 
-var sections_branch_list = [];
+      // Step 3: Iterate through course IDs and fetch course data
+      for (String courseId in courseIds) {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+            .collection('Courses')
+            .doc(courseId)
+            .get();
+
+        if (documentSnapshot.exists) {
+          Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          CourseData courseData = CourseData(
+            name: data['Course_Name'] ?? '',
+            code: data['Course_Code'] ?? '',
+            section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
+            classesHeld: data['Classes_Held'] ?? '',
+          );
+          courseDataList.add(courseData);
+        } else {
+          print('Document does not exist for course ID: $courseId');
+        }
+      }
+    } else {
+      print('Teacher document not found for ID: $teacherId');
+    }
+  } catch (e) {
+    print('Error fetching course data: $e');
+  }
+
+  return courseDataList;
+}
+
+class CourseData {
+  final String name;
+  final String code;
+  final String section;
+  final String classesHeld;
+
+  CourseData({
+    required this.name,
+    required this.code,
+    required this.section,
+    required this.classesHeld,
+  });
+}
+
+// Global lists for course data
+var Course_Names = <String>[];
+var Course_Code = <String>[];
+var classesHeld = <String>[];
+var sections_branch_list = <String>[];
 
 class Teachers_Dashboard extends StatelessWidget {
-  const Teachers_Dashboard({super.key});
+  const Teachers_Dashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,128 +94,160 @@ class Teachers_Dashboard extends StatelessWidget {
   }
 }
 
-class Teacher_Home_Page extends StatelessWidget {
-  const Teacher_Home_Page({super.key});
+class Teacher_Home_Page extends StatefulWidget {
+  const Teacher_Home_Page({Key? key}) : super(key: key);
+
+  @override
+  _TeacherHomePageState createState() => _TeacherHomePageState();
+}
+
+class _TeacherHomePageState extends State<Teacher_Home_Page> {
+  late Future<List<CourseData>> _courseDataFuture;
+
+  @override
+   void initState() {
+    super.initState();
+    // Example of fetching teacher ID from Firebase Authentication
+    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    if (teacherId != null) {
+      _courseDataFuture = fetchCourseData(teacherId); // Initialize _courseDataFuture with teacherId
+    } else {
+      print('User not logged in');
+      // Handle the case where user is not logged in
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
-      body: Column(children: [
-        const SizedBox(height: 25),
-        Container(
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          height: 70,
-          width: 330,
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(184, 163, 255, 1),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-              // bottomLeft: Radius.circular(20),
-              // topRight: Radius.circular(20)
+      body: Column(
+        children: [
+          const SizedBox(height: 25),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            height: 70,
+            width: 330,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(184, 163, 255, 1),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
             ),
-            // boxShadow: [
-            //   BoxShadow(
-            //     spreadRadius: 3,
-            //     blurRadius: 11,
-            //     color: Color.fromRGBO(184, 163, 255, 1),
-            //   ),
-            // ],
-          ),
-          child: Center(
-            child: Text(
-              "Your Courses",
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600
+            child: Center(
+              child: Text(
+                "Your Courses",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 5,
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  print("Pressed Card");
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(184, 163, 255, 1),
-                        offset: Offset(6, 6),
-                        blurRadius: 0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Card(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      side: BorderSide(
-                        color: Color.fromRGBO(215, 196, 223, 1),
-                        width: 2.0,
-                      ),
-                    ),
-                    color: const Color.fromRGBO(255, 255, 255, 1),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              Course_Names[index],
-                              style: const TextStyle(fontSize: 18),
-                            ),
+          Expanded(
+            flex: 5,
+            child: FutureBuilder<List<CourseData>>(
+              future: _courseDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No courses available'));
+                } else {
+                  List<CourseData> courseDataList = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: courseDataList.length,
+                    itemBuilder: (context, index) {
+                      CourseData courseData = courseDataList[index];
+                      return InkWell(
+                        onTap: () {
+                          print("Pressed Card: ${courseData.name}");
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(184, 163, 255, 1),
+                                offset: Offset(4, 4),
+                                blurRadius: 0,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                Course_Code[index],
-                                style: const TextStyle(fontSize: 12),
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              side: BorderSide(
+                                color: Color.fromRGBO(215, 196, 223, 1),
+                                width: 2.0,
                               ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
+                            color: const Color.fromRGBO(255, 255, 255, 1),
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              padding: const EdgeInsets.all(15),
+                              child: Column(
                                 children: [
-                                  Text(
-                                    sections_branch_list[index],
-                                    style: const TextStyle(fontSize: 12),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      courseData.name,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
                                   ),
-                                  Text(
-                                    classesHeld[index],
-                                    style: const TextStyle(fontSize: 12),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        courseData.code,
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Section: " + courseData.section,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            "Classes Held: " + courseData.classesHeld,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            itemCount: Course_Names.length,
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
@@ -175,7 +266,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 1); // Initialize _pageController in initState
+    _pageController = PageController(
+        initialPage: 1); // Initialize _pageController in initState
 
     _screens = [
       add_a_subject(controller: _pageController),
@@ -186,7 +278,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
   @override
   void dispose() {
-    _pageController.dispose(); // Dispose _pageController when it's no longer needed
+    _pageController
+        .dispose(); // Dispose _pageController when it's no longer needed
     super.dispose();
   }
 
@@ -210,10 +303,14 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex, // The currently selected index.
-        color: Color.fromRGBO(184, 163, 255, 1), // Background color of the bottom navigation bar.
-        buttonBackgroundColor: const Color.fromRGBO(184, 163, 255, 0), // Background color of the active item.
-        backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1), // Background color of the navigation bar.
-        animationDuration: Duration(milliseconds: 300), // Duration of animation when switching tabs.
+        color: Color.fromRGBO(
+            184, 163, 255, 1), // Background color of the bottom navigation bar.
+        buttonBackgroundColor: const Color.fromRGBO(
+            184, 163, 255, 0), // Background color of the active item.
+        backgroundColor: const Color.fromRGBO(
+            184, 163, 255, 0.1), // Background color of the navigation bar.
+        animationDuration: const Duration(
+            milliseconds: 300), // Duration of animation when switching tabs.
         height: 70.0, // Height of the bottom navigation bar.
         items: const <Widget>[
           Icon(Icons.add, size: 35), // Icon for the Home tab.
@@ -226,7 +323,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
             _currentIndex = index; // Update the current index.
             _pageController.animateToPage(
               index,
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.ease,
             ); // Animate to the selected page.
           });
