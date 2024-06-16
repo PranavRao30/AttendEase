@@ -5,6 +5,7 @@ import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,15 +17,15 @@ Future main() async {
           projectId: "attendease-f1528"));
 
   const String androidClientId =
-      "814534653957-sohpr687be1snd1brolorci10fs22nsg.apps.googleusercontent.com";
+      '814534653957-sohpr687be1snd1brolorci10fs22nsg.apps.googleusercontent.com';
   const String iosClientId =
-      "814534653957-ellhmoefk28i6h9klq3b7ppsdsvc8167.apps.googleusercontent.com";
+      '814534653957-ellhmoefk28i6h9klq3b7ppsdsvc8167.apps.googleusercontent.com';
 
   const String webClientId =
       "814534653957-2uccgqsjhg9dfuc8hro2e7q6rpm9di8d.apps.googleusercontent.com";
   runApp(
     const MyApp(
-        androidClientId: webClientId,
+        androidClientId: androidClientId,
         iosClientId: iosClientId,
         webClientId: webClientId),
   );
@@ -49,17 +50,37 @@ class MyApp extends StatelessWidget {
                   ? iosClientId
                   : webClientId,
         ),
-        child: const MaterialApp(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: GradientContainerWithStartScreen(),
+          home: Consumer<GoogleSignInProvider>(
+            builder: (context, provider, _) {
+              print(provider.user);
+              if (provider.user != null) {
+                // User is signed in
+                final emailName = provider.user!.email?.split('@').first ?? '';
+
+                if (emailName.contains("cse")) {
+                  return Teachers_Dashboard(); // Navigate to Teachers Dashboard
+                } else {
+                  // Handle other conditions or show appropriate screen
+                  return Scaffold(
+                    body: GradientContainerWithStartScreen(),
+                  );
+                }
+              } else {
+                // User is not signed in
+                return Scaffold(
+                  body: GradientContainerWithStartScreen(),
+                );
+              }
+            },
           ),
         ),
       );
 }
 
 class GradientContainerWithStartScreen extends StatelessWidget {
-  const GradientContainerWithStartScreen({super.key});
+  const GradientContainerWithStartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
