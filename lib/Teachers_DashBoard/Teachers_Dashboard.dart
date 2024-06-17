@@ -11,7 +11,7 @@ void main() {
   runApp(const Teachers_Dashboard());
 }
 
-// Dummy data fetching function (replace with actual backend fetch)
+// Fetch teachers courses
 Future<List<CourseData>> fetchCourseData(String teacherId) async {
   List<CourseData> courseDataList = [];
 
@@ -24,7 +24,8 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
 
     if (teacherSnapshot.exists) {
       // Step 2: Extract course IDs from the teacher document
-      List<String> courseIds = List<String>.from(teacherSnapshot['Course_id'] ?? []);
+      List<String> courseIds =
+          List<String>.from(teacherSnapshot['Course_id'] ?? []);
 
       // Step 3: Iterate through course IDs and fetch course data
       for (String courseId in courseIds) {
@@ -34,11 +35,22 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
             .get();
 
         if (documentSnapshot.exists) {
-          Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+          Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+
+// for duplicates
+          Course_Names.add(data["Course_Name"]);
+
+          Course_Code.add(data['Course_Code']);
+          sections_branch_list
+              .add("${data['Semester']}${data['Section']} | ${data['Branch']}");
+          classesHeld.add("Classes Held: ${data['Classes_Held']}");
+
           CourseData courseData = CourseData(
             name: data['Course_Name'] ?? '',
             code: data['Course_Code'] ?? '',
-            section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
+            section:
+                '${data['Semester']}${data['Section']} | ${data['Branch']}',
             classesHeld: data['Classes_Held'] ?? '',
           );
           courseDataList.add(courseData);
@@ -53,6 +65,7 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
     print('Error fetching course data: $e');
   }
 
+  print("Cccccc ${Course_Names}");
   return courseDataList;
 }
 
@@ -102,37 +115,22 @@ class Teacher_Home_Page extends StatefulWidget {
 }
 
 class _TeacherHomePageState extends State<Teacher_Home_Page> {
+  // late indicates the compiler it may be non nullable value.
+  // Future represents a value or error in future
   late Future<List<CourseData>> _courseDataFuture;
-
-  @override
-   void initState() {
-    super.initState();
-    // Example of fetching teacher ID from Firebase Authentication
-    String? teacherId = FirebaseAuth.instance.currentUser?.email;
-    if (teacherId != null) {
-      _courseDataFuture = fetchCourseData(teacherId); // Initialize _courseDataFuture with teacherId
-    } else {
-      print('User not logged in');
-      // Handle the case where user is not logged in
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var fetch_initial_Teachers = await FirebaseFirestore.instance
-          .collection("Teachers")
-          .doc(emailName)
-          .get();
-      if (fetch_initial_Teachers.exists) {
-        Teachers_data = fetch_initial_Teachers.data();
-        await fetch_Teachers_Data(Teachers_data[
-            'Course_id']); // Call the fetch_Teachers_Data function here
-        setState(
-            () {}); // Call setState to rebuild the widget tree with the new data
-      }
-    });
+    // Example of fetching teacher ID from Firebase Authentication
+    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    if (teacherId != null) {
+      _courseDataFuture = fetchCourseData(
+          teacherId); // Initialize _courseDataFuture with teacherId
+    } else {
+      print('User not logged in');
+      // Handle the case where user is not logged in
+    }
   }
 
   @override
@@ -244,7 +242,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                                                 const TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            "Classes Held: " + courseData.classesHeld,
+                                            "Classes Held: " +
+                                                courseData.classesHeld,
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),

@@ -1,4 +1,3 @@
-// import 'dart:ffi';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Sections.dart';
 import 'package:attend_ease/ui_components/util.dart';
@@ -8,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:info_popup/info_popup.dart';
+import 'dart:async';
 
 // void main() {
 //   runApp(add_a_subject());
 // }
 
 class add_a_subject extends StatelessWidget {
-
   add_a_subject({super.key, required this.controller});
 
   final PageController controller;
@@ -32,10 +31,7 @@ class add_a_subject extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: MyHomePage(
-        title: 'Flutter Demo Home Page',
-        controller: controller
-      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page', controller: controller),
     );
   }
 }
@@ -45,7 +41,6 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
   final PageController controller;
-
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -115,6 +110,21 @@ var position;
 
 var Section;
 
+// Display duplicates
+void displayDuplicatesMessage(BuildContext context) {
+  final snackbar = SnackBar(
+    content: Text("Course Already Exists for this Class"),
+    duration: Duration(seconds: 3),
+    action: SnackBarAction(
+        label: "Ok",
+        onPressed: () {
+          print("Duplicates");
+        }),
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   check(currentCycle) {
     if (currentCycle == "Even") {
@@ -182,430 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   textStyle: const TextStyle(
                       fontSize: 25, fontWeight: FontWeight.w600),
                 ),
-
-                // Branch Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Container(
-                            child: Text(
-                          "Select Branch:",
-                          style: font_details(),
-                        )),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 46),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                      value: dropdownvalue_branch,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                      // Items from the array
-                                      items: branch_codes.map((String s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text(s));
-                                      }).toList(),
-
-                                      //
-                                      onChanged: (String? newVal) {
-                                        setState(() {
-                                          dropdownvalue_branch = newVal!;
-
-                                          // Newly Arrived Branches
-                                          if (dropdownvalue_branch == "CSIOT" ||
-                                              dropdownvalue_branch == "AIDS" ||
-                                              dropdownvalue_branch == "CSDS") {
-                                            if (dropdownvalue_semester == 1 ||
-                                                dropdownvalue_semester == 3 ||
-                                                dropdownvalue_semester == 5 ||
-                                                dropdownvalue_semester == 7) {
-                                              dropdownvalue_semester = 1;
-                                            }
-                                            if (dropdownvalue_semester == 2 ||
-                                                dropdownvalue_semester == 4 ||
-                                                dropdownvalue_semester == 6 ||
-                                                dropdownvalue_semester == 8) {
-                                              dropdownvalue_semester = 2;
-                                            }
-                                            sem = new_Arrival(
-                                                dropdownvalue_branch,
-                                                current_cycle);
-                                          } else {
-                                            check(current_cycle);
-                                          }
-
-                                          // Dropdown for CSE else enalbing maual entry for other branches
-                                          if (dropdownvalue_branch == "CSE") {
-                                            cse_courses = get_courses(
-                                                dropdownvalue_branch,
-                                                dropdownvalue_semester);
-                                            enable_Course = true;
-                                            enable_manual_course_name = false;
-                                            validate_course_name = false;
-                                          } else {
-                                            enable_manual_course_name = true;
-                                            enable_Course = false;
-                                          }
-                                          enable_section = false;
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Cycle Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Current Cycle:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 50),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                      value: current_cycle,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                      // Items from the array
-                                      items: ['Even', "Odd"].map((String s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text(s));
-                                      }).toList(),
-                                      onChanged: (String? newVal) {
-                                        current_cycle = newVal!;
-                                        setState(() {
-                                          check(current_cycle);
-
-                                          // Dropdown for CSE
-                                          if (dropdownvalue_branch == "CSE") {
-                                            cse_courses = get_courses(
-                                                dropdownvalue_branch,
-                                                dropdownvalue_semester);
-                                          }
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Semester Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Select Semester:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                      value: dropdownvalue_semester,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-
-                                      // Items from the array
-                                      items: sem.map((int s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text("$s"));
-                                      }).toList(),
-
-                                      //
-                                      onChanged: (int? newVal) {
-                                        setState(() {
-                                          dropdownvalue_semester = newVal!;
-                                          if (dropdownvalue_branch != "CSIOT" ||
-                                              dropdownvalue_branch != "AIDS" ||
-                                              dropdownvalue_branch != "CSDS") {
-                                            select_sections(
-                                                dropdownvalue_branch,
-                                                current_cycle);
-                                          }
-
-                                          //Extracting section
-                                          section = sections[
-                                              '$dropdownvalue_semester'];
-
-                                          enable_section = newVal != null;
-
-                                          if (dropdownvalue_branch == "CSE") {
-                                            cse_courses = get_courses(
-                                                dropdownvalue_branch,
-                                                dropdownvalue_semester);
-                                          }
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Section Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Select Section:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 43),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                value: dropdownvalue_section,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                // Items from the array
-                                items: section.map((String s) {
-                                  return DropdownMenuItem(
-                                      value: s, child: Text(s));
-                                }).toList(),
-
-                                //
-                                onChanged: enable_section
-                                    ? (String? newVal) {
-                                        setState(() {
-                                          dropdownvalue_section = newVal!;
-                                          enable_Course = newVal != null;
-                                        });
-                                      }
-                                    : null,
-                              )))),
-                    ],
-                  ),
-                ),
-
-                // Course Selection
-                if (dropdownvalue_branch == "CSE")
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Select Course:",
-                          style: font_details(),
-                        ),
-
-                        // options
-
-                        Padding(
-                            padding: const EdgeInsets.only(left: 40),
-                            child: Container(
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(11),
-                                  color: Colors.white,
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton(
-                                          value: dropdown_course,
-                                          icon: const Icon(
-                                              Icons.keyboard_arrow_down),
-                                          // Items from the array
-                                          items: cse_courses.map((String s) {
-                                            return DropdownMenuItem(
-                                                value: s,
-                                                child: Row(children: [
-                                                  const SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                  ),
-                                                  // fit: BoxFit.contain,
-                                                  // MediaQuery.of(context)
-                                                  //         .size
-                                                  //         .width -
-                                                  // width: 160,
-
-                                                  SizedBox(
-                                                    width: 160,
-                                                    child: Text(
-                                                      s,
-                                                    ),
-                                                  ),
-                                                ]));
-                                          }).toList(),
-
-                                          //
-                                          onChanged: enable_Course
-                                              ? (String? newVal) {
-                                                  setState(() {
-                                                    dropdown_course = newVal!;
-                                                    print(dropdown_course);
-                                                  });
-                                                }
-                                              : null,
-                                        ))))),
-                      ],
-                    ),
-                  ),
-
-                // Course Name
-                if (dropdownvalue_branch != "CSE") const Get_Course_Name(),
-
-                // Course code
-                const Get_Course_Code(),
-
-                // Classes Held
-                const Get_Classes_Held(),
-
-                Container(
-                  height: 10,
-                ),
-
-                // Submit
-                InfoPopupWidget(
-                  contentTitle: "Already Exists",
-                  child: ElevatedButton(
-                      onPressed: () {
-                        // Validating Part
-                        validate_course_name = course_name.text.isEmpty;
-                        validate_course_code = course_code.text.isEmpty;
-                        validate_classes_held = classes_held.text.isEmpty;
-
-                        // Apppending
-                        // For Other Branches
-                        if (!validate_classes_held &&
-                            !validate_course_code &&
-                            !validate_course_name &&
-                            dropdownvalue_branch != "CSE") {
-                          Store_Course_Name = course_name.text.toString();
-                          sem_sec_branch =
-                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-
-                          if (!check_duplicates(
-                              course_code.text.toString(),
-                              sem_sec_branch,
-                              Course_Code,
-                              sections_branch_list)) {
-                            Course_Names.add(Store_Course_Name);
-                            print("INSIDE DUP${Store_Course_Code}");
-                            Course_Code.add(Store_Course_Code);
-                            classesHeld.add(
-                                "Classes Held: ${classes_held.text.toString()}");
-
-                            sections_branch_list.add(
-                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                            // Adding Data to firebase
-                            // add_course_data("");
-                            add_Teachers_data(1);
-                            // Navigating
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Teachers_Dashboard(),
-                                ));
-                          } else {
-                            // Text(
-                            //   "Course Already Exists!!",
-                            //   style: TextStyle(fontSize: 10, color: Colors.red),
-                            // );
-                            print("D");
-                          }
-                        }
-
-                        // For CSE
-                        if (!validate_classes_held &&
-                            !validate_course_code &&
-                            dropdownvalue_branch == "CSE") {
-                          //
-                          var semSecBranch =
-                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-                          var addCourseCode = course_code.text.toString();
-
-                          // Checking Duplicates
-
-                          if (!check_duplicates(addCourseCode, semSecBranch,
-                              Course_Code, sections_branch_list)) {
-                            Course_Names.add(dropdown_course);
-                            Course_Code.add(addCourseCode);
-                            classesHeld.add(
-                                "Classes Held: ${classes_held.text.toString()}");
-
-                            sections_branch_list.add(
-                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                            // Adding Data to firebase
-                            // add_course_data("");
-                            add_Teachers_data(1);
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Teachers_Dashboard(),
-                                ));
-                          } else {
-                            print("D");
-                          }
-                        }
-
-                        // print(Course_Names);
-                        // print(Course_Code);
-                        // print(sections_branch_list);
-                        // print(classesHeld);
-
-                        setState(() {});
-
-                        // if (!validate_classes_held &&
-                        //     !validate_course_code &&
-                        //     !validate_course_name) {
-                        //   Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) => MyApp(),
-                        //       ));
-                        // }
-                        setState(() {});
-                      },
-                      child: const Text("ADD")),
-                )
-              ],
+              ),
             ),
           ),
           Expanded(
@@ -616,575 +203,576 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                              // width: 400,
-                              // margin: const EdgeInsets.only(top: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Enter Course Details",
-                                    style: GoogleFonts.poppins(
-                                        textStyle: font25(
-                                            textColor: Color.fromRGBO(
-                                                184, 163, 255, 1)),
-                                        fontWeight: FontWeight.w600
+                        Container(
+                          // width: 400,
+                          // margin: const EdgeInsets.only(top: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Enter Course Details",
+                                style: GoogleFonts.poppins(
+                                    textStyle: font25(
+                                        textColor:
+                                            Color.fromRGBO(184, 163, 255, 1)),
+                                    fontWeight: FontWeight.w600
 
-                                        // Retreiving from the theme
+                                    // Retreiving from the theme
 
-                                        // Theme.of(context).textTheme.displayLarge
-                                        // !.copyWith(color: Colors.deepPurpleAccent[500]),
-                                        ),
-                                  ),
-                                  // Branch Selection
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Row(
-                                      children: [
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional.centerStart,
+                                    // Theme.of(context).textTheme.displayLarge
+                                    // !.copyWith(color: Colors.deepPurpleAccent[500]),
+                                    ),
+                              ),
+                              // Branch Selection
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, left: 10),
+                                child: Row(
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                      child: Container(
+                                          child: Text(
+                                        "Select Branch:",
+                                        style: font_details(),
+                                      )),
+                                    ),
+                                    // options
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 46),
+                                        child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                    value: dropdownvalue_branch,
+                                                    icon: const Icon(Icons
+                                                        .keyboard_arrow_down),
+                                                    // Items from the array
+                                                    items: branch_codes
+                                                        .map((String s) {
+                                                      return DropdownMenuItem(
+                                                          value: s,
+                                                          child: Text(s));
+                                                    }).toList(),
+
+                                                    //
+                                                    onChanged:
+                                                        (String? newVal) {
+                                                      setState(() {
+                                                        dropdownvalue_branch =
+                                                            newVal!;
+
+                                                        // Newly Arrived Branches
+                                                        if (dropdownvalue_branch ==
+                                                                "CSIOT" ||
+                                                            dropdownvalue_branch ==
+                                                                "AIDS" ||
+                                                            dropdownvalue_branch ==
+                                                                "CSDS") {
+                                                          if (dropdownvalue_semester == 1 ||
+                                                              dropdownvalue_semester ==
+                                                                  3 ||
+                                                              dropdownvalue_semester ==
+                                                                  5 ||
+                                                              dropdownvalue_semester ==
+                                                                  7) {
+                                                            dropdownvalue_semester =
+                                                                1;
+                                                          }
+                                                          if (dropdownvalue_semester == 2 ||
+                                                              dropdownvalue_semester ==
+                                                                  4 ||
+                                                              dropdownvalue_semester ==
+                                                                  6 ||
+                                                              dropdownvalue_semester ==
+                                                                  8) {
+                                                            dropdownvalue_semester =
+                                                                2;
+                                                          }
+                                                          sem = new_Arrival(
+                                                              dropdownvalue_branch,
+                                                              current_cycle);
+                                                        } else {
+                                                          check(current_cycle);
+                                                        }
+
+                                                        // Dropdown for CSE else enalbing maual entry for other branches
+                                                        if (dropdownvalue_branch ==
+                                                            "CSE") {
+                                                          cse_courses = get_courses(
+                                                              dropdownvalue_branch,
+                                                              dropdownvalue_semester);
+                                                          enable_Course = true;
+                                                          enable_manual_course_name =
+                                                              false;
+                                                          validate_course_name =
+                                                              false;
+                                                        } else {
+                                                          enable_manual_course_name =
+                                                              true;
+                                                          enable_Course = false;
+                                                        }
+                                                        enable_section = false;
+                                                      });
+                                                    })))),
+                                  ],
+                                ),
+                              ),
+
+                              // Cycle Selection
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, left: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Current Cycle:",
+                                      style: font_details(),
+                                    ),
+
+                                    // options
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 50),
+                                        child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(11),
+                                              color: Colors.white,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                    value: current_cycle,
+                                                    icon: const Icon(Icons
+                                                        .keyboard_arrow_down),
+                                                    // Items from the array
+                                                    items: ['Even', "Odd"]
+                                                        .map((String s) {
+                                                      return DropdownMenuItem(
+                                                          value: s,
+                                                          child: Text(s));
+                                                    }).toList(),
+                                                    onChanged:
+                                                        (String? newVal) {
+                                                      current_cycle = newVal!;
+                                                      setState(() {
+                                                        check(current_cycle);
+
+                                                        // Dropdown for CSE
+                                                        if (dropdownvalue_branch ==
+                                                            "CSE") {
+                                                          cse_courses = get_courses(
+                                                              dropdownvalue_branch,
+                                                              dropdownvalue_semester);
+                                                        }
+                                                      });
+                                                    })))),
+                                  ],
+                                ),
+                              ),
+
+                              // Semester Selection
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, left: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Select Semester:",
+                                      style: font_details(),
+                                    ),
+
+                                    // options
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 30),
+                                        child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                    value:
+                                                        dropdownvalue_semester,
+                                                    icon: const Icon(Icons
+                                                        .keyboard_arrow_down),
+
+                                                    // Items from the array
+                                                    items: sem.map((int s) {
+                                                      return DropdownMenuItem(
+                                                          value: s,
+                                                          child: Text("$s"));
+                                                    }).toList(),
+
+                                                    //
+                                                    onChanged: (int? newVal) {
+                                                      setState(() {
+                                                        dropdownvalue_semester =
+                                                            newVal!;
+                                                        if (dropdownvalue_branch !=
+                                                                "CSIOT" ||
+                                                            dropdownvalue_branch !=
+                                                                "AIDS" ||
+                                                            dropdownvalue_branch !=
+                                                                "CSDS") {
+                                                          select_sections(
+                                                              dropdownvalue_branch,
+                                                              current_cycle);
+                                                        }
+
+                                                        //Extracting section
+                                                        section = sections[
+                                                            '$dropdownvalue_semester'];
+
+                                                        enable_section =
+                                                            newVal != null;
+
+                                                        if (dropdownvalue_branch ==
+                                                            "CSE") {
+                                                          cse_courses = get_courses(
+                                                              dropdownvalue_branch,
+                                                              dropdownvalue_semester);
+                                                        }
+                                                      });
+                                                    })))),
+                                  ],
+                                ),
+                              ),
+
+                              // Section Selection
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, left: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Select Section:",
+                                      style: font_details(),
+                                    ),
+
+                                    // options
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 44),
+                                        child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                              value: dropdownvalue_section,
+                                              icon: const Icon(
+                                                  Icons.keyboard_arrow_down),
+                                              // Items from the array
+                                              items: section.map((String s) {
+                                                return DropdownMenuItem(
+                                                    value: s, child: Text(s));
+                                              }).toList(),
+
+                                              //
+                                              onChanged: enable_section
+                                                  ? (String? newVal) {
+                                                      setState(() {
+                                                        dropdownvalue_section =
+                                                            newVal!;
+                                                        enable_Course =
+                                                            newVal != null;
+                                                      });
+                                                    }
+                                                  : null,
+                                            )))),
+                                  ],
+                                ),
+                              ),
+
+                              // Course Selection
+                              if (dropdownvalue_branch == "CSE")
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 20, left: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Select Course:",
+                                        style: font_details(),
+                                      ),
+
+                                      // options
+
+                                      Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
                                           child: Container(
-                                              child: Text(
-                                            "Select Branch:",
-                                            style: font_details(),
-                                          )),
-                                        ),
-                                        // options
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 46),
-                                            child: Container(
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.white,
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                        child: DropdownButton(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: Colors.white,
+                                              ),
+                                              padding: EdgeInsets.all(0),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                      child: ButtonTheme(
+                                                          alignedDropdown: true,
+                                                          child: DropdownButton(
                                                             value:
-                                                                dropdownvalue_branch,
+                                                                dropdown_course,
                                                             icon: const Icon(Icons
                                                                 .keyboard_arrow_down),
                                                             // Items from the array
-                                                            items: branch_codes
+                                                            items: cse_courses
                                                                 .map(
                                                                     (String s) {
                                                               return DropdownMenuItem(
                                                                   value: s,
-                                                                  child:
-                                                                      Text(s));
-                                                            }).toList(),
+                                                                  child: Row(
+                                                                      children: [
+                                                                        const SingleChildScrollView(
+                                                                          scrollDirection:
+                                                                              Axis.horizontal,
+                                                                        ),
+                                                                        // fit: BoxFit.contain,
+                                                                        // MediaQuery.of(context)
+                                                                        //         .size
+                                                                        //         .width -
+                                                                        // width: 160,
 
-                                                            //
-                                                            onChanged: (String?
-                                                                newVal) {
-                                                              setState(() {
-                                                                dropdownvalue_branch =
-                                                                    newVal!;
-
-                                                                // Newly Arrived Branches
-                                                                if (dropdownvalue_branch == "CSIOT" ||
-                                                                    dropdownvalue_branch ==
-                                                                        "AIDS" ||
-                                                                    dropdownvalue_branch ==
-                                                                        "CSDS") {
-                                                                  if (dropdownvalue_semester == 1 ||
-                                                                      dropdownvalue_semester ==
-                                                                          3 ||
-                                                                      dropdownvalue_semester ==
-                                                                          5 ||
-                                                                      dropdownvalue_semester ==
-                                                                          7) {
-                                                                    dropdownvalue_semester =
-                                                                        1;
-                                                                  }
-                                                                  if (dropdownvalue_semester == 2 ||
-                                                                      dropdownvalue_semester ==
-                                                                          4 ||
-                                                                      dropdownvalue_semester ==
-                                                                          6 ||
-                                                                      dropdownvalue_semester ==
-                                                                          8) {
-                                                                    dropdownvalue_semester =
-                                                                        2;
-                                                                  }
-                                                                  sem = new_Arrival(
-                                                                      dropdownvalue_branch,
-                                                                      current_cycle);
-                                                                } else {
-                                                                  check(
-                                                                      current_cycle);
-                                                                }
-
-                                                                // Dropdown for CSE else enalbing maual entry for other branches
-                                                                if (dropdownvalue_branch ==
-                                                                    "CSE") {
-                                                                  cse_courses =
-                                                                      get_courses(
-                                                                          dropdownvalue_branch,
-                                                                          dropdownvalue_semester);
-                                                                  enable_Course =
-                                                                      true;
-                                                                  enable_manual_course_name =
-                                                                      false;
-                                                                  validate_course_name =
-                                                                      false;
-                                                                } else {
-                                                                  enable_manual_course_name =
-                                                                      true;
-                                                                  enable_Course =
-                                                                      false;
-                                                                }
-                                                                enable_section =
-                                                                    false;
-                                                              });
-                                                            })))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Cycle Selection
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Current Cycle:",
-                                          style: font_details(),
-                                        ),
-
-                                        // options
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 50),
-                                            child: Container(
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(11),
-                                                  color: Colors.white,
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                        child: DropdownButton(
-                                                            value:
-                                                                current_cycle,
-                                                            icon: const Icon(Icons
-                                                                .keyboard_arrow_down),
-                                                            // Items from the array
-                                                            items: [
-                                                              'Even',
-                                                              "Odd"
-                                                            ].map((String s) {
-                                                              return DropdownMenuItem(
-                                                                  value: s,
-                                                                  child:
-                                                                      Text(s));
-                                                            }).toList(),
-                                                            onChanged: (String?
-                                                                newVal) {
-                                                              current_cycle =
-                                                                  newVal!;
-                                                              setState(() {
-                                                                check(
-                                                                    current_cycle);
-
-                                                                // Dropdown for CSE
-                                                                if (dropdownvalue_branch ==
-                                                                    "CSE") {
-                                                                  cse_courses =
-                                                                      get_courses(
-                                                                          dropdownvalue_branch,
-                                                                          dropdownvalue_semester);
-                                                                }
-                                                              });
-                                                            })))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Semester Selection
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Select Semester:",
-                                          style: font_details(),
-                                        ),
-
-                                        // options
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 30),
-                                            child: Container(
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                        child: DropdownButton(
-                                                            value:
-                                                                dropdownvalue_semester,
-                                                            icon: const Icon(Icons
-                                                                .keyboard_arrow_down),
-
-                                                            // Items from the array
-                                                            items: sem
-                                                                .map((int s) {
-                                                              return DropdownMenuItem(
-                                                                  value: s,
-                                                                  child: Text(
-                                                                      "$s"));
+                                                                        SizedBox(
+                                                                          width:
+                                                                              160,
+                                                                          child:
+                                                                              Text(
+                                                                            s,
+                                                                          ),
+                                                                        ),
+                                                                      ]));
                                                             }).toList(),
 
                                                             //
                                                             onChanged:
-                                                                (int? newVal) {
-                                                              setState(() {
-                                                                dropdownvalue_semester =
-                                                                    newVal!;
-                                                                if (dropdownvalue_branch != "CSIOT" ||
-                                                                    dropdownvalue_branch !=
-                                                                        "AIDS" ||
-                                                                    dropdownvalue_branch !=
-                                                                        "CSDS") {
-                                                                  select_sections(
-                                                                      dropdownvalue_branch,
-                                                                      current_cycle);
-                                                                }
-
-                                                                //Extracting section
-                                                                section = sections[
-                                                                    '$dropdownvalue_semester'];
-
-                                                                enable_section =
-                                                                    newVal !=
-                                                                        null;
-
-                                                                if (dropdownvalue_branch ==
-                                                                    "CSE") {
-                                                                  cse_courses =
-                                                                      get_courses(
-                                                                          dropdownvalue_branch,
-                                                                          dropdownvalue_semester);
-                                                                }
-                                                              });
-                                                            })))),
-                                      ],
-                                    ),
+                                                                enable_Course
+                                                                    ? (String?
+                                                                        newVal) {
+                                                                        setState(
+                                                                            () {
+                                                                          dropdown_course =
+                                                                              newVal!;
+                                                                          print(
+                                                                              dropdown_course);
+                                                                        });
+                                                                      }
+                                                                    : null,
+                                                          ))))),
+                                    ],
                                   ),
+                                ),
 
-                                  // Section Selection
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Select Section:",
-                                          style: font_details(),
-                                        ),
+                              // Course Name
+                              if (dropdownvalue_branch != "CSE")
+                                const Get_Course_Name(),
 
-                                        // options
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 44),
-                                            child: Container(
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                        child: DropdownButton(
-                                                  value: dropdownvalue_section,
-                                                  icon: const Icon(Icons
-                                                      .keyboard_arrow_down),
-                                                  // Items from the array
-                                                  items:
-                                                      section.map((String s) {
-                                                    return DropdownMenuItem(
-                                                        value: s,
-                                                        child: Text(s));
-                                                  }).toList(),
+                              // Course code
+                              const Get_Course_Code(),
 
-                                                  //
-                                                  onChanged: enable_section
-                                                      ? (String? newVal) {
-                                                          setState(() {
-                                                            dropdownvalue_section =
-                                                                newVal!;
-                                                            enable_Course =
-                                                                newVal != null;
-                                                          });
-                                                        }
-                                                      : null,
-                                                )))),
-                                      ],
+                              // Classes Held
+                              const Get_Classes_Held(),
+
+                              Container(
+                                height: 10,
+                              ),
+
+                              // Submit
+                              InfoPopupWidget(
+                                contentTitle: "Already Exists",
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromRGBO(184, 163, 255, 1),
+                                      foregroundColor:
+                                          Colors.black, // Black text
                                     ),
-                                  ),
+                                    onPressed: () {
+                                      // Validating Part
+                                      validate_course_name =
+                                          course_name.text.isEmpty;
+                                      validate_course_code =
+                                          course_code.text.isEmpty;
+                                      validate_classes_held =
+                                          classes_held.text.isEmpty;
 
-                                  // Course Selection
-                                  if (dropdownvalue_branch == "CSE")
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20, left: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Select Course:",
-                                            style: font_details(),
-                                          ),
+                                      // Apppending
+                                      // For Other Branches
+                                      if (!validate_classes_held &&
+                                          !validate_course_code &&
+                                          !validate_course_name &&
+                                          dropdownvalue_branch != "CSE") {
+                                        Store_Course_Name =
+                                            course_name.text.toString();
+                                        sem_sec_branch =
+                                            "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
 
-                                          // options
+                                        if (!check_duplicates(
+                                            add_course_code,
+                                            sem_sec_branch,
+                                            Course_Code,
+                                            sections_branch_list)) {
+                                          Course_Names.add(Store_Course_Name);
+                                          Course_Code.add(Store_Course_Code);
+                                          classesHeld.add(
+                                              "Classes Held: ${classes_held.text.toString()}");
 
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20),
-                                              child: Container(
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: Colors.white,
-                                                  ),
-                                                  padding: EdgeInsets.all(0),
-                                                  child:
-                                                      DropdownButtonHideUnderline(
-                                                          child: ButtonTheme(
-                                                              alignedDropdown:
-                                                                  true,
-                                                              child:
-                                                                  DropdownButton(
-                                                                value:
-                                                                    dropdown_course,
-                                                                icon: const Icon(
-                                                                    Icons
-                                                                        .keyboard_arrow_down),
-                                                                // Items from the array
-                                                                items: cse_courses
-                                                                    .map((String
-                                                                        s) {
-                                                                  return DropdownMenuItem(
-                                                                      value: s,
-                                                                      child: Row(
-                                                                          children: [
-                                                                            const SingleChildScrollView(
-                                                                              scrollDirection: Axis.horizontal,
-                                                                            ),
-                                                                            // fit: BoxFit.contain,
-                                                                            // MediaQuery.of(context)
-                                                                            //         .size
-                                                                            //         .width -
-                                                                            // width: 160,
+                                          sections_branch_list.add(
+                                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
 
-                                                                            SizedBox(
-                                                                              width: 160,
-                                                                              child: Text(
-                                                                                s,
-                                                                              ),
-                                                                            ),
-                                                                          ]));
-                                                                }).toList(),
+                                          // Adding Data to firebase
+                                          // add_course_data("");
+                                          add_Teachers_data(1);
 
-                                                                //
-                                                                onChanged:
-                                                                    enable_Course
-                                                                        ? (String?
-                                                                            newVal) {
-                                                                            setState(() {
-                                                                              dropdown_course = newVal!;
-                                                                              print(dropdown_course);
-                                                                            });
-                                                                          }
-                                                                        : null,
-                                                              ))))),
-                                        ],
-                                      ),
-                                    ),
+                                          // Navigating
+                                          Timer(Duration(seconds: 4), () {
+                                            widget.controller.animateToPage(1,
+                                                duration:
+                                                    Duration(milliseconds: 400),
+                                                curve: Curves.ease);
+                                          });
+                                        } else {
+                                          // Text(
+                                          //   "Course Already Exists!!",
+                                          //   style: TextStyle(fontSize: 10, color: Colors.red),
+                                          // );
+                                          print("D");
+                                        }
+                                      }
 
-                                  // Course Name
-                                  if (dropdownvalue_branch != "CSE")
-                                    const Get_Course_Name(),
+                                      // For CSE
+                                      if (!validate_classes_held &&
+                                          !validate_course_code &&
+                                          dropdownvalue_branch == "CSE") {
+                                        //
+                                        var semSecBranch =
+                                            "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                        var addCourseCode =
+                                            course_code.text.toString();
 
-                                  // Course code
-                                  const Get_Course_Code(),
+                                        // Checking Duplicates
+                                        // bool c2 = check_duplicates2(
+                                        //     addCourseCode,
+                                        //     dropdownvalue_semester,
+                                        //     dropdownvalue_section,
+                                        //     dropdownvalue_branch);
+                                        if (!check_duplicates(
+                                            addCourseCode,
+                                            semSecBranch,
+                                            Course_Code,
+                                            sections_branch_list)) {
+                                          Course_Names.add(dropdown_course);
+                                          Course_Code.add(addCourseCode);
+                                          classesHeld.add(
+                                              "Classes Held: ${classes_held.text.toString()}");
 
-                                  // Classes Held
-                                  const Get_Classes_Held(),
+                                          sections_branch_list.add(
+                                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
 
-                                  Container(
-                                    height: 10,
-                                  ),
+                                          // Adding Data to firebase
+                                          // add_course_data("");
+                                          add_Teachers_data(1);
 
-                                  // Submit
-                                  InfoPopupWidget(
-                                    contentTitle: "Already Exists",
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Color.fromRGBO(184, 163, 255, 1),
-                                          foregroundColor:
-                                              Colors.black, // Black text
-                                        ),
-                                        onPressed: () {
-                                          // Validating Part
-                                          validate_course_name =
-                                              course_name.text.isEmpty;
-                                          validate_course_code =
-                                              course_code.text.isEmpty;
-                                          validate_classes_held =
-                                              classes_held.text.isEmpty;
-
-                                          // Apppending
-                                          // For Other Branches
-                                          if (!validate_classes_held &&
-                                              !validate_course_code &&
-                                              !validate_course_name &&
-                                              dropdownvalue_branch != "CSE") {
-                                            Store_Course_Name =
-                                                course_name.text.toString();
-                                            sem_sec_branch =
-                                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-
-                                            if (!check_duplicates(
-                                                add_course_code,
-                                                sem_sec_branch,
-                                                Course_Code,
-                                                sections_branch_list)) {
-                                              Course_Names.add(
-                                                  Store_Course_Name);
-                                              Course_Code.add(
-                                                  Store_Course_Code);
-                                              classesHeld.add(
-                                                  "Classes Held: ${classes_held.text.toString()}");
-
-                                              sections_branch_list.add(
-                                                  "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                                              // Adding Data to firebase
-                                              // add_course_data("");
-                                              add_Teachers_data(1);
-                                              // Navigating
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Teacher_Home_Page(),
-                                                  ));
-                                            } else {
-                                              // Text(
-                                              //   "Course Already Exists!!",
-                                              //   style: TextStyle(fontSize: 10, color: Colors.red),
-                                              // );
-                                              print("D");
-                                            }
-                                          }
-
-                                          // For CSE
-                                          if (!validate_classes_held &&
-                                              !validate_course_code &&
-                                              dropdownvalue_branch == "CSE") {
-                                            //
-                                            var semSecBranch =
-                                                "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-                                            var addCourseCode =
-                                                course_code.text.toString();
-
-                                            // Checking Duplicates
-
-                                            if (!check_duplicates(
-                                                addCourseCode,
-                                                semSecBranch,
-                                                Course_Code,
-                                                sections_branch_list)) {
-                                              Course_Names.add(dropdown_course);
-                                              Course_Code.add(addCourseCode);
-                                              classesHeld.add(
-                                                  "Classes Held: ${classes_held.text.toString()}");
-
-                                              sections_branch_list.add(
-                                                  "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                                              // Adding Data to firebase
-                                              // add_course_data("");
-                                              add_Teachers_data(1);
-
-                                              widget.controller.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.ease);
-                                            } else {
-                                              print("D");
-                                            }
-                                          }
-
-                                          // print(Course_Names);
-                                          // print(Course_Code);
-                                          // print(sections_branch_list);
-                                          // print(classesHeld);
-
-                                          setState(() {});
-
-                                          // if (!validate_classes_held &&
-                                          //     !validate_course_code &&
-                                          //     !validate_course_name) {
+                                          // Navigating
+                                          // Timer(Duration(seconds: 6), () {
                                           //   Navigator.push(
                                           //       context,
                                           //       MaterialPageRoute(
-                                          //         builder: (context) => MyApp(),
+                                          //         builder: (context) =>
+                                          //             const Teacher_Home_Page(),
                                           //       ));
-                                          // }
-                                          setState(() {});
-                                        },
-                                        child: Text(
-                                          "ADD",
-                                          style: GoogleFonts.poppins(
-                                            textStyle: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white),
-                                          ),
-                                        )),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ]))))
+                                          // });
+
+                                          Timer(Duration(seconds: 4), () {
+                                            widget.controller.animateToPage(1,
+                                                duration:
+                                                    Duration(milliseconds: 400),
+                                                curve: Curves.ease);
+                                          });
+                                        } else {
+                                          displayDuplicatesMessage(context);
+                                        }
+                                      }
+
+                                      // print(Course_Names);
+                                      // print(Course_Code);
+                                      // print(sections_branch_list);
+                                      // print(classesHeld);
+
+                                      setState(() {});
+
+                                      // if (!validate_classes_held &&
+                                      //     !validate_course_code &&
+                                      //     !validate_course_name) {
+                                      //   Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //         builder: (context) => MyApp(),
+                                      //       ));
+                                      // }
+                                      setState(() {});
+                                    },
+                                    child: Text(
+                                      "ADD",
+                                      style: GoogleFonts.poppins(
+                                        textStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                    )),
+                              )
+                            ],
+                          ),
+                        ),
+                      ]))))
         ]));
   }
 }
 
-// class Get_Course_Drop_Down extends StatelessWidget {
+// Separate Widgets of Course Details
+
+// class displayDuplicatesMessage extends StatelessWidget {
+//   const displayDuplicatesMessage({super.key});
+
 //   @override
 //   Widget build(BuildContext context) {
-//     return;
+//     return SnackBar(
+//         content: Text("Course Already exists"),
+//         duration: Duration(seconds: 6),
+//         action: SnackBarAction(
+//           label: 'Ok',
+//           onPressed: () => print("Duplicates"),
+//         ));
 //   }
 // }
 
-// Separate Widgets of Course Details
 class Get_Course_Name extends StatelessWidget {
   const Get_Course_Name({super.key});
 

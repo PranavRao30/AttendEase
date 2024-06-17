@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 var sections = {};
 var sem;
@@ -57,8 +59,7 @@ new_Arrival(dropdownvalueBranch, currentCycle) {
   }
 }
 
-check_duplicates(
-    addCourseCode, semSecBranch, courseCode, sectionsBranchList) {
+check_duplicates(addCourseCode, semSecBranch, courseCode, sectionsBranchList) {
   for (int i = 0; i < courseCode.length; i++) {
     if (addCourseCode == courseCode[i]) {
       if (sectionsBranchList[i] == semSecBranch) {
@@ -67,6 +68,24 @@ check_duplicates(
     }
   }
   return false;
+}
+
+check_duplicates2(addCourseCode, dropdownvalue_semester, dropdownvalue_section,
+    dropdownvalue_branch) async {
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection("Courses")
+      .where('Course_Code', isEqualTo: addCourseCode)
+      .where('Semester', isEqualTo: dropdownvalue_semester)
+      .where('Section', isEqualTo: dropdownvalue_section)
+      .where('Branch', isEqualTo: dropdownvalue_branch)
+      .get();
+
+  // if (querySnapshot.docs.isEmpty)
+  //   return true;
+  // else
+  //   return false;
+
+  return querySnapshot.docs.isEmpty;
 }
 
 void main() {

@@ -109,12 +109,6 @@ add_Teachers_data(flag) async {
         "Course_id": []
       };
     }
-    // else if (course_id.isNotEmpty) {
-    //   print("Section 2");
-    //   for (int i = 0; i < course_id.length; i++) {
-    //     print(course_id[i]);
-    //   }
-    // }
   }
 
   // add subject
