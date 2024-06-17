@@ -105,9 +105,6 @@ bool enable_Course = true;
 bool enable_manual_course_name = false;
 bool disable_dropdown_cse = true;
 
-// to catch the index of duplicate entry
-var position;
-
 var Section;
 
 // Display duplicates
@@ -143,7 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
             dropdownvalue_branch == "CSDS") &&
         (currentCycle == "Odd")) {
       sem = [1, 3];
+
       dropdownvalue_semester = 1;
+      dropdownvalue_section = 'A';
       setState(() {});
     }
 
@@ -153,6 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
         (currentCycle == "Even")) {
       sem = [2, 4];
       dropdownvalue_semester = 2;
+      dropdownvalue_section = 'A';
       setState(() {});
     }
   }
@@ -300,11 +300,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           sem = new_Arrival(
                                                               dropdownvalue_branch,
                                                               current_cycle);
+                                                          dropdownvalue_section =
+                                                              "A";
                                                         } else {
                                                           check(current_cycle);
                                                         }
 
-                                                        // Dropdown for CSE else enalbing maual entry for other branches
+                                                        // Dropdown for CSE else enalbing manual entry for other branches
                                                         if (dropdownvalue_branch ==
                                                             "CSE") {
                                                           cse_courses = get_courses(
@@ -613,7 +615,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       foregroundColor:
                                           Colors.black, // Black text
                                     ),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       // Validating Part
                                       validate_course_name =
                                           course_name.text.isEmpty;
@@ -677,16 +679,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                             course_code.text.toString();
 
                                         // Checking Duplicates
-                                        // bool c2 = check_duplicates2(
-                                        //     addCourseCode,
-                                        //     dropdownvalue_semester,
-                                        //     dropdownvalue_section,
-                                        //     dropdownvalue_branch);
                                         if (!check_duplicates(
-                                            addCourseCode,
-                                            semSecBranch,
-                                            Course_Code,
-                                            sections_branch_list)) {
+                                                addCourseCode,
+                                                semSecBranch,
+                                                Course_Code,
+                                                sections_branch_list) &&
+                                            (await check_duplicates2(
+                                                addCourseCode,
+                                                dropdownvalue_semester,
+                                                dropdownvalue_section,
+                                                dropdownvalue_branch))) {
                                           Course_Names.add(dropdown_course);
                                           Course_Code.add(addCourseCode);
                                           classesHeld.add(
@@ -696,7 +698,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                               "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
 
                                           // Adding Data to firebase
-                                          // add_course_data("");
                                           add_Teachers_data(1);
 
                                           // Navigating

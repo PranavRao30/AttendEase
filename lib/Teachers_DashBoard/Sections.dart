@@ -70,8 +70,12 @@ check_duplicates(addCourseCode, semSecBranch, courseCode, sectionsBranchList) {
   return false;
 }
 
-check_duplicates2(addCourseCode, dropdownvalue_semester, dropdownvalue_section,
-    dropdownvalue_branch) async {
+Future<bool> check_duplicates2(
+  String addCourseCode, 
+  int dropdownvalue_semester, 
+  String dropdownvalue_section,
+  String dropdownvalue_branch
+) async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("Courses")
       .where('Course_Code', isEqualTo: addCourseCode)
@@ -79,11 +83,6 @@ check_duplicates2(addCourseCode, dropdownvalue_semester, dropdownvalue_section,
       .where('Section', isEqualTo: dropdownvalue_section)
       .where('Branch', isEqualTo: dropdownvalue_branch)
       .get();
-
-  // if (querySnapshot.docs.isEmpty)
-  //   return true;
-  // else
-  //   return false;
 
   return querySnapshot.docs.isEmpty;
 }
