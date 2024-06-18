@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:attend_ease/Bluetooth/broadcast.dart';
 void main() {
   runApp(const Teachers_Dashboard());
 }
@@ -52,6 +52,7 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
             section:
                 '${data['Semester']}${data['Section']} | ${data['Branch']}',
             classesHeld: data['Classes_Held'] ?? '',
+            CourseID: data['Course_id'] ?? '',
           );
           courseDataList.add(courseData);
         } else {
@@ -74,12 +75,13 @@ class CourseData {
   final String code;
   final String section;
   final String classesHeld;
-
+  final String CourseID;
   CourseData({
     required this.name,
     required this.code,
     required this.section,
     required this.classesHeld,
+    required this.CourseID,
   });
 }
 
@@ -182,7 +184,10 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                       CourseData courseData = courseDataList[index];
                       return InkWell(
                         onTap: () {
-                          print("Pressed Card: ${courseData.name}");
+                          print("Pressed Card: ${courseData.CourseID}");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Broadcast_Land(courseData.CourseID)),);
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
