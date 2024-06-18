@@ -75,7 +75,7 @@ Widget build(BuildContext context) {
                 elevation: 8.0,
                 shape: CircleBorder(),
                 child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(180, 193, 95, 240),
+                  backgroundColor: Color.fromRGBO(184, 163, 255, 1),
                   child: IconButton(
                     icon: Icon(Icons.add, color: const Color.fromARGB(255, 255, 206, 248)),
                     onPressed: () async {
@@ -136,6 +136,7 @@ Widget build(BuildContext context) {
           )
         ],
       ),
+      backgroundColor: Color.fromRGBO(184, 163, 255, 0.1),
     );
   }
 }
