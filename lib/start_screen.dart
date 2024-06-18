@@ -1,4 +1,5 @@
 import 'package:attend_ease/Sign_in/Sign_In.dart';
+import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
@@ -53,17 +54,19 @@ class StartScreen extends StatelessWidget {
                         builder: (context) => Teachers_Dashboard()),
                   );
                 }
+                // else{
+                //   final provider =
+                //     Provider.of<GoogleSignInProvider>(context, listen: false);
+                //   await provider.googleLogout();
                 // }
-                //  else if (emailName.toString().contains("cs") &&
-                //     student_flag == 0) {
-
-                //   student_flag = 1;
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => AddASubject()),
-                //   );
                 // }
+                 else if (emailName.toString().contains("cs")) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddASubject()),
+                  );
+                }
 
                 print("Inside button:${emailName.toString()}");
               }

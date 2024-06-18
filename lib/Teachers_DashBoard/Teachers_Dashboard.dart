@@ -1,11 +1,14 @@
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:attend_ease/start_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attend_ease/Sign_in/Sign_In.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const Teachers_Dashboard());
@@ -358,7 +361,29 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('Profile'),
       ),
       body: Center(
-        child: const Text('Profile Screen'),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromRGBO(184, 163, 255, 1),
+              foregroundColor: Colors.black, // Black text
+            ),
+            onPressed: () async {
+              final provider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              await provider.googleLogout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StartScreen()),
+              );
+            },
+            child: Text(
+              "LOGOUT",
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+              ),
+            )),
       ),
     );
   }
