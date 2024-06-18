@@ -64,7 +64,7 @@ class StartScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddASubject()),
+                        builder: (context) => Student_Dashboard()),
                   );
                 }
 
