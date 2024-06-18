@@ -1,10 +1,10 @@
 import 'package:attend_ease/Sign_in/Sign_In.dart';
+import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
-
 
 void main() {
   runApp(const Student_Dashboard());
@@ -53,7 +53,6 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
-  
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -164,13 +163,12 @@ class _StudentHomePageState extends State<Student_Home_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       // Background Color of the home page.
       backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
 
       // UI
       body: Column(children: [
-         const SizedBox(
+        const SizedBox(
           height: 25,
         ),
         Container(
@@ -194,7 +192,7 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                 ),
               ]),
           child: Center(
-             child: Text(
+            child: Text(
               "Your Courses",
               style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
@@ -271,19 +269,22 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 6, 0, 0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             sections_branch_list[index],
-                                            style: const TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
                                           Text(
                                             classesHeld[index],
                                             // "Classes Held: ${attended_class[index]}/${total_class[index]}",
-                                            style: const TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -323,7 +324,12 @@ class ProfileScreen extends StatelessWidget {
               await provider.googleLogout();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StartScreen()),
+                MaterialPageRoute(
+                    builder: (context) => GradientContainer(
+                          Color.fromARGB(255, 150, 120, 255),
+                          Color.fromARGB(255, 150, 67, 183),
+                          child: StartScreen(),
+                        )),
               );
             },
             child: Text(

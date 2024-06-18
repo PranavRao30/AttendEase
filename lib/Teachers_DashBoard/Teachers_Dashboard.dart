@@ -1,5 +1,6 @@
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
+
 void main() {
   runApp(const Teachers_Dashboard());
 }
@@ -190,7 +192,10 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                           print("Pressed Card: ${courseData.CourseID}");
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Broadcast_Land(courseData.CourseID)),);
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Broadcast_Land(courseData.CourseID)),
+                          );
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
@@ -377,7 +382,12 @@ class ProfileScreen extends StatelessWidget {
               await provider.googleLogout();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StartScreen()),
+                MaterialPageRoute(
+                    builder: (context) => GradientContainer(
+                          Color.fromARGB(255, 150, 120, 255),
+                          Color.fromARGB(255, 150, 67, 183),
+                          child: StartScreen(),
+                        )),
               );
             },
             child: Text(
