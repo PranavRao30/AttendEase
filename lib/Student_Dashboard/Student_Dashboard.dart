@@ -1,13 +1,77 @@
 import 'package:attend_ease/Sign_in/Sign_In.dart';
+import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(const Student_Dashboard());
+}
+
+// Fetch teachers courses
+Future<List<CourseData>> fetchCourseData() async {
+  List<CourseData> courseDataList = [];
+  List course_doc_id = [];
+  try {
+    // Step 1: Retrieve the Course Collection.
+    // QuerySnapshot querySnapshot =
+    //     await FirebaseFirestore.instance.collection('Courses').get();
+
+    DocumentSnapshot documentSnapshot;
+    // Retreiving course document ids
+
+    DocumentSnapshot student_details = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(emailName)
+        .get();
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("Courses")
+        .where('Semester', isEqualTo: student_details['Semester'])
+        .where('Section', isEqualTo: student_details['Section'])
+        .where('Branch', isEqualTo: student_details['Branch'])
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      for (var course_id in querySnapshot.docs) {
+        documentSnapshot = await FirebaseFirestore.instance
+            .collection('Courses')
+            .doc(course_id.id)
+            .get();
+
+        if (documentSnapshot.exists) {
+          Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+
+          // Extracting data
+
+          CourseData courseData = CourseData(
+            name: data['Course_Name'] ?? '',
+            code: data['Course_Code'] ?? '',
+            section:
+                '${data['Semester']}${data['Section']} | ${data['Branch']}',
+            classesHeld: data['Classes_Held'] ?? '',
+            CourseID: data['Course_id'] ?? '',
+          );
+          courseDataList.add(courseData);
+        } else {
+          print('Document does not exist for course ID:');
+        }
+      }
+    } else {
+      print("Does not exist");
+    }
+  } catch (e) {
+    print('Error fetching course data: $e');
+  }
+
+  // print("Cccccc ${Course_Names}");
+  return courseDataList;
 }
 
 class Student_Dashboard extends StatelessWidget {
@@ -78,7 +142,7 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   late PageController _pageController;
   late List<Widget> _screens;
 
@@ -86,10 +150,9 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   void initState() {
     super.initState();
     _pageController = PageController(
-        initialPage: 1); // Initialize _pageController in initState
+        initialPage: 0); // Initialize _pageController in initState
 
     _screens = [
-      ProfileScreen(),
       Student_Home_Page(),
       ProfileScreen(), // Make sure to define ProfileScreen or any other screen you intend to navigate to
     ];
@@ -132,7 +195,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
             milliseconds: 300), // Duration of animation when switching tabs.
         height: 70.0, // Height of the bottom navigation bar.
         items: const <Widget>[
-          Icon(Icons.add, size: 35), // Icon for the Home tab.
+          // Icon(Icons.add, size: 35), // Icon for the Home tab.
           Icon(Icons.home, size: 35), // Icon for the Access Time tab.
           Icon(Icons.person, size: 35), // Icon for the Person tab.
         ],
@@ -152,6 +215,27 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   }
 }
 
+class CourseData {
+  final String name;
+  final String code;
+  final String section;
+  final String classesHeld;
+  final String CourseID;
+  CourseData({
+    required this.name,
+    required this.code,
+    required this.section,
+    required this.classesHeld,
+    required this.CourseID,
+  });
+}
+
+// Global lists for course data
+var SCourse_Names = <String>[];
+var SCourse_Code = <String>[];
+var SclassesHeld = <String>[];
+var Ssections_branch_list = <String>[];
+
 class Student_Home_Page extends StatefulWidget {
   const Student_Home_Page({Key? key}) : super(key: key);
 
@@ -160,112 +244,124 @@ class Student_Home_Page extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<Student_Home_Page> {
+  // late indicates the compiler it may be non nullable value.
+  // Future represents a value or error in future
+  late Future<List<CourseData>> _courseDataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    // Example of fetching teacher ID from Firebase Authentication
+    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    if (teacherId != null) {
+      _courseDataFuture =
+          fetchCourseData(); // Initialize _courseDataFuture with teacherId
+    } else {
+      print('User not logged in');
+      // Handle the case where user is not logged in
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Background Color of the home page.
       backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
-
-      // UI
-      body: Column(children: [
-        const SizedBox(
-          height: 25,
-        ),
-        Container(
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 45),
-          height: 70,
-          width: 330,
-
-          // Decoration
-          decoration: const BoxDecoration(
+      body: Column(
+        children: [
+          const SizedBox(height: 25),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            height: 70,
+            width: 330,
+            decoration: const BoxDecoration(
               color: Color.fromRGBO(184, 163, 255, 1),
-              // border: Border.all(width: 2, color: Colors.black),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
-              boxShadow: [
-                BoxShadow(
-                  spreadRadius: 3,
-                  blurRadius: 11,
-                  color: Color.fromRGBO(224, 210, 230, 1),
-                ),
-              ]),
-          child: Center(
-            child: Text(
-              "Your Courses",
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 25,
+            ),
+            child: Center(
+              child: Text(
+                "Your Courses",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-
-        // Utilizing the remaining child space using expanded
-        Expanded(
+          Expanded(
             flex: 5,
-            child: ListTile(
-              title: ListView.builder(
-                // Dynaimic Builder
-                itemBuilder: (context, index) {
-                  return InkWell(
-                      onTap: () {
-                        print("Pressed Card");
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(boxShadow: const [
-                          BoxShadow(
-                              color: Color.fromRGBO(215, 130, 255, 1),
-                              offset: Offset(6, 6),
-                              blurRadius: 0),
-                        ], borderRadius: BorderRadius.circular(20)),
-
-                        // Card
-                        child: Card(
-                          // Border of the card and its shadow
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            side: BorderSide(
-                              color: Color.fromRGBO(
-                                  215, 196, 223, 1), // Border color
-                              width: 2.0,
-                              // Border width
-                            ),
+            child: FutureBuilder<List<CourseData>>(
+              future: _courseDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No courses available'));
+                } else {
+                  List<CourseData> courseDataList = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: courseDataList.length,
+                    itemBuilder: (context, index) {
+                      CourseData courseData = courseDataList[index];
+                      return InkWell(
+                        onTap: () {
+                          print("Pressed Card: ${courseData.CourseID}");
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           Broadcast_Land(courseData.CourseID)),
+                          // );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(184, 163, 255, 1),
+                                offset: Offset(4, 4),
+                                blurRadius: 0,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          color: const Color.fromRGBO(255, 255, 255, 1),
-                          // elevation: 10,
-
-                          // columnwise arrangement of the details
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-
-                                // Course Names
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              side: BorderSide(
+                                color: Color.fromRGBO(215, 196, 223, 1),
+                                width: 2.0,
+                              ),
+                            ),
+                            color: const Color.fromRGBO(255, 255, 255, 1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Column(
                                 children: [
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      Course_Names[index],
+                                      courseData.name,
                                       style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
-
-                                  // Course Code
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5),
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        Course_Code[index],
+                                        courseData.code,
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ),
                                   ),
-
-                                  // Section | Branch | Attended
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Padding(
@@ -276,13 +372,13 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            sections_branch_list[index],
+                                            "Section: " + courseData.section,
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            classesHeld[index],
-                                            // "Classes Held: ${attended_class[index]}/${total_class[index]}",
+                                            "Classes Held: " +
+                                                courseData.classesHeld,
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           ),
@@ -290,17 +386,20 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                                       ),
                                     ),
                                   ),
-                                ]),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ));
-                },
-                itemCount: Course_Names.length,
-              ),
-            )
-            // Dynamic Fetching of data using listview.builder
+                      );
+                    },
+                  );
+                }
+              },
             ),
-      ]),
+          ),
+        ],
+      ),
     );
   }
 }

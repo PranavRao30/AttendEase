@@ -43,13 +43,13 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
           Map<String, dynamic> data =
               documentSnapshot.data() as Map<String, dynamic>;
 
-// for duplicates
-          Course_Names.add(data["Course_Name"]);
+          // // for duplicates
+          // Course_Names.add(data["Course_Name"]);
 
-          Course_Code.add(data['Course_Code']);
-          sections_branch_list
-              .add("${data['Semester']}${data['Section']} | ${data['Branch']}");
-          classesHeld.add("Classes Held: ${data['Classes_Held']}");
+          // Course_Code.add(data['Course_Code']);
+          // sections_branch_list
+          //     .add("${data['Semester']}${data['Section']} | ${data['Branch']}");
+          // classesHeld.add("Classes Held: ${data['Classes_Held']}");
 
           CourseData courseData = CourseData(
             name: data['Course_Name'] ?? '',
@@ -282,6 +282,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
   }
 }
 
+
+// Navigation bar
 class BottomNavigationExample extends StatefulWidget {
   @override
   _BottomNavigationExampleState createState() =>
@@ -296,6 +298,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   @override
   void initState() {
     super.initState();
+  
     _pageController = PageController(
         initialPage: 1); // Initialize _pageController in initState
 

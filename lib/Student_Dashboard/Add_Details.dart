@@ -1,7 +1,11 @@
+import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
 import 'package:attend_ease/Student_DashBoard/Sections_student.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
 
 void main() {
   runApp(const AddASubject());
@@ -157,7 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_branch,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: branch_codes.map((String s) {
                                         return DropdownMenuItem(
@@ -221,7 +226,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: current_cycle,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
                                       // Items from the array
                                       items: ['Even', "Odd"].map((String s) {
                                         return DropdownMenuItem(
@@ -260,7 +266,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                       value: dropdownvalue_semester,
-                                      icon: const Icon(Icons.keyboard_arrow_down),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
 
                                       // Items from the array
                                       items: sem.map((int s) {
@@ -337,6 +344,26 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
+          SizedBox(
+            height: 50,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                get_Students_data(dropdownvalue_branch, dropdownvalue_semester,
+                    dropdownvalue_section);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Student_Dashboard()));
+              },
+              child: Text(
+                "Join Class",
+                style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white)),
+              )),
         ]));
   }
 }
