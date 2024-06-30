@@ -91,6 +91,10 @@ class StartScreen extends StatelessWidget {
                     get_student_data = documentSnapshot.data();
                     if (get_student_data["status_of_joining"] == true) {
                       print("controol");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => Student_Dashboard())));
                       // Navi to dashboard
                     } else if (get_student_data["status_of_joining"] == false) {
                       // Join class page

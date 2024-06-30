@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:attend_ease/Backend/add_data.dart';
+import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
 
 void main() {
   runApp(const AddASubject());
@@ -343,9 +344,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
+          SizedBox(
+            height: 50,
+          ),
           ElevatedButton(
               onPressed: () {
-                get_Students_data(dropdownvalue_branch, dropdownvalue_semester, dropdownvalue_section);
+                get_Students_data(dropdownvalue_branch, dropdownvalue_semester,
+                    dropdownvalue_section);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Student_Dashboard()));
               },
               child: Text(
                 "Join Class",

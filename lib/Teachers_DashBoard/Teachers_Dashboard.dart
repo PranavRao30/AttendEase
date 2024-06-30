@@ -282,6 +282,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
   }
 }
 
+
+// Navigation bar
 class BottomNavigationExample extends StatefulWidget {
   @override
   _BottomNavigationExampleState createState() =>
@@ -296,6 +298,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   @override
   void initState() {
     super.initState();
+  
     _pageController = PageController(
         initialPage: 1); // Initialize _pageController in initState
 
