@@ -5,7 +5,6 @@ import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,6 @@ Future main() async {
 
   const String webClientId =
       "814534653957-2uccgqsjhg9dfuc8hro2e7q6rpm9di8d.apps.googleusercontent.com";
-
   runApp(
     const MyApp(
         androidClientId: androidClientId,
@@ -51,37 +49,17 @@ class MyApp extends StatelessWidget {
                   ? iosClientId
                   : webClientId,
         ),
-        child: MaterialApp(
+        child: const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Consumer<GoogleSignInProvider>(
-            builder: (context, provider, _) {
-              print(provider.user);
-              if (provider.user != null) {
-                // User is signed in
-                final emailName = provider.user!.email.split('@').first;
-
-                if (emailName.contains("cse")) {
-                  return Teachers_Dashboard(); // Navigate to Teachers Dashboard
-                } else {
-                  // Handle other conditions or show appropriate screen
-                  return Scaffold(
-                    body: GradientContainerWithStartScreen(),
-                  );
-                }
-              } else {
-                // User is not signed in
-                return Scaffold(
-                  body: GradientContainerWithStartScreen(),
-                );
-              }
-            },
+          home: Scaffold(
+            body: GradientContainerWithStartScreen(),
           ),
         ),
       );
 }
 
 class GradientContainerWithStartScreen extends StatelessWidget {
-  const GradientContainerWithStartScreen({Key? key}) : super(key: key);
+  const GradientContainerWithStartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
