@@ -19,8 +19,6 @@ Future<List<CourseData>> fetchCourseData() async {
   List course_doc_id = [];
   try {
     // Step 1: Retrieve the Course Collection.
-    // QuerySnapshot querySnapshot =
-    //     await FirebaseFirestore.instance.collection('Courses').get();
 
     DocumentSnapshot documentSnapshot;
     // Retreiving course document ids
