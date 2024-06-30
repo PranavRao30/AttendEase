@@ -606,149 +606,122 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
 
                               // Submit
-                              InfoPopupWidget(
-                                contentTitle: "Already Exists",
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Color.fromRGBO(184, 163, 255, 1),
-                                      foregroundColor:
-                                          Colors.black, // Black text
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromRGBO(184, 163, 255, 1),
+                                    foregroundColor: Colors.black, // Black text
+                                  ),
+                                  onPressed: () async {
+                                    // Validating Part
+                                    
+                                    // setState(() {
+                                    validate_course_name =
+                                        course_name.text.isEmpty;
+                                    validate_course_code =
+                                        course_code.text.isEmpty;
+                                    validate_classes_held =
+                                        classes_held.text.isEmpty;
+                                    // });}
+
+                                    // Apppending
+                                    // For Other Branches
+                                    if (!validate_classes_held &&
+                                        !validate_course_code &&
+                                        !validate_course_name &&
+                                        dropdownvalue_branch != "CSE") {
+                                      Store_Course_Name =
+                                          course_name.text.toString();
+                                      sem_sec_branch =
+                                          "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+
+                                      if (!check_duplicates(
+                                          add_course_code,
+                                          sem_sec_branch,
+                                          Course_Code,
+                                          sections_branch_list)) {
+                                        Course_Names.add(Store_Course_Name);
+                                        Course_Code.add(Store_Course_Code);
+                                        classesHeld.add(
+                                            "Classes Held: ${classes_held.text.toString()}");
+
+                                        sections_branch_list.add(
+                                            "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
+
+                                        // Adding Data to firebase
+                                        // add_course_data("");
+                                        add_Teachers_data(1);
+
+                                        // Navigating
+                                        Timer(Duration(seconds: 4), () {
+                                          widget.controller.animateToPage(1,
+                                              duration:
+                                                  Duration(milliseconds: 400),
+                                              curve: Curves.ease);
+                                        });
+                                      } else {
+                                        // Text(
+                                        //   "Course Already Exists!!",
+                                        //   style: TextStyle(fontSize: 10, color: Colors.red),
+                                        // );
+                                        print("D");
+                                      }
+                                    }
+
+                                    // For CSE
+                                    if (!validate_classes_held &&
+                                        !validate_course_code &&
+                                        dropdownvalue_branch == "CSE") {
+                                      //
+                                      var semSecBranch =
+                                          "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                      var addCourseCode =
+                                          course_code.text.toString();
+
+// !check_duplicates(
+//                                                 addCourseCode,
+//                                                 semSecBranch,
+//                                                 Course_Code,
+//                                                 sections_branch_list) &&
+                                      // Checking Duplicates
+                                      if ((await check_duplicates2(
+                                          addCourseCode,
+                                          dropdownvalue_semester,
+                                          dropdownvalue_section,
+                                          dropdownvalue_branch))) {
+                                        // Course_Names.add(dropdown_course);
+                                        // Course_Code.add(addCourseCode);
+                                        // classesHeld.add(
+                                        //     "Classes Held: ${classes_held.text.toString()}");
+
+                                        // sections_branch_list.add(
+                                        //     "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
+
+                                        // Adding Data to firebase
+                                        add_Teachers_data(1);
+
+                                        Timer(Duration(seconds: 2), () {
+                                          widget.controller.animateToPage(1,
+                                              duration:
+                                                  Duration(milliseconds: 400),
+                                              curve: Curves.ease);
+                                        });
+                                      } else {
+                                        displayDuplicatesMessage(context);
+                                      }
+                                    }
+
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "ADD",
+                                    style: GoogleFonts.poppins(
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white),
                                     ),
-                                    onPressed: () async {
-                                      // Validating Part
-                                      validate_course_name =
-                                          course_name.text.isEmpty;
-                                      validate_course_code =
-                                          course_code.text.isEmpty;
-                                      validate_classes_held =
-                                          classes_held.text.isEmpty;
-
-                                      // Apppending
-                                      // For Other Branches
-                                      if (!validate_classes_held &&
-                                          !validate_course_code &&
-                                          !validate_course_name &&
-                                          dropdownvalue_branch != "CSE") {
-                                        Store_Course_Name =
-                                            course_name.text.toString();
-                                        sem_sec_branch =
-                                            "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-
-                                        if (!check_duplicates(
-                                            add_course_code,
-                                            sem_sec_branch,
-                                            Course_Code,
-                                            sections_branch_list)) {
-                                          Course_Names.add(Store_Course_Name);
-                                          Course_Code.add(Store_Course_Code);
-                                          classesHeld.add(
-                                              "Classes Held: ${classes_held.text.toString()}");
-
-                                          sections_branch_list.add(
-                                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                                          // Adding Data to firebase
-                                          // add_course_data("");
-                                          add_Teachers_data(1);
-
-                                          // Navigating
-                                          Timer(Duration(seconds: 4), () {
-                                            widget.controller.animateToPage(1,
-                                                duration:
-                                                    Duration(milliseconds: 400),
-                                                curve: Curves.ease);
-                                          });
-                                        } else {
-                                          // Text(
-                                          //   "Course Already Exists!!",
-                                          //   style: TextStyle(fontSize: 10, color: Colors.red),
-                                          // );
-                                          print("D");
-                                        }
-                                      }
-
-                                      // For CSE
-                                      if (!validate_classes_held &&
-                                          !validate_course_code &&
-                                          dropdownvalue_branch == "CSE") {
-                                        //
-                                        var semSecBranch =
-                                            "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-                                        var addCourseCode =
-                                            course_code.text.toString();
-
-                                        // Checking Duplicates
-                                        if (!check_duplicates(
-                                                addCourseCode,
-                                                semSecBranch,
-                                                Course_Code,
-                                                sections_branch_list) &&
-                                            (await check_duplicates2(
-                                                addCourseCode,
-                                                dropdownvalue_semester,
-                                                dropdownvalue_section,
-                                                dropdownvalue_branch))) {
-                                          Course_Names.add(dropdown_course);
-                                          Course_Code.add(addCourseCode);
-                                          classesHeld.add(
-                                              "Classes Held: ${classes_held.text.toString()}");
-
-                                          sections_branch_list.add(
-                                              "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch");
-
-                                          // Adding Data to firebase
-                                          add_Teachers_data(1);
-
-                                          // Navigating
-                                          // Timer(Duration(seconds: 6), () {
-                                          //   Navigator.push(
-                                          //       context,
-                                          //       MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             const Teacher_Home_Page(),
-                                          //       ));
-                                          // });
-
-                                          Timer(Duration(seconds: 4), () {
-                                            widget.controller.animateToPage(1,
-                                                duration:
-                                                    Duration(milliseconds: 400),
-                                                curve: Curves.ease);
-                                          });
-                                        } else {
-                                          displayDuplicatesMessage(context);
-                                        }
-                                      }
-
-                                      // print(Course_Names);
-                                      // print(Course_Code);
-                                      // print(sections_branch_list);
-                                      // print(classesHeld);
-
-                                      setState(() {});
-
-                                      // if (!validate_classes_held &&
-                                      //     !validate_course_code &&
-                                      //     !validate_course_name) {
-                                      //   Navigator.push(
-                                      //       context,
-                                      //       MaterialPageRoute(
-                                      //         builder: (context) => MyApp(),
-                                      //       ));
-                                      // }
-                                      setState(() {});
-                                    },
-                                    child: Text(
-                                      "ADD",
-                                      style: GoogleFonts.poppins(
-                                        textStyle: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white),
-                                      ),
-                                    )),
-                              )
+                                  )),
                             ],
                           ),
                         ),
@@ -796,6 +769,7 @@ class Get_Course_Name extends StatelessWidget {
               color: Colors.white60,
             ),
             child: TextField(
+              // non CSE branches
               enabled: enable_manual_course_name,
               // Extracting course name from the text field
               controller: course_name,

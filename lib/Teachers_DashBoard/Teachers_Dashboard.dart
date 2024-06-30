@@ -38,13 +38,13 @@ Future<List<CourseData>> fetchCourseData(String teacherId) async {
           Map<String, dynamic> data =
               documentSnapshot.data() as Map<String, dynamic>;
 
-// for duplicates
-          Course_Names.add(data["Course_Name"]);
+          // // for duplicates
+          // Course_Names.add(data["Course_Name"]);
 
-          Course_Code.add(data['Course_Code']);
-          sections_branch_list
-              .add("${data['Semester']}${data['Section']} | ${data['Branch']}");
-          classesHeld.add("Classes Held: ${data['Classes_Held']}");
+          // Course_Code.add(data['Course_Code']);
+          // sections_branch_list
+          //     .add("${data['Semester']}${data['Section']} | ${data['Branch']}");
+          // classesHeld.add("Classes Held: ${data['Classes_Held']}");
 
           CourseData courseData = CourseData(
             name: data['Course_Name'] ?? '',

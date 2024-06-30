@@ -7,9 +7,10 @@ import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 
 // Teacher Collection Variables
-var email, add_teacher_map;
+var email, add_teacher_map, add_student_map;
 var course_id;
 var uuid = Uuid();
+var stud_id;
 var id, f = 1;
 // Courses Collection Variables
 var Store_Course_Name,
@@ -146,4 +147,35 @@ add_Teachers_data(flag) async {
     print("After adding");
     print(get_data);
   }
+}
+
+get_Students_data(
+    dropdownvalue_branch, dropdownvalue_semester, dropdownvalue_section) async {
+  // stud_id = uuid.v4();
+  print("add_student");
+  print(emailName);
+
+  // if (documentSnapshot.exists) {
+  // add_student_map = {
+  //   "status_of_joining": true,
+  //   "student_id": email,
+  //   "Student_name": emailName.toString(),
+  //   "Branch": "",
+  //   "Semester": "",
+  //   "Section": "",
+  //   "Courses_list": [],
+  // };
+
+  // await FirebaseFirestore.instance.collection("Students").doc(email).set(add_student_map);
+
+  await FirebaseFirestore.instance
+      .collection("Students")
+      .doc(emailName)
+      .update({
+    "status_of_joining": true,
+    "Branch": dropdownvalue_branch,
+    "Semester": dropdownvalue_semester,
+    "Section": dropdownvalue_section
+  });
+  print("students details updated");
 }

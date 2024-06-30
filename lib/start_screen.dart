@@ -7,8 +7,9 @@ import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
-import  'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+var get_student_data;
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -19,7 +20,7 @@ class StartScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-           Text(
+          Text(
             'AttendEase',
             style: GoogleFonts.poppins(
               color: Color.fromARGB(255, 255, 255, 255),
@@ -40,30 +41,66 @@ class StartScreen extends StatelessWidget {
               final provider =
                   Provider.of<GoogleSignInProvider>(context, listen: false);
               await provider.googleLogin();
+
+              //
               if (provider.user != null) {
                 // User is signed in
                 // Navigate to the next screen.
+
+                var email_list = emailName.toString().split('.');
+                print(email_list[1].substring(0, 2));
                 if (emailName.toString().contains("cse")) {
                   add_Teachers_data(0);
-                  
 
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Teachers_Dashboard()),
                   );
-                }
-                // }
-                //  else if (emailName.toString().contains("cs") &&
-                //     student_flag == 0) {
+                } else if (email_list[1].substring(0, 2) == "cs") {
+                  // create a collection
+                  DocumentSnapshot documentSnapshot = await FirebaseFirestore
+                      .instance
+                      .collection("Students")
+                      .doc(emailName)
+                      .get();
+                  print(documentSnapshot.exists);
+                  // creating a document
+                  if (!documentSnapshot.exists) {
+                    add_student_map = {
+                      "status_of_joining": false,
+                      "student_id": emailName,
+                      "Student_name": emailName.toString(),
+                      "Branch": "",
+                      "Semester": "",
+                      "Section": "",
+                      "Courses_list": [],
+                    };
 
-                //   student_flag = 1;
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => AddASubject()),
-                //   );
-                // }
+                    await FirebaseFirestore.instance
+                        .collection("Students")
+                        .doc(emailName)
+                        .set(add_student_map);
+
+                    // Join class page
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddASubject()));
+                  } else {
+                    // if exists
+                    get_student_data = documentSnapshot.data();
+                    if (get_student_data["status_of_joining"] == true) {
+                      print("controol");
+                      // Navi to dashboard
+                    } else if (get_student_data["status_of_joining"] == false) {
+                      // Join class page
+                      print("Second time login");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddASubject()));
+                    }
+                  }
+                }
 
                 print("Inside button:${emailName.toString()}");
               }
@@ -74,13 +111,13 @@ class StartScreen extends StatelessWidget {
             ),
             icon: const Icon(Icons.arrow_right_alt),
             label: Text(
-            'Get Started',
-            style: GoogleFonts.poppins(
-              color: Color.fromARGB(255, 255, 255, 255),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+              'Get Started',
+              style: GoogleFonts.poppins(
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
           ),
         ],
       ),
