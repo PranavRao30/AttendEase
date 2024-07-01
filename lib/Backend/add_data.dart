@@ -5,6 +5,7 @@ import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
+import 'package:intl/intl.dart';
 
 // Teacher Collection Variables
 var email, add_teacher_map, add_student_map;
@@ -21,16 +22,61 @@ var Store_Course_Name,
     Store_Classes_Held,
     add_courses_map;
 
-add_course_data(id) {
-  // Gets data
-  // initialize_data();
+remove_concurrency() async{
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection("Courses")
+      // .where('Semester', isEqualTo: dropdownvalue_semester)
+      // .where('Section', isEqualTo: dropdownvalue_section)
+      // .where('Branch', isEqualTo: dropdownvalue_branch)
+      // .where('Course_Code', isEqualTo: Store_Course_Code)
+      .get();
 
-  // Courses data
+  DocumentSnapshot get_concurrent_document;
+  var remove_concurrent;
+  var remove_list = [];
+  if (querySnapshot.docs.isNotEmpty) {
+    for (var course_id in querySnapshot.docs) {
+      get_concurrent_document = await FirebaseFirestore.instance
+          .collection("Courses")
+          .doc(course_id.id)
+          .get();
+
+      remove_concurrent = get_concurrent_document.data();
+      remove_list.add(remove_concurrent['Time_of_adding']);
+      // print(course_id.id);
+    }
+
+    DateFormat format = DateFormat("HH:mm:ss");
+
+    // Datetime obj list
+    List<DateTime> parsed_to_time =
+        remove_list.map((time) => format.parse(time)).toList();
+    // remove_list.add("23:57:44");
+    parsed_to_time.sort();
+
+    // Converting time objects into string
+    List<String> sortedTime =
+        parsed_to_time.map((time) => format.format(time)).toList();
+
+    print(sortedTime);
+  }
+}
+
+
+add_course_data(id) async {
+  // Gets data
+   // Courses data
   Store_Course_Code = course_code.text.toString();
   Store_Branch = dropdownvalue_branch;
   Store_Semester = dropdownvalue_semester;
   Store_Section = dropdownvalue_section;
   Store_Classes_Held = classes_held.text.toString();
+
+  DateTime time = DateTime.now();
+  String formatted_time = DateFormat("HH:mm:ss").format(time);
+  
+  print(formatted_time.toString() + time.millisecond.toString());
+
   if (Store_Branch == "CSE")
     Store_Course_Name = dropdown_course;
   else
@@ -44,7 +90,8 @@ add_course_data(id) {
     "Semester": Store_Semester,
     "Section": Store_Section,
     "Classes_Held": Store_Classes_Held,
-    "Teacher_id": email
+    "Teacher_id": email,
+    "Time_of_adding": formatted_time,
   };
 
   FirebaseFirestore.instance
@@ -88,11 +135,6 @@ add_Teachers_data(flag) async {
       course_id = [];
     else {
       course_id = List<String>.from(get_data["Course_id"]);
-
-      // Upon Login
-      // if (flag == 0) {
-      //   fetch_Teachers_Data(course_id);
-      // }
     }
 
     print("From Backend");
