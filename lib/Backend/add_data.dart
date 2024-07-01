@@ -6,6 +6,7 @@ import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 // Teacher Collection Variables
 var email, add_teacher_map, add_student_map;
@@ -22,7 +23,7 @@ var Store_Course_Name,
     Store_Classes_Held,
     add_courses_map;
 
-remove_concurrency() async{
+remove_concurrency() async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("Courses")
       // .where('Semester', isEqualTo: dropdownvalue_semester)
@@ -51,7 +52,7 @@ remove_concurrency() async{
     // Datetime obj list
     List<DateTime> parsed_to_time =
         remove_list.map((time) => format.parse(time)).toList();
-    // remove_list.add("23:57:44");
+
     parsed_to_time.sort();
 
     // Converting time objects into string
@@ -62,10 +63,9 @@ remove_concurrency() async{
   }
 }
 
-
 add_course_data(id) async {
   // Gets data
-   // Courses data
+  // Courses data
   Store_Course_Code = course_code.text.toString();
   Store_Branch = dropdownvalue_branch;
   Store_Semester = dropdownvalue_semester;
@@ -74,7 +74,7 @@ add_course_data(id) async {
 
   DateTime time = DateTime.now();
   String formatted_time = DateFormat("HH:mm:ss").format(time);
-  
+
   print(formatted_time.toString() + time.millisecond.toString());
 
   if (Store_Branch == "CSE")
@@ -99,6 +99,10 @@ add_course_data(id) async {
       .doc(id)
       .set(add_courses_map)
       .then((value) => print("Course data inserted"));
+
+  Timer(Duration(seconds: 3), () {
+    remove_concurrency();
+  });
 }
 
 // version 3
