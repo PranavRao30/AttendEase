@@ -44,6 +44,8 @@ dependencies:
   provider: ^6.1.2
   uuid: ^4.4.0
   curved_navigation_bar: ^1.0.3
+  flutter_screenutil: ^5.9.3
+
   
   beacon_broadcast: 0.3.1
   permission_handler: ^11.3.1
