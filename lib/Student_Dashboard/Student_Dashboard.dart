@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:attend_ease/Bluetooth/receive.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/gradient_container.dart';
@@ -273,6 +273,7 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                       return InkWell(
                         onTap: () {
                           print("Pressed Card: ${courseData.CourseID}");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BeaconPage(courseData.CourseID)));
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
