@@ -26,10 +26,10 @@ var Store_Course_Name,
 remove_concurrency() async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("Courses")
-      // .where('Semester', isEqualTo: dropdownvalue_semester)
-      // .where('Section', isEqualTo: dropdownvalue_section)
-      // .where('Branch', isEqualTo: dropdownvalue_branch)
-      // .where('Course_Code', isEqualTo: Store_Course_Code)
+      .where('Semester', isEqualTo: dropdownvalue_semester)
+      .where('Section', isEqualTo: dropdownvalue_section)
+      .where('Branch', isEqualTo: dropdownvalue_branch)
+      .where('Course_Code', isEqualTo: Store_Course_Code)
       .get();
 
   DocumentSnapshot get_concurrent_document;
@@ -43,6 +43,7 @@ remove_concurrency() async {
           .get();
 
       remove_concurrent = get_concurrent_document.data();
+
       remove_list.add(remove_concurrent['Time_of_adding']);
       // print(course_id.id);
     }
@@ -60,6 +61,35 @@ remove_concurrency() async {
         parsed_to_time.map((time) => format.format(time)).toList();
 
     print(sortedTime);
+
+    QuerySnapshot get_removing_id;
+    DocumentSnapshot get_teachers_courseid;
+    // get_removing_id = await FirebaseFirestore.instance
+    //     .collection("Courses")
+    //     .where("Time_of_adding", isEqualTo: sortedTime[1])
+    //     .get();
+    // for (var i in get_removing_id.docs) print(i.id);
+
+    for (int i = 1; i < sortedTime.length; i++) {
+      get_removing_id = await FirebaseFirestore.instance
+          .collection("Courses")
+          .where("Time_of_adding", isEqualTo: sortedTime[i])
+          .get();
+
+      // print(get_removing_id);
+
+      for (var course_id in get_removing_id.docs) {
+        print(course_id.id);
+
+        Timer(Duration(seconds: 5), () async {
+          await FirebaseFirestore.instance
+              .collection("Courses")
+              .doc(course_id.id)
+              .delete();
+        });
+      }
+
+    }
   }
 }
 
@@ -100,7 +130,7 @@ add_course_data(id) async {
       .set(add_courses_map)
       .then((value) => print("Course data inserted"));
 
-  Timer(Duration(seconds: 3), () {
+  Timer(Duration(seconds: 5), () {
     remove_concurrency();
   });
 }
@@ -195,6 +225,9 @@ add_Teachers_data(flag) async {
   }
 }
 
+
+
+// Students Data
 get_Students_data(
     dropdownvalue_branch, dropdownvalue_semester, dropdownvalue_section) async {
   // stud_id = uuid.v4();
