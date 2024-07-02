@@ -1,3 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +15,22 @@ import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
+import 'package:attend_ease/Bluetooth/broadcast.dart';
+
+var students_list;
+// List<get_table> Students_data;
+
+class get_table {
+  final int slno;
+  final String name;
+  final String Present;
+
+  get_table({
+    required this.slno,
+    required this.name,
+    required this.Present,
+  });
+}
 
 // Fetch course data from Firestore
 Future<List<CourseData>> fetchCourseData(String teacherId) async {
@@ -77,6 +97,8 @@ class CourseData {
   });
 }
 
+List<get_table>? Students_data = [];
+
 class Teachers_Dashboard extends StatelessWidget {
   const Teachers_Dashboard({Key? key}) : super(key: key);
 
@@ -124,7 +146,9 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
       // Remove the course immediately from UI
       setState(() {
         _courseDataFuture = _courseDataFuture.then((courseDataList) {
-          return courseDataList.where((course) => course.CourseID != courseId).toList();
+          return courseDataList
+              .where((course) => course.CourseID != courseId)
+              .toList();
         });
       });
 
@@ -167,12 +191,18 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
 
     try {
       // Add the course back to Firestore
-      await FirebaseFirestore.instance.collection('Courses').doc(courseData.CourseID).set({
+      await FirebaseFirestore.instance
+          .collection('Courses')
+          .doc(courseData.CourseID)
+          .set({
         'Course_Name': courseData.name,
         'Course_Code': courseData.code,
-        'Semester': courseData.section.substring(0, 1), // Assuming format SemesterSection | Branch
-        'Section': courseData.section.substring(1, 2), // Assuming format SemesterSection | Branch
-        'Branch': courseData.section.substring(5), // Assuming format SemesterSection | Branch
+        'Semester': courseData.section
+            .substring(0, 1), // Assuming format SemesterSection | Branch
+        'Section': courseData.section
+            .substring(1, 2), // Assuming format SemesterSection | Branch
+        'Branch': courseData.section
+            .substring(5), // Assuming format SemesterSection | Branch
         'Classes_Held': courseData.classesHeld,
         'Course_id': courseData.CourseID,
       });
@@ -259,15 +289,55 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                           ),
                         ),
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            print("Inside Card");
+                            var get_data;
+                            DocumentSnapshot documentSnapshot =
+                                await FirebaseFirestore.instance
+                                    .collection("Courses")
+                                    .doc(courseData.CourseID)
+                                    .get();
+
+                            if (documentSnapshot.exists)
+                              get_data = documentSnapshot.data();
+
+                            // Accessing students_list from courses collection
+                            students_list =
+                                List<String>.from(get_data["Student_list"]);
+
+                            for (var docid in students_list) {
+                              // To get details of that particular Course.
+                              DocumentSnapshot documentSnapshot =
+                                  await FirebaseFirestore.instance
+                                      .collection("Students")
+                                      .doc(docid)
+                                      .get();
+                              var get_data;
+                              if (documentSnapshot.exists) {
+                                get_data = documentSnapshot.data();
+                                print(
+                                    "RECEIVER NAME ${get_data["student_name"]}");
+
+                                Students_data!.add(
+                                  get_table(
+                                      slno: 1,
+                                      name: get_data["student_name"],
+                                      Present: "P"),
+                                );
+                              }
+                            }
+
                             print("Pressed Card: ${courseData.CourseID}");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Broadcast_Land(courseData.CourseID),
-                              ),
-                            );
+
+                            Timer(
+                                Duration(seconds: 3),
+                                () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            Broadcast_Land(courseData.CourseID),
+                                      ),
+                                    ));
                           },
                           child: Container(
                             margin: const EdgeInsets.all(10),
@@ -315,8 +385,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 6, 0, 0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

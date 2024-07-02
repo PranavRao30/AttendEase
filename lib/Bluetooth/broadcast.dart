@@ -39,7 +39,7 @@ class GlowingButtonPage extends StatefulWidget {
 
 class _GlowingButtonPageState extends State<GlowingButtonPage> {
   // copy of list
-  List<get_table> _data = List.from(Students_data);
+  List<get_table> _data = List.from(Students_data!);
   bool is_sort = true;
 
   bool _isGlowing = false;

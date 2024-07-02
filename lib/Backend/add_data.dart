@@ -112,6 +112,7 @@ add_course_data(id) async {
   else
     Store_Course_Name = course_name.text.toString();
 
+
   add_courses_map = {
     "Course_id": id,
     "Course_Name": Store_Course_Name,
@@ -122,6 +123,7 @@ add_course_data(id) async {
     "Classes_Held": Store_Classes_Held,
     "Teacher_id": email,
     "Time_of_adding": formatted_time,
+    "Student_list": [],
   };
 
   FirebaseFirestore.instance
@@ -256,5 +258,7 @@ get_Students_data(
     "Semester": dropdownvalue_semester,
     "Section": dropdownvalue_section
   });
+
+  
   print("students details updated");
 }

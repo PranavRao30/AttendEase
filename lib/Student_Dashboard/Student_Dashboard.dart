@@ -273,7 +273,11 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                       return InkWell(
                         onTap: () {
                           print("Pressed Card: ${courseData.CourseID}");
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BeaconPage(courseData.CourseID)));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BeaconPage(courseData.CourseID)));
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
@@ -464,7 +468,7 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
           name: data['Course_Name'] ?? '',
           code: data['Course_Code'] ?? '',
           section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
-          classesHeld: data['Classes_Held'] ??'',
+          classesHeld: data['Classes_Held'] ?? '',
           CourseID: doc.id,
         );
       }).toList();
@@ -494,92 +498,120 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
       }
-      Timer(const Duration(seconds: 1), () =>
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Student_Dashboard())));
+
+
+      // Updating students list in Courses Collection
+      var data;
+      DocumentSnapshot courseDoc = await FirebaseFirestore.instance
+          .collection("Courses")
+          .doc(courseId)
+          .get();
+
+      if (courseDoc.exists) {
+        data = courseDoc.data();
+      }
+
+      var student_list = List<String>.from(data["Student_list"]);
+
+      // Add the Student email id if it's not already in the list
+      if (!student_list.contains(emailName)) {
+        student_list.add(emailName);
+
+        // Update the course's document with the new list of Student IDs
+        await FirebaseFirestore.instance
+            .collection("Courses")
+            .doc(courseId)
+            .update({'Student_list': student_list});
+      }
+
+      Timer(
+          const Duration(seconds: 1),
+          () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => Student_Dashboard())));
     } catch (e) {
       print('Error joining course: $e');
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    // Background Color of the home page.
-    backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
-    body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-              height: 70.0,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(184, 163, 255, 1),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // Background Color of the home page.
+      backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                height: 70.0,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(184, 163, 255, 1),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    "Select Courses",
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: Center(
+              DropdownButton<String>(
+                hint: Text('Select a course'),
+                value: selectedCourse,
+                isExpanded: true,
+                items: availableCourses.map((CourseData course) {
+                  return DropdownMenuItem<String>(
+                    value: course.CourseID,
+                    child: Text(course.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCourse = value;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  if (selectedCourse != null) {
+                    await joinCourse(selectedCourse!);
+                    // Update the UI or show a success message
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(184, 163, 255, 1),
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
                 child: Text(
-                  "Select Courses",
+                  'Join Course',
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
-            ),
-            DropdownButton<String>(
-              hint: Text('Select a course'),
-              value: selectedCourse,
-              isExpanded: true,
-              items: availableCourses.map((CourseData course) {
-                return DropdownMenuItem<String>(
-                  value: course.CourseID,
-                  child: Text(course.name),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCourse = value;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                if (selectedCourse != null) {
-                  await joinCourse(selectedCourse!);
-                  // Update the UI or show a success message
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(184, 163, 255, 1),
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              child: Text(
-                'Join Course',
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
