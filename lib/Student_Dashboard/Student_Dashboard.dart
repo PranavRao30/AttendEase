@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:attend_ease/Bluetooth/receive.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/gradient_container.dart';
@@ -16,59 +18,36 @@ void main() {
 // Fetch teachers courses
 Future<List<CourseData>> fetchCourseData() async {
   List<CourseData> courseDataList = [];
-  List course_doc_id = [];
   try {
-    // Step 1: Retrieve the Course Collection.
-
-    DocumentSnapshot documentSnapshot;
-    // Retreiving course document ids
-
-    DocumentSnapshot student_details = await FirebaseFirestore.instance
+    DocumentSnapshot studentDetails = await FirebaseFirestore.instance
         .collection("Students")
-        .doc(emailName)
+        .doc(FirebaseAuth.instance.currentUser!.email)
         .get();
 
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("Courses")
-        .where('Semester', isEqualTo: student_details['Semester'])
-        .where('Section', isEqualTo: student_details['Section'])
-        .where('Branch', isEqualTo: student_details['Branch'])
-        .get();
+    List<dynamic> courseIDs = studentDetails['Courses_list'];
 
-    if (querySnapshot.docs.isNotEmpty) {
-      for (var course_id in querySnapshot.docs) {
-        documentSnapshot = await FirebaseFirestore.instance
-            .collection('Courses')
-            .doc(course_id.id)
-            .get();
+    for (String courseId in courseIDs) {
+      DocumentSnapshot courseDoc = await FirebaseFirestore.instance
+          .collection('Courses')
+          .doc(courseId)
+          .get();
 
-        if (documentSnapshot.exists) {
-          Map<String, dynamic> data =
-              documentSnapshot.data() as Map<String, dynamic>;
-
-          // Extracting data
-
-          CourseData courseData = CourseData(
-            name: data['Course_Name'] ?? '',
-            code: data['Course_Code'] ?? '',
-            section:
-                '${data['Semester']}${data['Section']} | ${data['Branch']}',
-            classesHeld: data['Classes_Held'] ?? '',
-            CourseID: data['Course_id'] ?? '',
-          );
-          courseDataList.add(courseData);
-        } else {
-          print('Document does not exist for course ID:');
-        }
+      if (courseDoc.exists) {
+        Map<String, dynamic> data = courseDoc.data() as Map<String, dynamic>;
+        CourseData courseData = CourseData(
+          name: data['Course_Name'] ?? '',
+          code: data['Course_Code'] ?? '',
+          section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
+          classesHeld: data['Classes_Held'] ?? '',
+          CourseID: data['Course_id'] ?? '',
+        );
+        courseDataList.add(courseData);
       }
-    } else {
-      print("Does not exist");
     }
   } catch (e) {
     print('Error fetching course data: $e');
   }
 
-  // print("Cccccc ${Course_Names}");
   return courseDataList;
 }
 
@@ -140,26 +119,25 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   late PageController _pageController;
   late List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-        initialPage: 0); // Initialize _pageController in initState
+    _pageController = PageController(initialPage: 1);
 
     _screens = [
-      Student_Home_Page(),
-      ProfileScreen(), // Make sure to define ProfileScreen or any other screen you intend to navigate to
+      CourseSelectionPage(),
+      Student_Home_Page(), // Add this line
+      ProfileScreen(),
     ];
   }
 
   @override
   void dispose() {
-    _pageController
-        .dispose(); // Dispose _pageController when it's no longer needed
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -182,30 +160,25 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         children: _screens,
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        index: _currentIndex, // The currently selected index.
-        color: Color.fromRGBO(
-            184, 163, 255, 1), // Background color of the bottom navigation bar.
-        buttonBackgroundColor: const Color.fromRGBO(
-            184, 163, 255, 0), // Background color of the active item.
-        backgroundColor: const Color.fromRGBO(
-            184, 163, 255, 0.1), // Background color of the navigation bar.
-        animationDuration: const Duration(
-            milliseconds: 300), // Duration of animation when switching tabs.
-        height: 70.0, // Height of the bottom navigation bar.
+        index: _currentIndex,
+        color: Color.fromRGBO(184, 163, 255, 1),
+        buttonBackgroundColor: const Color.fromRGBO(184, 163, 255, 0),
+        backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+        animationDuration: const Duration(milliseconds: 300),
+        height: 70.0,
         items: const <Widget>[
-          // Icon(Icons.add, size: 35), // Icon for the Home tab.
-          Icon(Icons.home, size: 35), // Icon for the Access Time tab.
-          Icon(Icons.person, size: 35), // Icon for the Person tab.
+          Icon(Icons.add, size: 35),
+          Icon(Icons.home, size: 35), // Add this icon
+          Icon(Icons.person, size: 35),
         ],
         onTap: (index) {
-          // Callback function when a tab is tapped.
           setState(() {
-            _currentIndex = index; // Update the current index.
+            _currentIndex = index;
             _pageController.animateToPage(
               index,
               duration: const Duration(milliseconds: 300),
               curve: Curves.ease,
-            ); // Animate to the selected page.
+            );
           });
         },
       ),
@@ -242,22 +215,12 @@ class Student_Home_Page extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<Student_Home_Page> {
-  // late indicates the compiler it may be non nullable value.
-  // Future represents a value or error in future
   late Future<List<CourseData>> _courseDataFuture;
 
   @override
   void initState() {
     super.initState();
-    // Example of fetching teacher ID from Firebase Authentication
-    String? teacherId = FirebaseAuth.instance.currentUser?.email;
-    if (teacherId != null) {
-      _courseDataFuture =
-          fetchCourseData(); // Initialize _courseDataFuture with teacherId
-    } else {
-      print('User not logged in');
-      // Handle the case where user is not logged in
-    }
+    _courseDataFuture = fetchCourseData();
   }
 
   @override
@@ -310,12 +273,7 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                       return InkWell(
                         onTap: () {
                           print("Pressed Card: ${courseData.CourseID}");
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           Broadcast_Land(courseData.CourseID)),
-                          // );
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BeaconPage(courseData.CourseID)));
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
@@ -366,19 +324,41 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                                       padding:
                                           const EdgeInsets.fromLTRB(0, 6, 0, 0),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "Section: " + courseData.section,
-                                            style:
-                                                const TextStyle(fontSize: 12),
+                                          const Text(
+                                            "Classes Held: ",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(
-                                            "Classes Held: " +
-                                                courseData.classesHeld,
+                                            courseData.classesHeld,
                                             style:
-                                                const TextStyle(fontSize: 12),
+                                                const TextStyle(fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            "Section: ",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            courseData.section,
+                                            style:
+                                                const TextStyle(fontSize: 10),
                                           ),
                                         ],
                                       ),
@@ -438,6 +418,126 @@ class ProfileScreen extends StatelessWidget {
                     color: Colors.white),
               ),
             )),
+      ),
+    );
+  }
+}
+
+class CourseSelectionPage extends StatefulWidget {
+  @override
+  _CourseSelectionPageState createState() => _CourseSelectionPageState();
+}
+
+class _CourseSelectionPageState extends State<CourseSelectionPage> {
+  String? selectedCourse;
+  List<CourseData> availableCourses = []; // To be fetched from the backend
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAvailableCourses(); // Fetch the courses on page load
+  }
+
+  Future<void> fetchAvailableCourses() async {
+    try {
+      // Fetch current student's branch, section, and semester
+      DocumentSnapshot studentDetails = await FirebaseFirestore.instance
+          .collection("Students")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .get();
+
+      String branch = studentDetails['Branch'];
+      String section = studentDetails['Section'];
+      int semester = studentDetails['Semester'];
+
+      // Query the courses collection to get courses matching the student's branch, section, and semester
+      QuerySnapshot coursesSnapshot = await FirebaseFirestore.instance
+          .collection('Courses')
+          .where('Branch', isEqualTo: branch)
+          .where('Section', isEqualTo: section)
+          .where('Semester', isEqualTo: semester)
+          .get();
+
+      List<CourseData> fetchedCourses = coursesSnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return CourseData(
+          name: data['Course_Name'] ?? '',
+          code: data['Course_Code'] ?? '',
+          section: '${data['Semester']}${data['Section']} | ${data['Branch']}',
+          classesHeld: data['Classes_Held'] ??'',
+          CourseID: doc.id,
+        );
+      }).toList();
+
+      setState(() {
+        availableCourses = fetchedCourses;
+      });
+    } catch (e) {
+      print('Error fetching available courses: $e');
+    }
+  }
+
+  Future<void> joinCourse(String courseId) async {
+    try {
+      DocumentReference studentRef = FirebaseFirestore.instance
+          .collection("Students")
+          .doc(FirebaseAuth.instance.currentUser!.email);
+
+      DocumentSnapshot studentDoc = await studentRef.get();
+
+      List<dynamic> courseIDs = studentDoc['Courses_list'];
+
+      // Add the course ID if it's not already in the list
+      if (!courseIDs.contains(courseId)) {
+        courseIDs.add(courseId);
+
+        // Update the student's document with the new list of course IDs
+        await studentRef.update({'Courses_list': courseIDs});
+      }
+      Timer(const Duration(seconds: 1), () =>
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Student_Dashboard())));
+    } catch (e) {
+      print('Error joining course: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Select Courses'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            DropdownButton<String>(
+              hint: Text('Select a course'),
+              value: selectedCourse,
+              items: availableCourses.map((CourseData course) {
+                return DropdownMenuItem<String>(
+                  value: course.CourseID,
+                  child: Text(course.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedCourse = value;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                if (selectedCourse != null) {
+                  await joinCourse(selectedCourse!);
+                  // Update the UI or show a success message
+                }
+              },
+              child: Text('Join Course'),
+            ),
+          ],
+        ),
       ),
     );
   }

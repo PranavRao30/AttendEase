@@ -12,9 +12,9 @@ import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
 
-void main() {
-  runApp(const Teachers_Dashboard());
-}
+// void main() {
+//   runApp(const Teachers_Dashboard());
+// }
 
 // Fetch teachers courses
 Future<List<CourseData>> fetchCourseData(String teacherId) async {
