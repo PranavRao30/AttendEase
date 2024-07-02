@@ -45,8 +45,8 @@ dependencies:
   uuid: ^4.4.0
   curved_navigation_bar: ^1.0.3
   flutter_screenutil: ^5.9.3
+  flutter_launcher_icons: "^0.13.1"
 
-  
   beacon_broadcast: 0.3.1
   permission_handler: ^11.3.1
   flutter_blue_plus: ^1.32.7
@@ -54,6 +54,12 @@ dependencies:
   avatar_glow: ^3.0.1
   intl: ^0.19.0
 
+flutter_launcher_icons:
+  android: false
+  ios: true
+  image_path: "assets/images/logo.png" 
+  adaptive_icon_background: "#000000" 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
