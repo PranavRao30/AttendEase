@@ -2,6 +2,7 @@ import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
 import 'package:attend_ease/Student_DashBoard/Sections_student.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:attend_ease/Backend/add_data.dart';
@@ -46,6 +47,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+var Student_Name = TextEditingController();
+bool validate_Name = false;
 var branch_codes = [
   'AE',
   'AIDS',
@@ -411,6 +414,69 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// Names
+
+class Get_Name extends StatelessWidget {
+  const Get_Name({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 2, // Adjust the flex value as needed
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                "Course Code:",
+                style: font_details(),
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 3, // Adjust the flex value as needed
+            child: Container(
+              margin: const EdgeInsets.only(left: 10),
+              width: MediaQuery.of(context).size.width *
+                  0.6, // Adjust width as needed
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(radius_12()),
+                color: Colors.white60,
+              ),
+              child: TextField(
+                controller: Student_Name,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]'))
+                ],
+                decoration: InputDecoration(
+                  hintText: "Enter Course Code..",
+                  errorText: validate_Name ? "Field cannot be empty" : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(radius_12()),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(radius_12()),
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Colors.purple,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
