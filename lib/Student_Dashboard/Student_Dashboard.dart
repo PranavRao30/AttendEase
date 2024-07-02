@@ -501,19 +501,43 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Select Courses'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    // Background Color of the home page.
+    backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+    body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+              height: 70.0,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(184, 163, 255, 1),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "Select Courses",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             DropdownButton<String>(
               hint: Text('Select a course'),
               value: selectedCourse,
+              isExpanded: true,
               items: availableCourses.map((CourseData course) {
                 return DropdownMenuItem<String>(
                   value: course.CourseID,
@@ -534,11 +558,28 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
                   // Update the UI or show a success message
                 }
               },
-              child: Text('Join Course'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(184, 163, 255, 1),
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Join Course',
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

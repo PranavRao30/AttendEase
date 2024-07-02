@@ -88,7 +88,7 @@ var classes_held = TextEditingController();
 
 var dropdown_course = "Applied Physics for Computer Science Stream";
 var cse1 = [
-  "Mathematical foundation for Computer SCience Stream-2",
+  "Mathematical foundation for Computer Science Stream-2",
   "Applied Physics for Computer Science Stream",
   "Principles of Programming in C",
   "Professional Writing Skills in English",
@@ -169,9 +169,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(children: [
-            const SizedBox(height: 25),
             Container(
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
               height: 70.0.h,
@@ -738,7 +737,7 @@ class Get_Course_Name extends StatelessWidget {
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')),
                 ],
                 decoration: InputDecoration(
-                  hintText: "Enter Course Name..",
+                  hintText: "Enter Course Name",
                   errorText: validate_course_name ? "Field cannot be empty" : null,
                   // Initial border
                   border: OutlineInputBorder(
@@ -800,7 +799,7 @@ class Get_Course_Code extends StatelessWidget {
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z ]+$'))
                 ],
                 decoration: InputDecoration(
-                  hintText: "Enter Course Code..",
+                  hintText: "Enter course code",
                   errorText: validate_course_code ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
@@ -861,7 +860,7 @@ class Get_Classes_Held extends StatelessWidget {
                 ],
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: "Enter number of classes held..",
+                  hintText: "Enter no of classes held",
                   errorText: validate_classes_held ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
