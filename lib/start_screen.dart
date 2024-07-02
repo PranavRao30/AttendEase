@@ -9,6 +9,7 @@ import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 var get_student_data;
 
@@ -43,12 +44,15 @@ class StartScreen extends StatelessWidget {
                   Provider.of<GoogleSignInProvider>(context, listen: false);
               await provider.googleLogin();
 
-              //
               if (provider.user != null) {
                 // User is signed in
                 // Navigate to the next screen.
-
+                var current_user = provider.user!.displayName;
                 var email_list = emailName.toString().split('.');
+
+                // DateTime time = DateTime.now();
+                // String formatted_time = DateFormat("HH:mm:ss").format(time);
+                
                 print(email_list[1].substring(0, 2));
                 if (emailName.toString().contains("cse")) {
                   add_Teachers_data(0);
@@ -68,7 +72,10 @@ class StartScreen extends StatelessWidget {
                   print(documentSnapshot.exists);
                   // creating a document
                   if (!documentSnapshot.exists) {
+                    
+
                     add_student_map = {
+                      "student_name": current_user,
                       "status_of_joining": false,
                       "student_id": emailName,
                       "Student_name": emailName.toString(),

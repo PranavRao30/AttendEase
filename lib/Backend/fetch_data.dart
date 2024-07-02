@@ -1,25 +1,44 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
-var Course_Names = <String>[];
-var Course_Code = <String>[];
-var classesHeld = <String>[];
-var sections_branch_list = <String>[];
+class get_table {
+  final int slno;
+  final String name;
+  final String Present;
 
-fetch_Teachers_Data(List<String> course_id) async {
-  var course_data;
-  for (int i = 0; i < course_id.length; i++) {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection("Courses")
-        .doc(course_id[i])
-        .get();
-    course_data = documentSnapshot.data();
-    Course_Names.add(course_data["Course_Name"]);
-
-    Course_Code.add(course_data['Course_Code']);
-    sections_branch_list.add(
-        "${course_data['Semester']}${course_data['Section']} | ${course_data['Branch']}");
-    classesHeld.add("Classes Held: ${course_data['Classes_Held']}");
-  }
-
-  print(Course_Code);
+  get_table(
+      {required this.slno,
+      required this.name,
+      required this.Present,
+      });
 }
+// Table
+getting_students_table() async {
+    
+}
+
+
+
+List<get_table> Students_data = [
+  get_table(
+      slno: 1,
+      name: "Prajwal P",
+  
+      Present: "P",
+      ),
+  get_table(
+      slno: 2,
+      name: "Pannaga R Bhat",
+      
+      Present: "A",
+      ),
+  get_table(
+      slno: 3,
+      name: "Pranav Anantha Rao",
+      Present: "P",
+      ),
+  get_table(
+      slno: 4,
+      name: "Pradeep P T",
+      Present: "A",
+      ),
+];
