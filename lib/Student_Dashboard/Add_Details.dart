@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(const AddASubject());
@@ -16,7 +17,8 @@ class AddASubject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScreenUtilInit(
+      builder: (BuildContext context,child) =>MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -29,6 +31,8 @@ class AddASubject extends StatelessWidget {
       home: const MyHomePage(
         title: 'Flutter Demo Home Page',
       ),
+    ),
+    designSize: const Size(360,690),
     );
   }
 }
@@ -107,263 +111,307 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: const Center(
-              child: Text('AttendEase'),
-            )),
-
-        // Background Color of the home page.
-        backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
-
-        // UI
-        body: Column(children: [
-          const SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-          ),
-          Container(
-            width: 400,
-            margin: const EdgeInsets.only(top: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Enter Course Details",
-                  style: GoogleFonts.poppins(
-                    textStyle: font25(textColor: Colors.purpleAccent),
-                  ),
-                ),
-
-                // Branch Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Container(
-                            child: Text(
-                          "Select Branch:",
-                          style: font_details(),
-                        )),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Center(
+          child: Text('AttendEase'),
+        ),
+      ),
+      backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Enter Course Details",
+                      style: GoogleFonts.poppins(
+                        textStyle: font25(textColor: Colors.purpleAccent),
                       ),
+                    ),
 
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 46),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
+                    // Branch Selection
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                "Select Branch:",
+                                style: font_details(),
                               ),
-                              child: DropdownButtonHideUnderline(
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
-                                      value: dropdownvalue_branch,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                      // Items from the array
-                                      items: branch_codes.map((String s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text(s));
-                                      }).toList(),
+                                    value: dropdownvalue_branch,
+                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                    isExpanded: true,
+                                    items: branch_codes.map((String s) {
+                                      return DropdownMenuItem(
+                                        value: s,
+                                        child: Text(s),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newVal) {
+                                      setState(() {
+                                        dropdownvalue_branch = newVal!;
 
-                                      //
-                                      onChanged: (String? newVal) {
-                                        setState(() {
-                                          dropdownvalue_branch = newVal!;
-
-                                          // Newly Arrived Branches
-                                          if (dropdownvalue_branch == "CSIOT" ||
-                                              dropdownvalue_branch == "AIDS" ||
-                                              dropdownvalue_branch == "CSDS") {
-                                            if (dropdownvalue_semester == 1 ||
-                                                dropdownvalue_semester == 3 ||
-                                                dropdownvalue_semester == 5 ||
-                                                dropdownvalue_semester == 7) {
-                                              dropdownvalue_semester = 1;
-                                            }
-                                            if (dropdownvalue_semester == 2 ||
-                                                dropdownvalue_semester == 4 ||
-                                                dropdownvalue_semester == 6 ||
-                                                dropdownvalue_semester == 8) {
-                                              dropdownvalue_semester = 2;
-                                            }
-                                            sem = new_Arrival(
-                                                dropdownvalue_branch,
-                                                current_cycle);
-                                          } else {
-                                            check(current_cycle);
+                                        // Newly Arrived Branches
+                                        if (dropdownvalue_branch == "CSIOT" ||
+                                            dropdownvalue_branch == "AIDS" ||
+                                            dropdownvalue_branch == "CSDS") {
+                                          if (dropdownvalue_semester == 1 ||
+                                              dropdownvalue_semester == 3 ||
+                                              dropdownvalue_semester == 5 ||
+                                              dropdownvalue_semester == 7) {
+                                            dropdownvalue_semester = 1;
                                           }
-                                          enable_section = false;
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Cycle Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Current Cycle:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 50),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                      value: current_cycle,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                      // Items from the array
-                                      items: ['Even', "Odd"].map((String s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text(s));
-                                      }).toList(),
-                                      onChanged: (String? newVal) {
-                                        current_cycle = newVal!;
-                                        setState(() {
+                                          if (dropdownvalue_semester == 2 ||
+                                              dropdownvalue_semester == 4 ||
+                                              dropdownvalue_semester == 6 ||
+                                              dropdownvalue_semester == 8) {
+                                            dropdownvalue_semester = 2;
+                                          }
+                                          sem = new_Arrival(
+                                              dropdownvalue_branch,
+                                              current_cycle);
+                                        } else {
                                           check(current_cycle);
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Semester Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Select Semester:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
+                                        }
+                                        enable_section = false;
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
-                              child: DropdownButtonHideUnderline(
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Cycle Selection
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                "Current Cycle:",
+                                style: font_details(),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
-                                      value: dropdownvalue_semester,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
+                                    value: current_cycle,
+                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                    isExpanded: true,
+                                    items: ['Even', "Odd"].map((String s) {
+                                      return DropdownMenuItem(
+                                        value: s,
+                                        child: Text(s),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newVal) {
+                                      setState(() {
+                                        current_cycle = newVal!;
+                                        check(current_cycle);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                                      // Items from the array
-                                      items: sem.map((int s) {
-                                        return DropdownMenuItem(
-                                            value: s, child: Text("$s"));
-                                      }).toList(),
+                    // Semester Selection
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                "Select Semester:",
+                                style: font_details(),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    value: dropdownvalue_semester,
+                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                    isExpanded: true,
+                                    items: sem.map((int s) {
+                                      return DropdownMenuItem(
+                                        value: s,
+                                        child: Text("$s"),
+                                      );
+                                    }).toList(),
+                                    onChanged: (int? newVal) {
+                                      setState(() {
+                                        dropdownvalue_semester = newVal!;
+                                        if (dropdownvalue_branch != "CSIOT" &&
+                                            dropdownvalue_branch != "AIDS" &&
+                                            dropdownvalue_branch != "CSDS") {
+                                          select_sections(
+                                              dropdownvalue_branch,
+                                              current_cycle);
+                                        }
 
-                                      //
-                                      onChanged: (int? newVal) {
-                                        setState(() {
-                                          dropdownvalue_semester = newVal!;
-                                          if (dropdownvalue_branch != "CSIOT" ||
-                                              dropdownvalue_branch != "AIDS" ||
-                                              dropdownvalue_branch != "CSDS") {
-                                            select_sections(
-                                                dropdownvalue_branch,
-                                                current_cycle);
+                                        // Extracting section
+                                        section = sections[
+                                            '$dropdownvalue_semester'];
+                                        enable_section = newVal != null;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Section Selection
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                "Select Section:",
+                                style: font_details(),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    value: dropdownvalue_section,
+                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                    isExpanded: true,
+                                    items: section.map((String s) {
+                                      return DropdownMenuItem(
+                                        value: s,
+                                        child: Text(s),
+                                      );
+                                    }).toList(),
+                                    onChanged: enable_section
+                                        ? (String? newVal) {
+                                            setState(() {
+                                              dropdownvalue_section = newVal!;
+                                              enable_section = false;
+                                            });
                                           }
-
-                                          //Extracting section
-                                          section = sections[
-                                              '$dropdownvalue_semester'];
-
-                                          enable_section = newVal != null;
-                                        });
-                                      })))),
-                    ],
-                  ),
-                ),
-
-                // Section Selection
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Select Section:",
-                        style: font_details(),
-                      ),
-
-                      // options
-                      Padding(
-                          padding: const EdgeInsets.only(left: 43),
-                          child: Container(
-                              height: 21,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(11),
-                                color: Colors.white,
+                                        : null,
+                                  ),
+                                ),
                               ),
-                              child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                value: dropdownvalue_section,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                // Items from the array
-                                items: section.map((String s) {
-                                  return DropdownMenuItem(
-                                      value: s, child: Text(s));
-                                }).toList(),
-
-                                //Fetching students.
-                                onChanged: enable_section
-                                    ? (String? newVal) {
-                                        setState(() {
-                                          dropdownvalue_section = newVal!;
-                                          enable_section = false;
-                                        });
-                                      }
-                                    : null,
-                              )))),
-                    ],
-                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                get_Students_data(dropdownvalue_branch, dropdownvalue_semester,
-                    dropdownvalue_section);
-                Navigator.push(
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  get_Students_data(dropdownvalue_branch,
+                      dropdownvalue_semester, dropdownvalue_section);
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Student_Dashboard()));
-              },
-              child: Text(
-                "Join Class",
-                style: GoogleFonts.poppins(
+                        builder: (context) => Student_Dashboard()),
+                  );
+                },
+                child: Text(
+                  "Join Class",
+                  style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white)),
-              )),
-        ]));
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
