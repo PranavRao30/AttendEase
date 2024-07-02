@@ -24,7 +24,7 @@ Future main() async {
       "814534653957-2uccgqsjhg9dfuc8hro2e7q6rpm9di8d.apps.googleusercontent.com";
   runApp(
     const MyApp(
-        androidClientId: androidClientId,
+        androidClientId: webClientId,
         iosClientId: iosClientId,
         webClientId: webClientId),
   );
