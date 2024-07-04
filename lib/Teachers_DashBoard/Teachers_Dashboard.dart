@@ -304,7 +304,7 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                             // Accessing students_list from courses collection
                             students_list =
                                 List<String>.from(get_data["Student_list"]);
-
+Students_data?.clear();
                             for (var docid in students_list) {
                               // To get details of that particular Course.
                               DocumentSnapshot documentSnapshot =
@@ -318,26 +318,39 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                                 print(
                                     "RECEIVER NAME ${get_data["student_name"]}");
 
+                             if (Students_data!.isEmpty) {
                                 Students_data!.add(
                                   get_table(
                                       slno: 1,
                                       name: get_data["student_name"],
                                       Present: "P"),
                                 );
+} else {
+  if(!Students_data!.contains(get_data["student_name"])){
+     Students_data!.add(
+                                  get_table(
+                                      slno: 1,
+                                      name: get_data["student_name"],
+                                      Present: "P"),
+                                );
+  }
+  print('Students_data is either null or empty.');
+}
+ 
+                                
                               }
+                  
                             }
 
                             print("Pressed Card: ${courseData.CourseID}");
 
-                            Timer(
-                                Duration(seconds: 3),
-                                () => Navigator.push(
+                                Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             Broadcast_Land(courseData.CourseID),
                                       ),
-                                    ));
+                                    );
                           },
                           child: Container(
                             margin: const EdgeInsets.all(10),
