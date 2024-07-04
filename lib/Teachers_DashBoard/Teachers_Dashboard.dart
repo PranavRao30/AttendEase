@@ -292,6 +292,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                           onTap: () async {
                             print("Inside Card");
                             var get_data;
+
+                            // Accessing courses collection
                             DocumentSnapshot documentSnapshot =
                                 await FirebaseFirestore.instance
                                     .collection("Courses")
@@ -318,13 +320,15 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                                 print(
                                     "RECEIVER NAME ${get_data["student_name"]}");
 
-                                Students_data!.add(
-                                  get_table(
-                                      slno: 1,
-                                      name: get_data["student_name"],
-                                      Present: "P"),
-                                );
-                              }
+                                
+                                  Students_data!.add(
+                                    get_table(
+                                        slno: 1,
+                                        name: get_data["student_name"],
+                                        Present: "A"),
+                                  );
+                              
+                              
                             }
 
                             print("Pressed Card: ${courseData.CourseID}");
