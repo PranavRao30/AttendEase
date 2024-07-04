@@ -787,7 +787,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   // Adding Data to firebase
                                                   add_Teachers_data(1);
 
-                                                  Timer(Duration(seconds: 3),
+                                                  Timer(Duration(seconds: 1),
                                                       () {
                                                     widget.controller
                                                         .animateToPage(
