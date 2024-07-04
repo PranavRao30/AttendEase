@@ -10,6 +10,7 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 
 String genratedUUID = "";
 
+
 class Broadcast_Land extends StatelessWidget {
   final String text;
   Broadcast_Land(this.text) {
@@ -39,11 +40,17 @@ class GlowingButtonPage extends StatefulWidget {
 
 class _GlowingButtonPageState extends State<GlowingButtonPage> {
   // copy of list
-  List<get_table> _data = List.from(Students_data!);
+  List<get_table> _data =List.from(Students_data!);
+ // Initialize _data as an empty list
+
+
   bool is_sort = true;
 
   bool _isGlowing = false;
   Timer? _glowTimer;
+
+
+
 
   void _startGlow() {
     setState(() {
@@ -66,7 +73,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+   {
+               
     return Scaffold(
         appBar: AppBar(
             // title: Text('Glowing Button Page'),
@@ -85,7 +94,8 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     shape: CircleBorder(),
                     child: CircleAvatar(
                       backgroundColor: Color.fromARGB(180, 193, 95, 240),
-                      child: IconButton(
+                      child: 
+                      IconButton(
                         icon: Icon(Icons.add,
                             color: const Color.fromARGB(255, 255, 206, 248)),
                         onPressed: () async {
@@ -138,7 +148,8 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                         //     ),
                         //   ),
                         // ),
-
+                        
+                       
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
@@ -236,7 +247,8 @@ Future<void> startBeaconBroadcast() async {
       .setUUID(genratedUUID)
       .setMajorId(100)
       .setMinorId(1)
-      .setTransmissionPower(-59);
+      .setTransmissionPower(-59)
+      .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24');
 
   // Check if the device supports beacon transmission
   BeaconStatus transmissionSupportStatus =

@@ -10,6 +10,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
 void main() {
   runApp(const Student_Dashboard());
@@ -94,6 +95,20 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+}
+// Display duplicates
+void displayDuplicatesMessage(BuildContext context) {
+  final snackbar = SnackBar(
+    content: Text("Course Already Joined. Try with different course"),
+    duration: Duration(seconds: 3),
+    action: SnackBarAction(
+        label: "Ok",
+        onPressed: () {
+          print("Duplicates");
+        }),
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -498,8 +513,8 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
       }
-
-
+      else
+              displayDuplicatesMessage(context);
       // Updating students list in Courses Collection
       var data;
       DocumentSnapshot courseDoc = await FirebaseFirestore.instance
