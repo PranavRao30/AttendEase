@@ -16,14 +16,14 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
+import 'Teachers_Profile.dart';
 
 var students_list;
-// List<get_table> Students_data;
 
 class get_table {
   final int slno;
   final String name;
-  final String Present;
+  String Present;
 
   get_table({
     required this.slno,
@@ -97,7 +97,7 @@ class CourseData {
   });
 }
 
-List<get_table>? Students_data = [];
+// List<get_table>? Students_data = [];
 
 class Teachers_Dashboard extends StatelessWidget {
   const Teachers_Dashboard({Key? key}) : super(key: key);
@@ -126,6 +126,8 @@ class Teacher_Home_Page extends StatefulWidget {
 
 class _TeacherHomePageState extends State<Teacher_Home_Page> {
   late Future<List<CourseData>> _courseDataFuture;
+
+  List<get_table> _data = [];
 
   @override
   void initState() {
@@ -291,66 +293,16 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
                         child: InkWell(
                           onTap: () async {
                             print("Inside Card");
-                            var get_data;
-                            DocumentSnapshot documentSnapshot =
-                                await FirebaseFirestore.instance
-                                    .collection("Courses")
-                                    .doc(courseData.CourseID)
-                                    .get();
-
-                            if (documentSnapshot.exists)
-                              get_data = documentSnapshot.data();
-
-                            // Accessing students_list from courses collection
-                            students_list =
-                                List<String>.from(get_data["Student_list"]);
-Students_data?.clear();
-                            for (var docid in students_list) {
-                              // To get details of that particular Course.
-                              DocumentSnapshot documentSnapshot =
-                                  await FirebaseFirestore.instance
-                                      .collection("Students")
-                                      .doc(docid)
-                                      .get();
-                              var get_data;
-                              if (documentSnapshot.exists) {
-                                get_data = documentSnapshot.data();
-                                print(
-                                    "RECEIVER NAME ${get_data["student_name"]}");
-
-                             if (Students_data!.isEmpty) {
-                                Students_data!.add(
-                                  get_table(
-                                      slno: 1,
-                                      name: get_data["student_name"],
-                                      Present: "P"),
-                                );
-} else {
-  if(!Students_data!.contains(get_data["student_name"])){
-     Students_data!.add(
-                                  get_table(
-                                      slno: 1,
-                                      name: get_data["student_name"],
-                                      Present: "P"),
-                                );
-  }
-  print('Students_data is either null or empty.');
-}
- 
-                                
-                              }
-                  
-                            }
 
                             print("Pressed Card: ${courseData.CourseID}");
 
-                                Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            Broadcast_Land(courseData.CourseID),
-                                      ),
-                                    );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Broadcast_Land(courseData.CourseID),
+                              ),
+                            );
                           },
                           child: Container(
                             margin: const EdgeInsets.all(10),

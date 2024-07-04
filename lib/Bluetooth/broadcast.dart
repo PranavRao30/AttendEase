@@ -7,12 +7,26 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 String genratedUUID = "";
+// List<get_table>? Students_data = [];
 
+// class get_table {
+//   final int slno;
+//   final String name;
+//   final String Present;
+
+//   get_table({
+//     required this.slno,
+//     required this.name,
+//     required this.Present,
+//   });
+// }
 
 class Broadcast_Land extends StatelessWidget {
-  final String text;
+  String text;
   Broadcast_Land(this.text) {
     genratedUUID = text;
   }
@@ -40,17 +54,74 @@ class GlowingButtonPage extends StatefulWidget {
 
 class _GlowingButtonPageState extends State<GlowingButtonPage> {
   // copy of list
-  List<get_table> _data =List.from(Students_data!);
- // Initialize _data as an empty list
+  List<get_table> _data = [];
+  List<get_table> Students_data = [];
+  // Initialize _data as an empty list
 
+  @override
+  void initState() {
+    super.initState();
+    get_table_data();
+    Timer(Duration(seconds: 3), () => setState(() {}));
+    // _data = List.from(Students_data!);
+  }
+
+  void get_table_data() async {
+    // Getting Students details on table
+    int slno = 1;
+    var get_data;
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection("Courses")
+        .doc(genratedUUID)
+        .get();
+
+    if (documentSnapshot.exists) get_data = documentSnapshot.data();
+
+    // Accessing students_list from courses collection
+    students_list = List<String>.from(get_data["Student_list"]);
+    Students_data?.clear();
+
+    for (var docid in students_list) {
+      // To get details of that particular Course.
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection("Students")
+          .doc(docid)
+          .get();
+      var get_data;
+      if (documentSnapshot.exists) {
+        get_data = documentSnapshot.data();
+        print("RECEIVER NAME ${get_data["student_name"]}");
+
+        // First Adding
+        if (Students_data.isEmpty) {
+          Students_data!.add(
+            get_table(slno: 1, name: get_data["student_name"], Present: "P"),
+          );
+        }
+
+        // Next entries
+        else {
+          if (!Students_data!.contains(get_data["student_name"])) {
+            slno++;
+            Students_data!.add(
+              get_table(
+                  slno: slno, name: get_data["student_name"], Present: "A"),
+            );
+          }
+          print('Students_data is either null or empty.');
+        }
+      }
+    }
+
+    setState(() {
+      _data = List.from(Students_data);
+    });
+  }
 
   bool is_sort = true;
 
   bool _isGlowing = false;
   Timer? _glowTimer;
-
-
-
 
   void _startGlow() {
     setState(() {
@@ -72,10 +143,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.dispose();
   }
 
+  
   @override
-  Widget build(BuildContext context)
-   {
-               
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             // title: Text('Glowing Button Page'),
@@ -94,8 +164,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     shape: CircleBorder(),
                     child: CircleAvatar(
                       backgroundColor: Color.fromARGB(180, 193, 95, 240),
-                      child: 
-                      IconButton(
+                      child: IconButton(
                         icon: Icon(Icons.add,
                             color: const Color.fromARGB(255, 255, 206, 248)),
                         onPressed: () async {
@@ -148,15 +217,12 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                         //     ),
                         //   ),
                         // ),
-                        
-                       
+
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                               columns: _createColumns(), rows: _createRows()),
                         ),
-
-                        
 
                         ElevatedButton(
                           child: Text('Go Back'),
@@ -180,11 +246,20 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         cells: [
           DataCell(Text(e.slno.toString())),
           DataCell(Text(e.name)),
-          DataCell(Text(
-            e.Present,
-            style: TextStyle(color: Colors.lightGreen),
-          )),
+          DataCell(InkWell(
+              onTap: () {
+                setState(() {
+                  e.Present = e.Present == 'P' ? 'A' : 'P';
+                });
+              },
+              child: Text(
+                e.Present,
+                style: TextStyle(
+                    color:
+                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
+              ))),
         ],
+        // onSelectChanged: (_) => toggleStatus(e.Present),
       );
     }).toList();
   }
