@@ -234,7 +234,8 @@ Future<void> startBeaconBroadcast() async {
       .setUUID(genratedUUID)
       .setMajorId(100)
       .setMinorId(1)
-      .setTransmissionPower(-59);
+      .setTransmissionPower(-59)
+      .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24');
 
   // Check if the device supports beacon transmission
   BeaconStatus transmissionSupportStatus =

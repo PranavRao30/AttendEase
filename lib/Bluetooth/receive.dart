@@ -35,18 +35,21 @@ class _BeaconPageState extends State<BeaconPage> {
     await [
       Permission.bluetooth,
       Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.location,
     ].request();
   }
 
   void initBeacon() async {
+  try {
     await flutterBeacon.initializeScanning;
     await requestPermissions();
     if (!mounted) return;
 
-    regions.add(Region(identifier: 'AltBeacon Region', proximityUUID: searchUUID));
+    regions.add(Region(identifier: 'AltBeacon Region'));
 
     _streamRanging = flutterBeacon.ranging(regions).listen((RangingResult result) {
-      if (result.beacons.isNotEmpty) { //Becaon signal detected
+      if (result.beacons.isNotEmpty) {
         setState(() {
           genratedUUID = result.beacons.first.proximityUUID;
         });
@@ -55,7 +58,12 @@ class _BeaconPageState extends State<BeaconPage> {
         }
       }
     });
+  } catch (e) {
+    print('Error initializing beacon scanning: $e');
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +76,7 @@ class _BeaconPageState extends State<BeaconPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 100),
-                Card(
-              elevation: 4.0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  genratedUUID,
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                )
-              ),
+                
               ElevatedButton(
                 child: Text('Go Back'),
                 onPressed: () {
