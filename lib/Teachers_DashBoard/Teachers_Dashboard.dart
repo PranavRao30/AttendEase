@@ -23,11 +23,13 @@ class get_table {
   final int slno;
   final String name;
   String Present;
+  final String Email_ID;
 
   get_table({
     required this.slno,
     required this.name,
     required this.Present,
+    required this.Email_ID,
   });
 }
 
