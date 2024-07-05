@@ -11,19 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 String genratedUUID = "";
-// List<get_table>? Students_data = [];
-
-// class get_table {
-//   final int slno;
-//   final String name;
-//   final String Present;
-
-//   get_table({
-//     required this.slno,
-//     required this.name,
-//     required this.Present,
-//   });
-// }
 
 class Broadcast_Land extends StatelessWidget {
   String text;
@@ -63,7 +50,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.initState();
     get_table_data();
     Timer(Duration(seconds: 3), () => setState(() {}));
-    // _data = List.from(Students_data!);
   }
 
   void get_table_data() async {
@@ -95,7 +81,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         // First Adding
         if (Students_data.isEmpty) {
           Students_data!.add(
-            get_table(slno: 1, name: get_data["student_name"], Present: "P"),
+            get_table(
+                slno: 1,
+                name: get_data["student_name"],
+                Present: "P",
+                email_id: get_data['student_id']),
           );
         }
 
@@ -105,7 +95,10 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
             slno++;
             Students_data!.add(
               get_table(
-                  slno: slno, name: get_data["student_name"], Present: "A"),
+                  slno: slno,
+                  name: get_data["student_name"],
+                  Present: "A",
+                  email_id: get_data['student_id']),
             );
           }
           print('Students_data is either null or empty.');
@@ -143,7 +136,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,24 +198,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                               ),
                             )),
                         SizedBox(height: 5),
-
-                        //   Card(
-                        //   elevation: 4.0,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(16.0),
-                        //     child: Text(
-                        //       genratedUUID,
-                        //       style: TextStyle(fontSize: 18.0),
-                        //     ),
-                        //   ),
-                        // ),
-
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                               columns: _createColumns(), rows: _createRows()),
                         ),
-
                         ElevatedButton(
                           child: Text('Go Back'),
                           onPressed: () {
@@ -250,6 +229,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
               onTap: () {
                 setState(() {
                   e.Present = e.Present == 'P' ? 'A' : 'P';
+                  print("Selected ${e.email_id}");
                 });
               },
               child: Text(
@@ -258,8 +238,8 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     color:
                         e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
               ))),
+          DataCell(Text(e.email_id.toString())),
         ],
-        // onSelectChanged: (_) => toggleStatus(e.Present),
       );
     }).toList();
   }
@@ -296,6 +276,24 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
             } else {
               _data.sort(
                 (a, b) => b.Present.compareTo(a.Present),
+              );
+            }
+
+            is_sort = !is_sort;
+          });
+        },
+      ),
+      DataColumn(
+        label: Text("Email_ID"),
+        onSort: (columnIndex, _) {
+          setState(() {
+            if (is_sort) {
+              _data.sort(
+                (a, b) => a.Present.compareTo(b.email_id),
+              );
+            } else {
+              _data.sort(
+                (a, b) => b.Present.compareTo(a.email_id),
               );
             }
 
