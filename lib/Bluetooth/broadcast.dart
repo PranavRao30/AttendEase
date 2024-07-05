@@ -246,18 +246,26 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         cells: [
           DataCell(Text(e.slno.toString())),
           DataCell(Text(e.name)),
-          DataCell(InkWell(
-              onTap: () {
-                setState(() {
-                  e.Present = e.Present == 'P' ? 'A' : 'P';
-                });
-              },
-              child: Text(
-                e.Present,
-                style: TextStyle(
-                    color:
-                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
-              ))),
+          DataCell(
+  InkWell(
+    onTap: () {
+      setState(() {
+        e.Present = e.Present == 'P' ? 'A' : 'P';
+      });
+    },
+    child: Container(
+      padding: EdgeInsets.all(16.0),  // Adjust the padding as needed
+      child: Text(
+        e.Present,
+        style: TextStyle(
+          fontSize: 15.0,  // Increase the font size
+          color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
+        ),
+      ),
+    ),
+  ),
+),
+
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );
