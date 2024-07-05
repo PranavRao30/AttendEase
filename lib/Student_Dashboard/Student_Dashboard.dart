@@ -517,31 +517,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  "Branch: ${_branchController.text}",
-                  style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  "Semester: ${_semesterController.text}",
-                  style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  "Section: ${_sectionController.text}",
+                  "Class: ${_semesterController.text}${_sectionController.text}, ${_branchController.text}",
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
                       fontSize: 18,
