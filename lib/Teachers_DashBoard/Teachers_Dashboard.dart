@@ -16,7 +16,6 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
-import 'Teachers_Profile.dart';
 
 var students_list;
 
