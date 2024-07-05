@@ -96,6 +96,7 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 // Display duplicates
 void displayDuplicatesMessage(BuildContext context) {
   final snackbar = SnackBar(
@@ -401,44 +402,128 @@ class _StudentHomePageState extends State<Student_Home_Page> {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _photoUrlController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
+
+  Future<void> _fetchUserDetails() async {
+    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+    final user = provider.user;
+
+    if (user != null) {
+      setState(() {
+        _nameController.text = user.displayName ?? '';
+        _emailController.text = user.email ?? '';
+        _photoUrlController.text = user.photoUrl ?? '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromRGBO(184, 163, 255, 1),
-              foregroundColor: Colors.black, // Black text
+        backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+        body: Center(
+          child: Column(children: [
+            const SizedBox(height: 25),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              height: 70,
+              width: 330,
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(184, 163, 255, 1),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "Your Profile",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            onPressed: () async {
-              final provider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
-              await provider.googleLogout();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GradientContainer(
-                          Color.fromARGB(255, 150, 120, 255),
-                          Color.fromARGB(255, 150, 67, 183),
-                          child: StartScreen(),
-                        )),
-              );
-            },
-            child: Text(
-              "LOGOUT",
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(_photoUrlController.text),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Name: ${_nameController.text}",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Email: ${_emailController.text}",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(184, 163, 255, 1),
+                foregroundColor: Colors.black, // Black text
+              ),
+              onPressed: () async {
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                await provider.googleLogout();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GradientContainer(
+                            Color.fromARGB(255, 150, 120, 255),
+                            Color.fromARGB(255, 150, 67, 183),
+                            child: StartScreen(),
+                          )),
+                );
+              },
+              child: Text(
+                "LOGOUT",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white),
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            )),
-      ),
-    );
+            ),
+          ]),
+        ));
   }
 }
 
@@ -512,9 +597,8 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
 
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
-      }
-      else
-              displayDuplicatesMessage(context);
+      } else
+        displayDuplicatesMessage(context);
       // Updating students list in Courses Collection
       var data;
       DocumentSnapshot courseDoc = await FirebaseFirestore.instance
