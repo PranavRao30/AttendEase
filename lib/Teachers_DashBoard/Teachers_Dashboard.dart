@@ -462,46 +462,265 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _photoUrlController = TextEditingController();
+  late Future<List<CourseData>> _courseDataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    if (teacherId != null) _courseDataFuture = fetchCourseData(teacherId);
+  }
+
+  Future<void> _fetchUserDetails() async {
+    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+    final user = provider.user;
+
+    if (user != null) {
+      setState(() {
+        _nameController.text = user.displayName ?? '';
+        _emailController.text = user.email ?? '';
+        _photoUrlController.text = user.photoUrl ?? '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromRGBO(184, 163, 255, 1),
-            foregroundColor: Colors.black,
-          ),
-          onPressed: () async {
-            final provider =
-                Provider.of<GoogleSignInProvider>(context, listen: false);
-            await provider.googleLogout();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GradientContainer(
-                  Color.fromARGB(255, 150, 120, 255),
-                  Color.fromARGB(255, 150, 67, 183),
-                  child: StartScreen(),
+        backgroundColor: const Color.fromRGBO(184, 163, 255, 0.1),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 25),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                height: 70,
+                width: 330,
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(184, 163, 255, 1),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    "Your Profile",
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            );
-          },
-          child: Text(
-            "LOGOUT",
-            style: GoogleFonts.poppins(
-              textStyle: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(_photoUrlController.text),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Name: ${_nameController.text}",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Email: ${_emailController.text}",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+              FutureBuilder<List<CourseData>>(
+                  future: _courseDataFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No courses available'));
+                    } else {
+                      List<CourseData> courseDataList = snapshot.data!;
+                      return ListView.builder(
+                          shrinkWrap: true, // Add this line
+                          physics:
+                              NeverScrollableScrollPhysics(), // Add this line
+                          itemCount: courseDataList.length,
+                          itemBuilder: (context, index) {
+                            CourseData courseData = courseDataList[index];
+                            return InkWell(
+                              onTap: () {
+                                print("Pressed Card: ${courseData.CourseID}");
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             BeaconPage(courseData.CourseID)));
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(184, 163, 255, 1),
+                                      offset: Offset(4, 4),
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Card(
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    side: BorderSide(
+                                      color: Color.fromRGBO(215, 196, 223, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  color: const Color.fromRGBO(255, 255, 255, 1),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          courseData.name,
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    courseData.code,
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 6),
+                                                    child: Row(
+                                                      children: [
+                                                        const Text(
+                                                          "Section: ",
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          courseData.section,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  IconButton(
+                                                    icon: const Icon(Icons.edit,
+                                                        size: 20),
+                                                    onPressed: () {
+                                                      // Add your edit logic here
+                                                    },
+                                                  ),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                        Icons.download,
+                                                        size: 20),
+                                                    onPressed: () {
+                                                      // Add your export logic here
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    }
+                  }),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(255, 106, 106, 1),
+                  foregroundColor: Colors.black, // Black text
+                ),
+                onPressed: () async {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  await provider.googleLogout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GradientContainer(
+                              Color.fromARGB(255, 150, 120, 255),
+                              Color.fromARGB(255, 150, 67, 183),
+                              child: StartScreen(),
+                            )),
+                  );
+                },
+                child: Text(
+                  "LOGOUT",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
