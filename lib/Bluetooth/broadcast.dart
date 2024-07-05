@@ -115,7 +115,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         }
         print(Students_data[0].Email_ID);
         initTemp(Students_data);
-        Students_data = List.from(Stud_details);
       }
     }
 
@@ -124,12 +123,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     });
   }
 
-   
-
   bool is_sort = true;
-  
-
-
   bool _isGlowing = false;
   Timer? _glowTimer;
 
@@ -274,18 +268,26 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         cells: [
           DataCell(Text(e.slno.toString())),
           DataCell(Text(e.name)),
-          DataCell(InkWell(
-              onTap: () {
-                setState(() {
-                  e.Present = e.Present == 'P' ? 'A' : 'P';
-                });
-              },
-              child: Text(
-                e.Present,
-                style: TextStyle(
-                    color:
-                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
-              ))),
+          DataCell(
+  InkWell(
+    onTap: () {
+      setState(() {
+        e.Present = e.Present == 'P' ? 'A' : 'P';
+      });
+    },
+    child: Container(
+      padding: EdgeInsets.all(16.0),  // Adjust the padding as needed
+      child: Text(
+        e.Present,
+        style: TextStyle(
+          fontSize: 18.0,  // Increase the font size
+          color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
+        ),
+      ),
+    ),
+  ),
+),
+            DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );
