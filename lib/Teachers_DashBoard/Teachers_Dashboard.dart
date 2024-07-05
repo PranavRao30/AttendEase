@@ -16,7 +16,7 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
-import 'Teachers_Profile.dart';
+// import 'Teachers_Profile.dart';
 
 var students_list;
 
@@ -24,11 +24,13 @@ class get_table {
   final int slno;
   final String name;
   String Present;
+  final String Email_ID;
 
   get_table({
     required this.slno,
     required this.name,
     required this.Present,
+    required this.Email_ID,
   });
 }
 

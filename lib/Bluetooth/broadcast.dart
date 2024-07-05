@@ -1,3 +1,4 @@
+import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'dart:async';
@@ -9,6 +10,8 @@ import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attend_ease/Backend/fetch_data.dart';
+import 'package:attend_ease/ui_components/util.dart';
 
 String genratedUUID = "";
 // List<get_table>? Students_data = [];
@@ -95,7 +98,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         // First Adding
         if (Students_data.isEmpty) {
           Students_data!.add(
-            get_table(slno: 1, name: get_data["student_name"], Present: "P"),
+            get_table(slno: 1, name: get_data["student_name"], Present: "A", Email_ID:"${get_data['student_id']}"),
           );
         }
 
@@ -105,11 +108,14 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
             slno++;
             Students_data!.add(
               get_table(
-                  slno: slno, name: get_data["student_name"], Present: "A"),
+                  slno: slno, name: get_data["student_name"], Present: "A", Email_ID:"${get_data['student_id']}"),
             );
           }
-          print('Students_data is either null or empty.');
+          
         }
+        print(Students_data[0].Email_ID);
+        initTemp(Students_data);
+        Students_data = List.from(Stud_details);
       }
     }
 
@@ -118,7 +124,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     });
   }
 
+   
+
   bool is_sort = true;
+  
+
 
   bool _isGlowing = false;
   Timer? _glowTimer;
@@ -142,7 +152,18 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     _glowTimer?.cancel();
     super.dispose();
   }
-
+    void update_A_P(attend_stud){
+      for(int i=0;i<attend_stud.length;i++){
+        for(int j=0;j<Students_data.length;j++){
+          if(Students_data[j].Email_ID==attend_stud[i]){
+            Students_data[j].Present="P";
+          }
+        }
+        setState(() {
+          
+        });
+      }
+    }
   
   @override
   Widget build(BuildContext context) {
@@ -173,6 +194,13 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           await requestPermissions();
                           await startBeaconBroadcast();
                           print("Button Pressed");
+
+                          creating_attendance_collection(genratedUUID);
+                      
+                          
+
+
+
                         },
                       ),
                       radius: 40.0,
@@ -258,6 +286,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     color:
                         e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
               ))),
+              DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );
@@ -303,6 +332,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
           });
         },
       ),
+      DataColumn(label: Text("Email ID")),
     ];
   }
 }
