@@ -53,7 +53,7 @@ class _BeaconPageState extends State<BeaconPage> {
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     DateFormat format = DateFormat("HH");
     String hour = format.format(now);
-    String stud_attendance_id = '${formattedDate}_${searchUUID.toLowerCase()}_14';
+    String stud_attendance_id = '${formattedDate}_${searchUUID.toLowerCase()}_${hour}';
 
     regions.add(Region(identifier: 'AltBeacon Region'));
 
@@ -78,7 +78,7 @@ class _BeaconPageState extends State<BeaconPage> {
                   .collection("Attendance")
                   .doc(stud_attendance_id)
                   .update({"Attendees": attendees_list});
-              update_A_P(attendees_list);
+                  update_A_P(attendees_list);
               
               print("Updated attendees list: $attendees_list");
             }

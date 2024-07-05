@@ -14,6 +14,7 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/ui_components/util.dart';
 
 String genratedUUID = "";
+ValueNotifier<bool> util_flag = ValueNotifier(false);
 // List<get_table>? Students_data = [];
 
 // class get_table {
@@ -61,12 +62,21 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   List<get_table> Students_data = [];
   // Initialize _data as an empty list
 
-  @override
+    @override
   void initState() {
     super.initState();
     get_table_data();
     Timer(Duration(seconds: 3), () => setState(() {}));
-    // _data = List.from(Students_data!);
+    
+    // Add listener to util_flag
+    util_flag.addListener(() {
+      if (util_flag.value) {
+        setState(() {
+          _data = List.from(Stud_details);
+        });
+        util_flag.value = false; // Reset the flag after updating
+      }
+    });
   }
 
   void get_table_data() async {
@@ -122,7 +132,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       _data = List.from(Students_data);
     });
   }
-
   bool is_sort = true;
   bool _isGlowing = false;
   Timer? _glowTimer;
@@ -146,18 +155,18 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     _glowTimer?.cancel();
     super.dispose();
   }
-    void update_A_P(attend_stud){
-      for(int i=0;i<attend_stud.length;i++){
-        for(int j=0;j<Students_data.length;j++){
-          if(Students_data[j].Email_ID==attend_stud[i]){
-            Students_data[j].Present="P";
-          }
-        }
-        setState(() {
+    // void update_A_P(attend_stud){
+    //   for(int i=0;i<attend_stud.length;i++){
+    //     for(int j=0;j<Students_data.length;j++){
+    //       if(Students_data[j].Email_ID==attend_stud[i]){
+    //         Students_data[j].Present="P";
+    //       }
+    //     }
+    //     setState(() {
           
-        });
-      }
-    }
+    //     });
+    //   }
+    // }
   
   @override
   Widget build(BuildContext context) {
@@ -190,7 +199,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           print("Button Pressed");
 
                           creating_attendance_collection(genratedUUID);
-                      
+                          // update_A_P([]);
                           
 
 
@@ -280,7 +289,8 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       child: Text(
         e.Present,
         style: TextStyle(
-          fontSize: 18.0,  // Increase the font size
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,  // Increase the font size
           color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
         ),
       ),
