@@ -19,21 +19,21 @@ class AddASubject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      builder: (BuildContext context,child) =>MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        canvasColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(215, 130, 255, 1),
+      builder: (BuildContext context, child) => MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          canvasColor: Color.fromARGB(255, 255, 255, 255),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromRGBO(215, 130, 255, 1),
+          ),
+          useMaterial3: true,
         ),
-        useMaterial3: true,
+        home: const MyHomePage(
+          title: 'Flutter Demo Home Page',
+        ),
       ),
-      home: const MyHomePage(
-        title: 'Flutter Demo Home Page',
-      ),
-    ),
-    designSize: const Size(360,690),
+      designSize: const Size(360, 690),
     );
   }
 }
@@ -117,13 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Center(
-          child: Text('AttendEase'),
-        ),
-      ),
-      backgroundColor: const Color.fromRGBO(255, 246, 254, 1),
+      backgroundColor: Color.fromRGBO(241, 238, 251, 1),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -135,10 +129,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "Enter Course Details",
-                      style: GoogleFonts.poppins(
-                        textStyle: font25(textColor: Colors.purpleAccent),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      height: 70,
+                      width: 330,
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(184, 163, 255, 1),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Enter your details",
+                          style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
 
@@ -311,14 +322,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                         if (dropdownvalue_branch != "CSIOT" &&
                                             dropdownvalue_branch != "AIDS" &&
                                             dropdownvalue_branch != "CSDS") {
-                                          select_sections(
-                                              dropdownvalue_branch,
+                                          select_sections(dropdownvalue_branch,
                                               current_cycle);
                                         }
 
                                         // Extracting section
-                                        section = sections[
-                                            '$dropdownvalue_semester'];
+                                        section =
+                                            sections['$dropdownvalue_semester'];
                                         enable_section = newVal != null;
                                       });
                                     },
@@ -406,9 +416,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     textStyle: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Colors.white
                     ),
                   ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(184, 163, 255, 1),
                 ),
               ),
             ],

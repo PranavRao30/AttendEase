@@ -286,7 +286,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     color:
                         e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
               ))),
-              DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );
