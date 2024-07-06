@@ -11,7 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 var get_student_data;
-
+var status_of_joining = false;
+edit_delete_joining(status){
+  status_of_joining  = status;
+}
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
 
@@ -62,7 +65,7 @@ class StartScreen extends StatelessWidget {
                   if (!documentSnapshot.exists) {
                     add_student_map = {
                       "student_name": current_user,
-                      "status_of_joining": false,
+                      "status_of_joining": status_of_joining,
                       "student_id": emailName,
                       "Branch": "",
                       "Semester": "",

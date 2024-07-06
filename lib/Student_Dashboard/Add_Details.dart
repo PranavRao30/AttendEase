@@ -409,6 +409,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialPageRoute(
                         builder: (context) => Student_Dashboard()),
                   );
+                  
                 },
                 child: Text(
                   "Join Class",

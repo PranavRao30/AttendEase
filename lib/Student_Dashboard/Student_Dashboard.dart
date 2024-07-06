@@ -699,6 +699,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   foregroundColor: Colors.black, // Black text
                 ),
                 onPressed: () async{
+
+                  edit_delete_joining(false);
                    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Students").doc(emailName).get();
             List<dynamic> stud_course_list = documentSnapshot.exists
                 ? List<String>.from(documentSnapshot["Courses_list"])
@@ -721,8 +723,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 await FirebaseFirestore.instance.collection("Courses").doc(stud_course_list[i]).update({"Student_list":course_stud_list});
 
                 }
+                  
+                  // await FirebaseFirestore.instance.collection("Students").doc(emailName).delete();
 
-                  await FirebaseFirestore.instance.collection("Students").doc(emailName).delete();
+                  // Deleting particular fields from the document
+                  // FieldValue.delete()
+                              await FirebaseFirestore.instance
+                .collection("Students")
+                .doc(emailName)
+                .update({
+                  'Section': "",
+                  'Semester': 0,
+                  'Courses_list':[],
+                  // Add more fields as needed
+                });
+
+                // updating status to false
+                await FirebaseFirestore.instance
+                .collection("Students")
+                .doc(emailName)
+                .update({
+                  'status_of_joining': false,
+
+                });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
