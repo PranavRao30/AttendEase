@@ -16,6 +16,7 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:attend_ease/Bluetooth/broadcast.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/main1.dart';
 
 var students_list;
 
@@ -385,6 +386,14 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
               },
             ),
           ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Teacher_Profile_Table()));
+              },
+              child: Text("Get table")),
         ],
       ),
     );
