@@ -7,6 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/ui_components/util.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
 
 String searchUUID = "";
 ValueNotifier<bool> attend_flag = ValueNotifier(false);
@@ -26,11 +28,11 @@ class _BeaconPageState extends State<BeaconPage> {
   final regions = <Region>[];
   StreamSubscription<RangingResult>? _streamRanging;
   bool hasUpdatedAttendance = false;  // Variable to track if the function has been executed
+  bool isScanning = false;  // Track if scanning has started
 
   @override
   void initState() {
     super.initState();
-    initBeacon();
   }
 
   @override
@@ -48,7 +50,7 @@ class _BeaconPageState extends State<BeaconPage> {
     ].request();
   }
 
-  void initBeacon() async {
+  void startBeaconScanning() async {
     await flutterBeacon.initializeScanning;
     await requestPermissions();
     if (!mounted) return;
@@ -113,12 +115,42 @@ class _BeaconPageState extends State<BeaconPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 100),
-          ElevatedButton(
-            child: Text('Go Back'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          Center(
+            child: Container(
+              width: 80,  // Width of the round button
+              height: 80,  // Height of the round button
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Color(0xFFD782FF), width: 4),  // Border color and width
+              ),
+              child: IconButton(
+                icon: Icon(Icons.bluetooth_searching, color: Color(0xffd290f1)),
+                iconSize: 40,  // Adjust icon size
+                onPressed: () async {
+                  if (!isScanning) {
+                    await FlutterBluePlus.turnOn();
+                    startBeaconScanning();
+                    setState(() {
+                      isScanning = true;
+                    });
+                  }
+                },
+              ),
+            ),
           ),
+          SizedBox(height: 20),
+          Center(
+            child: SizedBox(
+              width: 120,  // Set the desired width here
+              child: ElevatedButton(
+                child: Text('Go Back'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+
         ],
       ),
     );

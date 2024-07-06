@@ -83,9 +83,9 @@ var current_cycle = "Even";
 var dropdownvalue_section = 'A';
 var sem = [2, 4, 6, 8];
 var section = ['A', 'B'];
-var course_name = TextEditingController();
-var course_code = TextEditingController();
-var classes_held = TextEditingController();
+TextEditingController course_name = TextEditingController();
+TextEditingController course_code = TextEditingController();
+TextEditingController classes_held = TextEditingController();
 
 var dropdown_course = "Applied Physics for Computer Science Stream";
 var cse1 = [
@@ -227,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               // !.copyWith(color: Colors.deepPurpleAccent[500]),
                                               ),
                                         ),
-                                        // Branch Selection
+// Branch Selection
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 10, right: 10),
@@ -431,7 +431,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ],
                                           ),
                                         ),
-                                        // Semester Selection
+
+// Semester Selection
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 10, right: 10),
@@ -687,106 +688,141 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
 
                                         // Course Name
-                                        if (dropdownvalue_branch != "CSE") Get_Course_Name(
-              validate_course_name: validate_course_name,
-              course_name: course_name,
-              enable_manual_course_name: enable_manual_course_name,
-            ),
-            Get_Course_Code(
+                                        if (dropdownvalue_branch != "CSE")
+                                         GetCourseName(
+                validate_course_name: validate_course_name,
+                course_name: course_name,
+                enable_manual_course_name: enable_manual_course_name,
+              ),
+            GetCourseCode(
               validate_course_code: validate_course_code,
               course_code: course_code,
             ),
-            Get_Classes_Held(
+            GetClassesHeld(
               validate_classes_held: validate_classes_held,
               classes_held: classes_held,
             ),
-            Container(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(184, 163, 255, 1),
-                foregroundColor: Colors.black, // Black text
-              ),
-              onPressed: () async {
-                // Validating Part
-                setState(() {
-                  validate_course_name = course_name.text.isEmpty;
-                  validate_course_code = course_code.text.isEmpty;
-                  validate_classes_held = classes_held.text.isEmpty;
-                });
 
-                // If any field is invalid, return early to show error messages
-                if (validate_course_name || validate_course_code || validate_classes_held) {
-                  return;
-                }
+                                        Container(
+                                          height: 10,
+                                        ),
 
-                // Appending
-                // For Other Branches
-                if (dropdownvalue_branch != "CSE") {
-                  Store_Course_Name = course_name.text.toString();
-                  sem_sec_branch = "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                        // Submit
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromRGBO(
+                                                  184, 163, 255, 1),
+                                              foregroundColor:
+                                                  Colors.black, // Black text
+                                            ),
+                                            onPressed: () async {
+                                              // Validating Part
+                                               setState(() {
+                                              validate_course_name =
+                                                  course_name.text.isEmpty;
+                                              validate_course_code =
+                                                  course_code.text.isEmpty;
+                                              validate_classes_held =
+                                                  classes_held.text.isEmpty;
+                                               });
+                                              
 
-                  // Checking Duplicates
-                  if (await check_duplicates2(course_code.text.toString(), dropdownvalue_semester, dropdownvalue_section, dropdownvalue_branch)) {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    print("in non CSE");
-                    // Adding Data to firebase
-                    add_Teachers_data(1);
+                                              // Apppending
+                                              // For Other Branches
+                                              if (!validate_classes_held &&
+                                                  !validate_course_code &&
+                                                  !validate_course_name &&
+                                                  dropdownvalue_branch !=
+                                                      "CSE") {
+                                                Store_Course_Name =
+                                                    course_name.text.toString();
+                                                sem_sec_branch =
+                                                    "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
 
-                    Timer(Duration(seconds: 1), () {
-                      widget.controller.animateToPage(
-                        1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.ease,
-                      );
-                    });
-                  } else {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    displayDuplicatesMessage(context);
-                  }
-                }
+                                                // Checking Duplicates
+                                                if ((await check_duplicates2(
+                                                    course_code.text.toString(),
+                                                    dropdownvalue_semester,
+                                                    dropdownvalue_section,
+                                                    dropdownvalue_branch))) {
+                                                  setState(() {
+                                                    _isLoading = true;
+                                                  });
 
-                // For CSE
-                if (dropdownvalue_branch == "CSE") {
-                  var semSecBranch = "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-                  var addCourseCode = course_code.text.toString();
+                                                  print("in non cse");
+                                                  // Adding Data to firebase
+                                                  add_Teachers_data(1);
 
-                  // Checking Duplicates
-                  if (await check_duplicates2(addCourseCode, dropdownvalue_semester, dropdownvalue_section, dropdownvalue_branch)) {
-                    setState(() {
-                      _isLoading = true;
-                    });
+                                                  Timer(Duration(seconds: 1),
+                                                      () {
+                                                    widget.controller
+                                                        .animateToPage(
+                                                            1,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    400),
+                                                            curve: Curves.ease);
+                                                  });
+                                                } else {
+                                                  _isLoading = false;
+                                                  displayDuplicatesMessage(
+                                                      context);
+                                                }
+                                              }
 
-                    // Adding Data to firebase
-                    add_Teachers_data(1);
+                                              // For CSE
+                                              if (!validate_classes_held &&
+                                                  !validate_course_code &&
+                                                  dropdownvalue_branch ==
+                                                      "CSE") {
+                                                //
+                                                var semSecBranch =
+                                                    "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                                var addCourseCode =
+                                                    course_code.text.toString();
 
-                    Timer(Duration(seconds: 1), () {
-                      widget.controller.animateToPage(
-                        1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.ease,
-                      );
-                    });
-                  } else {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    displayDuplicatesMessage(context);
-                  }
-                }
+                                                // Checking Duplicates
+                                                if ((await check_duplicates2(
+                                                    addCourseCode,
+                                                    dropdownvalue_semester,
+                                                    dropdownvalue_section,
+                                                    dropdownvalue_branch))) {
+                                                  setState(() {
+                                                    _isLoading = true;
+                                                  });
 
-                // Transition fixed
-                setState(() {
-                  _isLoading = false;
-                });
-              },
-              child: Text(
-                "ADD",
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                                                  // Adding Data to firebase
+                                                  add_Teachers_data(1);
+
+                                                  Timer(Duration(seconds: 1),
+                                                      () {
+                                                    widget.controller
+                                                        .animateToPage(
+                                                            1,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    400),
+                                                            curve: Curves.ease);
+                                                  });
+                                                } else {
+                                                  _isLoading = false;
+                                                  displayDuplicatesMessage(
+                                                      context);
+                                                }
+                                              }
+
+                                              // transition fixed
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                            },
+                                            child: Text(
+                                              "ADD",
+                                              style: GoogleFonts.poppins(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white),
                                               ),
                                             )),
                                       ],
@@ -800,18 +836,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // Separate Widgets of Course Details
 
-class Get_Course_Name extends StatefulWidget {
+class GetCourseName extends StatefulWidget {
   final bool validate_course_name;
   final TextEditingController course_name;
   final bool enable_manual_course_name;
 
-  Get_Course_Name({required this.validate_course_name, required this.course_name, required this.enable_manual_course_name});
+  GetCourseName({
+    required this.validate_course_name,
+    required this.course_name,
+    required this.enable_manual_course_name,
+  });
 
   @override
-  _Get_Course_NameState createState() => _Get_Course_NameState();
+  _GetCourseNameState createState() => _GetCourseNameState();
 }
 
-class _Get_Course_NameState extends State<Get_Course_Name> {
+class _GetCourseNameState extends State<GetCourseName> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -820,7 +860,7 @@ class _Get_Course_NameState extends State<Get_Course_Name> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -830,19 +870,19 @@ class _Get_Course_NameState extends State<Get_Course_Name> {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                enabled: widget.enable_manual_course_name, // non CSE branches
-                controller: widget.course_name, // Extracting course name from the text field
+                enabled: widget.enable_manual_course_name,
+                controller: widget.course_name,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')), // Restriction to alphabets
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')),
                 ],
                 decoration: InputDecoration(
                   hintText: "Enter Course Name",
@@ -865,17 +905,17 @@ class _Get_Course_NameState extends State<Get_Course_Name> {
   }
 }
 
-class Get_Course_Code extends StatefulWidget {
+class GetCourseCode extends StatefulWidget {
   final bool validate_course_code;
   final TextEditingController course_code;
 
-  Get_Course_Code({required this.validate_course_code, required this.course_code});
+  GetCourseCode({required this.validate_course_code, required this.course_code});
 
   @override
-  _Get_Course_CodeState createState() => _Get_Course_CodeState();
+  _GetCourseCodeState createState() => _GetCourseCodeState();
 }
 
-class _Get_Course_CodeState extends State<Get_Course_Code> {
+class _GetCourseCodeState extends State<GetCourseCode> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -884,7 +924,7 @@ class _Get_Course_CodeState extends State<Get_Course_Code> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -894,10 +934,10 @@ class _Get_Course_CodeState extends State<Get_Course_Code> {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
@@ -928,17 +968,17 @@ class _Get_Course_CodeState extends State<Get_Course_Code> {
   }
 }
 
-class Get_Classes_Held extends StatefulWidget {
+class GetClassesHeld extends StatefulWidget {
   final bool validate_classes_held;
   final TextEditingController classes_held;
 
-  Get_Classes_Held({required this.validate_classes_held, required this.classes_held});
+  GetClassesHeld({required this.validate_classes_held, required this.classes_held});
 
   @override
-  _Get_Classes_HeldState createState() => _Get_Classes_HeldState();
+  _GetClassesHeldState createState() => _GetClassesHeldState();
 }
 
-class _Get_Classes_HeldState extends State<Get_Classes_Held> {
+class _GetClassesHeldState extends State<GetClassesHeld> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -947,7 +987,7 @@ class _Get_Classes_HeldState extends State<Get_Classes_Held> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -957,10 +997,10 @@ class _Get_Classes_HeldState extends State<Get_Classes_Held> {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
