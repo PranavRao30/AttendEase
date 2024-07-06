@@ -78,7 +78,6 @@ class _BeaconPageState extends State<BeaconPage> {
                   .collection("Attendance")
                   .doc(stud_attendance_id)
                   .update({"Attendees": attendees_list});
-                  update_A_P(attendees_list);
               
               print("Updated attendees list: $attendees_list");
             }

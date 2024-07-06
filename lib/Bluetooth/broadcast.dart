@@ -12,9 +12,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/ui_components/util.dart';
-
+import 'package:intl/intl.dart';
+import "dart:ui" as ui;
 String genratedUUID = "";
 ValueNotifier<bool> util_flag = ValueNotifier(false);
+DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    DateFormat format = DateFormat("HH");
+    String hour = format.format(now);
+    String stud_attendance_id = '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
 // List<get_table>? Students_data = [];
 
 // class get_table {
@@ -38,7 +44,7 @@ class Broadcast_Land extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.ltr,
+      textDirection: ui.TextDirection.ltr,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -62,22 +68,22 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   List<get_table> Students_data = [];
   // Initialize _data as an empty list
 
-      @override
-    void initState() {
-      super.initState();
-      get_table_data();
-      Timer(Duration(seconds: 3), () => setState(() {}));
-      
-      // Add listener to util_flag
-      util_flag.addListener(() {
-        if (util_flag.value) {
-          setState(() {
-            _data = List.from(Stud_details);
-          });
-          util_flag.value = false; // Reset the flag after updating
-        }
-      });
-    }
+    @override
+  void initState() {
+    super.initState();
+    get_table_data();
+    Timer(Duration(seconds: 15), () => setState(() {}));
+    
+    // Add listener to util_flag
+    util_flag.addListener(() {
+      if (util_flag.value) {
+        setState(() {
+          _data = List.from(Stud_details);
+        });
+        util_flag.value = false; // Reset the flag after updating
+      }
+    });
+  }
 
   void get_table_data() async {
     // Getting Students details on table
@@ -206,8 +212,17 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           print("Button Pressed");
 
                           creating_attendance_collection(genratedUUID);
-                          // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmace.ac.in","pranavar.cs22@bmsce.ac.in"]);
-                          
+                          // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
+
+                            Timer(Duration(seconds: 10), () async {
+                            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Attendance").doc(stud_attendance_id).get();
+                            List<dynamic> after_update_attend_list = documentSnapshot.exists
+                            ? List<String>.from(documentSnapshot["Attendees"])
+                            : [];
+                            print(after_update_attend_list);
+                            update_A_P(after_update_attend_list);
+                        });
+                            
 
 
 
