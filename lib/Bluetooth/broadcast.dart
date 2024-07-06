@@ -14,6 +14,7 @@ import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/ui_components/util.dart';
 
 String genratedUUID = "";
+ValueNotifier<bool> util_flag = ValueNotifier(false);
 // List<get_table>? Students_data = [];
 
 // class get_table {
@@ -61,12 +62,21 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   List<get_table> Students_data = [];
   // Initialize _data as an empty list
 
-  @override
+    @override
   void initState() {
     super.initState();
     get_table_data();
     Timer(Duration(seconds: 3), () => setState(() {}));
-    // _data = List.from(Students_data!);
+    
+    // Add listener to util_flag
+    util_flag.addListener(() {
+      if (util_flag.value) {
+        setState(() {
+          _data = List.from(Stud_details);
+        });
+        util_flag.value = false; // Reset the flag after updating
+      }
+    });
   }
 
   void get_table_data() async {
@@ -123,9 +133,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         
       
         initTemp(Students_data);
-      
-
-        // Students_data = List.from(Stud_details);
       }
     }
 
@@ -133,9 +140,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       _data = List.from(Students_data);
     });
   }
-
   bool is_sort = true;
-
   bool _isGlowing = false;
   Timer? _glowTimer;
 
@@ -201,6 +206,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           print("Button Pressed");
 
                           creating_attendance_collection(genratedUUID);
+                          // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmace.ac.in","pranavar.cs22@bmsce.ac.in"]);
+                          
+
+
+
                         },
                       ),
                       radius: 40.0,
@@ -274,19 +284,27 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         cells: [
           DataCell(Text(e.slno.toString())),
           DataCell(Text(e.name)),
-          DataCell(InkWell(
-              onTap: () {
-                setState(() {
-                  e.Present = e.Present == 'P' ? 'A' : 'P';
-                });
-              },
-              child: Text(
-                e.Present,
-                style: TextStyle(
-                    color:
-                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
-              ))),
-          DataCell(Text(e.Email_ID)),
+          DataCell(
+  InkWell(
+    onTap: () {
+      setState(() {
+        e.Present = e.Present == 'P' ? 'A' : 'P';
+      });
+    },
+    child: Container(
+      padding: EdgeInsets.all(16.0),  // Adjust the padding as needed
+      child: Text(
+        e.Present,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,  // Increase the font size
+          color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
+        ),
+      ),
+    ),
+  ),
+),
+            DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );

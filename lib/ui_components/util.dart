@@ -24,6 +24,7 @@ void initTemp(temp){
   Stud_details=temp;
 }
 
+int util_flag=0;
 void update_A_P(attend_stud){
       for(int i=0;i<attend_stud.length;i++){
         for(int j=0;j<Stud_details.length;j++){
@@ -32,6 +33,9 @@ void update_A_P(attend_stud){
           }
         }
       }
+    // Stud_details[0].Present="P";
+    // Stud_details[3].Present="P";
+    util_flag=1;
     }
 
 

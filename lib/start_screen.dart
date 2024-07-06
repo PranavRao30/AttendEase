@@ -6,7 +6,6 @@ import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
-import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -38,22 +37,14 @@ class StartScreen extends StatelessWidget {
           const SizedBox(height: 50),
           OutlinedButton.icon(
             onPressed: () async {
-              // Provider is used to call google signin methods
-              // listen = false indicates the widget in signin screen does not rebuild
               final provider =
                   Provider.of<GoogleSignInProvider>(context, listen: false);
               await provider.googleLogin();
 
               if (provider.user != null) {
-                // User is signed in
-                // Navigate to the next screen.
                 var current_user = provider.user!.displayName;
                 var email_list = emailName.toString().split('.');
 
-                // DateTime time = DateTime.now();
-                // String formatted_time = DateFormat("HH:mm:ss").format(time);
-
-                print(email_list[1].substring(0, 2));
                 if (emailName.toString().contains("cse")) {
                   add_Teachers_data(0);
 
@@ -63,14 +54,11 @@ class StartScreen extends StatelessWidget {
                         builder: (context) => Teachers_Dashboard()),
                   );
                 } else if (email_list[1].substring(0, 2) == "cs") {
-                  // create a collection
                   DocumentSnapshot documentSnapshot = await FirebaseFirestore
                       .instance
                       .collection("Students")
                       .doc(emailName)
                       .get();
-                  print(documentSnapshot.exists);
-                  // creating a document
                   if (!documentSnapshot.exists) {
                     add_student_map = {
                       "student_name": current_user,
@@ -87,31 +75,26 @@ class StartScreen extends StatelessWidget {
                         .doc(emailName)
                         .set(add_student_map);
 
-                    // Join class page
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AddASubject()));
                   } else {
-                    // if exists
                     get_student_data = documentSnapshot.data();
                     if (get_student_data["status_of_joining"] == true) {
-                      print("controol");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: ((context) => Student_Dashboard())));
-                      // Navi to dashboard
                     } else if (get_student_data["status_of_joining"] == false) {
-                      // Join class page
-                      print("Second time login");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddASubject()));
                     }
                   }
+                } else {
+                  // Show dialog box for invalid email
+                  _showInvalidEmailDialog(context);
                 }
-
-                print("Inside button:${emailName.toString()}");
               }
             },
             style: OutlinedButton.styleFrom(
@@ -130,6 +113,50 @@ class StartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showInvalidEmailDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          backgroundColor: Color.fromARGB(255, 118, 70, 166),
+          title: Text(
+            'Invalid Email',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            'Please use a valid organization email address',
+            style: GoogleFonts.poppins(
+              color: Colors.white70,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.googleLogout(); // Log out the user
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
