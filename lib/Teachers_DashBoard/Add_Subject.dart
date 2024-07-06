@@ -52,9 +52,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 // Variables Required
-var validate_course_name = false;
-var validate_course_code = false;
-var validate_classes_held = false;
+bool validate_course_name = false;
+bool validate_course_code = false;
+bool validate_classes_held = false;
 var add_course_code, sem_sec_branch;
 var branch_codes = [
   'AE',
@@ -83,9 +83,9 @@ var current_cycle = "Even";
 var dropdownvalue_section = 'A';
 var sem = [2, 4, 6, 8];
 var section = ['A', 'B'];
-var course_name = TextEditingController();
-var course_code = TextEditingController();
-var classes_held = TextEditingController();
+TextEditingController course_name = TextEditingController();
+TextEditingController course_code = TextEditingController();
+TextEditingController classes_held = TextEditingController();
 
 var dropdown_course = "Applied Physics for Computer Science Stream";
 var cse1 = [
@@ -689,13 +689,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                         // Course Name
                                         if (dropdownvalue_branch != "CSE")
-                                          const Get_Course_Name(),
-
-                                        // Course code
-                                        const Get_Course_Code(),
-
-                                        // Classes Held
-                                        const Get_Classes_Held(),
+                                         GetCourseName(
+                validate_course_name: validate_course_name,
+                course_name: course_name,
+                enable_manual_course_name: enable_manual_course_name,
+              ),
+            GetCourseCode(
+              validate_course_code: validate_course_code,
+              course_code: course_code,
+            ),
+            GetClassesHeld(
+              validate_classes_held: validate_classes_held,
+              classes_held: classes_held,
+            ),
 
                                         Container(
                                           height: 10,
@@ -711,15 +717,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             onPressed: () async {
                                               // Validating Part
-                                              // setState(() {
+                                               setState(() {
                                               validate_course_name =
                                                   course_name.text.isEmpty;
                                               validate_course_code =
                                                   course_code.text.isEmpty;
                                               validate_classes_held =
                                                   classes_held.text.isEmpty;
-                                              // });
-                                              setState(() {});
+                                               });
+                                              
 
                                               // Apppending
                                               // For Other Branches
@@ -830,9 +836,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // Separate Widgets of Course Details
 
-class Get_Course_Name extends StatelessWidget {
-  const Get_Course_Name({super.key});
+class GetCourseName extends StatefulWidget {
+  final bool validate_course_name;
+  final TextEditingController course_name;
+  final bool enable_manual_course_name;
 
+  GetCourseName({
+    required this.validate_course_name,
+    required this.course_name,
+    required this.enable_manual_course_name,
+  });
+
+  @override
+  _GetCourseNameState createState() => _GetCourseNameState();
+}
+
+class _GetCourseNameState extends State<GetCourseName> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -841,7 +860,7 @@ class Get_Course_Name extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -851,42 +870,30 @@ class Get_Course_Name extends StatelessWidget {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width *
-                  0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                // non CSE branches
-                enabled: enable_manual_course_name,
-                // Extracting course name from the text field
-                controller: course_name,
-                // Restriction to alphabets
+                enabled: widget.enable_manual_course_name,
+                controller: widget.course_name,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')),
                 ],
                 decoration: InputDecoration(
                   hintText: "Enter Course Name",
-                  errorText:
-                      validate_course_name ? "Field cannot be empty" : null,
-                  // Initial border
+                  errorText: widget.validate_course_name ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                    ),
+                    borderSide: const BorderSide(color: Colors.black),
                   ),
-                  // After selecting
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.purple,
-                    ),
+                    borderSide: const BorderSide(width: 2, color: Colors.purple),
                   ),
                 ),
               ),
@@ -898,9 +905,17 @@ class Get_Course_Name extends StatelessWidget {
   }
 }
 
-class Get_Course_Code extends StatelessWidget {
-  const Get_Course_Code({super.key});
+class GetCourseCode extends StatefulWidget {
+  final bool validate_course_code;
+  final TextEditingController course_code;
 
+  GetCourseCode({required this.validate_course_code, required this.course_code});
+
+  @override
+  _GetCourseCodeState createState() => _GetCourseCodeState();
+}
+
+class _GetCourseCodeState extends State<GetCourseCode> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -909,7 +924,7 @@ class Get_Course_Code extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -919,36 +934,29 @@ class Get_Course_Code extends StatelessWidget {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width *
-                  0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                controller: course_code,
+                controller: widget.course_code,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z ]+$'))
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z ]+$')),
                 ],
                 decoration: InputDecoration(
                   hintText: "Enter course code",
-                  errorText:
-                      validate_course_code ? "Field cannot be empty" : null,
+                  errorText: widget.validate_course_code ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                    ),
+                    borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.purple,
-                    ),
+                    borderSide: const BorderSide(width: 2, color: Colors.purple),
                   ),
                 ),
               ),
@@ -960,9 +968,17 @@ class Get_Course_Code extends StatelessWidget {
   }
 }
 
-class Get_Classes_Held extends StatelessWidget {
-  const Get_Classes_Held({super.key});
+class GetClassesHeld extends StatefulWidget {
+  final bool validate_classes_held;
+  final TextEditingController classes_held;
 
+  GetClassesHeld({required this.validate_classes_held, required this.classes_held});
+
+  @override
+  _GetClassesHeldState createState() => _GetClassesHeldState();
+}
+
+class _GetClassesHeldState extends State<GetClassesHeld> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -971,7 +987,7 @@ class Get_Classes_Held extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
-            flex: 2, // Adjust the flex value as needed
+            flex: 2,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
@@ -981,37 +997,30 @@ class Get_Classes_Held extends StatelessWidget {
             ),
           ),
           Flexible(
-            flex: 3, // Adjust the flex value as needed
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width *
-                  0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                controller: classes_held,
+                controller: widget.classes_held,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "Enter no of classes held",
-                  errorText:
-                      validate_classes_held ? "Field cannot be empty" : null,
+                  errorText: widget.validate_classes_held ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                    ),
+                    borderSide: const BorderSide(color: Colors.black),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.purple,
-                    ),
+                    borderSide: const BorderSide(width: 2, color: Colors.purple),
                   ),
                 ),
               ),
