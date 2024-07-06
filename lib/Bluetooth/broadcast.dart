@@ -219,6 +219,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                             List<dynamic> after_update_attend_list = documentSnapshot.exists
                             ? List<String>.from(documentSnapshot["Attendees"])
                             : [];
+                            
                             update_A_P(after_update_attend_list);
                             });
 
