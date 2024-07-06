@@ -28,7 +28,7 @@ class Teacher_Profile_Table extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: title,
-        theme: ThemeData(primarySwatch: Colors.deepOrange),
+        theme: ThemeData(primarySwatch: Colors.deepPurple),
         home: MainPage(),
       );
 }
@@ -52,18 +52,32 @@ class _MainPageState extends State<MainPage> {
   }
 
   
-  @override
-  Widget build(BuildContext context) => TabBarWidget(
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Data Table'),
+      ),
+      body: TabBarWidget(
         title: 'Data Table',
         tabs: [
           Tab(icon: Icon(Icons.edit), text: 'Editable'),
-          Tab(icon: Icon(Icons.sort_by_alpha), text: 'Sortable'),
-          Tab(icon: Icon(Icons.select_all), text: 'Selectable'),
         ],
         children: [
           EditablePage(courseID),
-          Container(),
-          Container(),
         ],
-      );
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Teachers_Dashboard(),
+            ),
+          );
+        },
+        child: Icon(Icons.arrow_back),
+      ),
+    );
+  }
 }
