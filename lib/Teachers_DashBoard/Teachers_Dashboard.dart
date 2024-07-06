@@ -386,14 +386,6 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
               },
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Teacher_Profile_Table()));
-              },
-              child: Text("Get table")),
         ],
       ),
     );
@@ -588,11 +580,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return InkWell(
                               onTap: () {
                                 print("Pressed Card: ${courseData.CourseID}");
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             BeaconPage(courseData.CourseID)));
+                               
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(10),
@@ -673,7 +661,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     icon: const Icon(Icons.edit,
                                                         size: 20),
                                                     onPressed: () {
-                                                      // Add your edit logic here
+                                                      get_courseid(courseData.CourseID);
+                                                       Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Teacher_Profile_Table()));
                                                     },
                                                   ),
                                                   IconButton(

@@ -652,6 +652,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                             ),
+                                          
                                           ],
                                         ),
                                       ),
@@ -690,7 +691,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 20)
+              SizedBox(height: 20),
+
+               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(255, 106, 106, 1),
+                  foregroundColor: Colors.black, // Black text
+                ),
+                onPressed: () async{
+                   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Students").doc(emailName).get();
+            List<dynamic> stud_course_list = documentSnapshot.exists
+                ? List<String>.from(documentSnapshot["Courses_list"])
+                : [];
+
+                for(int i=0;i<stud_course_list.length;i++)
+                {
+      //             QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      // .collection("Courses")
+      // .where('Course_id', isEqualTo: stud_course_list[i])
+      // .get();
+
+      DocumentSnapshot documentSnapshot1 = await FirebaseFirestore.instance.collection("Courses").doc(stud_course_list[i]).get();
+      List<dynamic> course_stud_list = documentSnapshot1.exists
+                ? List<String>.from(documentSnapshot1["Student_list"])
+                : [];
+                
+                course_stud_list.remove(emailName);
+
+                await FirebaseFirestore.instance.collection("Courses").doc(stud_course_list[i]).update({"Student_list":course_stud_list});
+
+                }
+
+                  await FirebaseFirestore.instance.collection("Students").doc(emailName).delete();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GradientContainer(
+                              Color.fromARGB(255, 150, 120, 255),
+                              Color.fromARGB(255, 150, 67, 183),
+                              child: AddASubject(),
+                            )),
+                  );
+                },
+                
+                child: Text(
+                  "LEAVE CLASS",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ));

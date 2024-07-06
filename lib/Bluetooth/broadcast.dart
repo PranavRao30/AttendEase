@@ -62,22 +62,22 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   List<get_table> Students_data = [];
   // Initialize _data as an empty list
 
-    @override
-  void initState() {
-    super.initState();
-    get_table_data();
-    Timer(Duration(seconds: 3), () => setState(() {}));
-    
-    // Add listener to util_flag
-    util_flag.addListener(() {
-      if (util_flag.value) {
-        setState(() {
-          _data = List.from(Stud_details);
-        });
-        util_flag.value = false; // Reset the flag after updating
-      }
-    });
-  }
+      @override
+    void initState() {
+      super.initState();
+      get_table_data();
+      Timer(Duration(seconds: 3), () => setState(() {}));
+      
+      // Add listener to util_flag
+      util_flag.addListener(() {
+        if (util_flag.value) {
+          setState(() {
+            _data = List.from(Stud_details);
+          });
+          util_flag.value = false; // Reset the flag after updating
+        }
+      });
+    }
 
   void get_table_data() async {
     // Getting Students details on table

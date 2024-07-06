@@ -1,3 +1,5 @@
+import 'package:attend_ease/Backend/add_data.dart';
+
 import '../data/users.dart';
 import '../model/user.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/utils.dart';
@@ -6,12 +8,23 @@ import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/widget/text_
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
 class EditablePage extends StatefulWidget {
+String course_id="";
+EditablePage(this.course_id);
+  
   @override
   _EditablePageState createState() => _EditablePageState();
-}
 
+
+}
+String id="";
+void initializecourse_id(cid){
+
+    id = cid;
+    print("Inside get course0 $id");
+}
 class _EditablePageState extends State<EditablePage> {
   late List<User1> users;
   // final allUsers = <User1>[
@@ -27,7 +40,11 @@ class _EditablePageState extends State<EditablePage> {
   void initState() {
     super.initState();
     users = [];
+    // print(course_id);
+
     addProfileDetails();
+
+
 
     // setState(() {
     //   this.users = List.of(allUsers);
@@ -39,7 +56,7 @@ class _EditablePageState extends State<EditablePage> {
       print("kj0");
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection("Courses")
-          .doc("e51038fb-93de-4d25-ad04-f8c8cd5d6c0b")
+          .doc(id)
           .get();
       print(documentSnapshot.exists);
 
