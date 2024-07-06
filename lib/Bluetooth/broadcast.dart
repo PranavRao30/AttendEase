@@ -1,4 +1,3 @@
-import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'dart:async';
@@ -8,12 +7,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:intl/intl.dart';
 import "dart:ui" as ui;
+
+
 String genratedUUID = "";
 ValueNotifier<bool> util_flag = ValueNotifier(false);
 DateTime now = DateTime.now();
@@ -35,6 +34,7 @@ DateTime now = DateTime.now();
 //   });
 // }
 
+// ignore: must_be_immutable
 class Broadcast_Land extends StatelessWidget {
   String text;
   Broadcast_Land(this.text) {
@@ -85,6 +85,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     });
   }
 
+
+
+
   void get_table_data() async {
     // Getting Students details on table
     int slno = 1;
@@ -98,7 +101,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
 
     // Accessing students_list from courses collection
     students_list = List<String>.from(get_data["Student_list"]);
-    Students_data?.clear();
+    Students_data.clear();
 
     for (var docid in students_list) {
       // To get details of that particular Course.
@@ -113,7 +116,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
 
         // First Adding
         if (Students_data.isEmpty) {
-          Students_data!.add(
+          Students_data.add(
             get_table(
                 slno: 1,
                 name: get_data["student_name"],
@@ -124,9 +127,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
 
         // Next entries
         else {
-          if (!Students_data!.contains(get_data["student_name"])) {
+          if (!Students_data.contains(get_data["student_name"])) {
             slno++;
-            Students_data!.add(
+            Students_data.add(
               get_table(
                   slno: slno,
                   name: get_data["student_name"],
@@ -170,16 +173,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.dispose();
   }
 
-  // void update_A_P(attend_stud) {
-  //   for (int i = 0; i < attend_stud.length; i++) {
-  //     for (int j = 0; j < Students_data.length; j++) {
-  //       if (Students_data[j].Email_ID == attend_stud[i]) {
-  //         Students_data[j].Present = "P";
-  //       }
-  //     }
-  //     setState(() {});
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

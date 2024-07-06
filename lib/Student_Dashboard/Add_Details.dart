@@ -6,7 +6,6 @@ import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -118,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(241, 238, 251, 1),
@@ -333,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         // Extracting section
                                         section =
                                             sections['$dropdownvalue_semester'];
-                                        enable_section = newVal != null;
+                                        enable_section = true;
                                       });
                                     },
                                   ),

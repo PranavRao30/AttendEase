@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:attend_ease/Bluetooth/broadcast.dart';
 
 TextStyle font25({
   Color textColor = Colors.brown,
