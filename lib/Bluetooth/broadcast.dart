@@ -85,6 +85,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     });
   }
 
+
+
+
   void get_table_data() async {
     // Getting Students details on table
     int slno = 1;
@@ -170,16 +173,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.dispose();
   }
 
-  // void update_A_P(attend_stud) {
-  //   for (int i = 0; i < attend_stud.length; i++) {
-  //     for (int j = 0; j < Students_data.length; j++) {
-  //       if (Students_data[j].Email_ID == attend_stud[i]) {
-  //         Students_data[j].Present = "P";
-  //       }
-  //     }
-  //     setState(() {});
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
