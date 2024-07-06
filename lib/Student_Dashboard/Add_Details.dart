@@ -1,5 +1,7 @@
+import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
 import 'package:attend_ease/Student_DashBoard/Sections_student.dart';
+import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Student_Dashboard.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:attend_ease/start_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const AddASubject());
@@ -425,7 +429,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: Color.fromRGBO(184, 163, 255, 1),
                 ),
               ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(255, 106, 106, 1),
+                  foregroundColor: Colors.black, // Black text
+                ),
+                onPressed: () async {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  await provider.googleLogout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GradientContainer(
+                              Color.fromARGB(255, 150, 120, 255),
+                              Color.fromARGB(255, 150, 67, 183),
+                              child: StartScreen(),
+                            )),
+                  );
+                },
+                child: Text(
+                  "LOGOUT",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
+            
           ),
         ),
       ),
