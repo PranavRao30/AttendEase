@@ -52,9 +52,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 // Variables Required
-bool validate_course_name = false;
-bool validate_course_code = false;
-bool validate_classes_held = false;
+var validate_course_name = false;
+var validate_course_code = false;
+var validate_classes_held = false;
 var add_course_code, sem_sec_branch;
 var branch_codes = [
   'AE',
@@ -227,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               // !.copyWith(color: Colors.deepPurpleAccent[500]),
                                               ),
                                         ),
-                                        // Branch Selection
+// Branch Selection
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 10, right: 10),
@@ -431,7 +431,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ],
                                           ),
                                         ),
-                                        // Semester Selection
+
+// Semester Selection
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 20, left: 10, right: 10),
@@ -687,106 +688,135 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
 
                                         // Course Name
-                                        if (dropdownvalue_branch != "CSE") Get_Course_Name(
-              validate_course_name: validate_course_name,
-              course_name: course_name,
-              enable_manual_course_name: enable_manual_course_name,
-            ),
-            Get_Course_Code(
-              validate_course_code: validate_course_code,
-              course_code: course_code,
-            ),
-            Get_Classes_Held(
-              validate_classes_held: validate_classes_held,
-              classes_held: classes_held,
-            ),
-            Container(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(184, 163, 255, 1),
-                foregroundColor: Colors.black, // Black text
-              ),
-              onPressed: () async {
-                // Validating Part
-                setState(() {
-                  validate_course_name = course_name.text.isEmpty;
-                  validate_course_code = course_code.text.isEmpty;
-                  validate_classes_held = classes_held.text.isEmpty;
-                });
+                                        if (dropdownvalue_branch != "CSE")
+                                          const Get_Course_Name(),
 
-                // If any field is invalid, return early to show error messages
-                if (validate_course_name || validate_course_code || validate_classes_held) {
-                  return;
-                }
+                                        // Course code
+                                        const Get_Course_Code(),
 
-                // Appending
-                // For Other Branches
-                if (dropdownvalue_branch != "CSE") {
-                  Store_Course_Name = course_name.text.toString();
-                  sem_sec_branch = "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                        // Classes Held
+                                        const Get_Classes_Held(),
 
-                  // Checking Duplicates
-                  if (await check_duplicates2(course_code.text.toString(), dropdownvalue_semester, dropdownvalue_section, dropdownvalue_branch)) {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    print("in non CSE");
-                    // Adding Data to firebase
-                    add_Teachers_data(1);
+                                        Container(
+                                          height: 10,
+                                        ),
 
-                    Timer(Duration(seconds: 1), () {
-                      widget.controller.animateToPage(
-                        1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.ease,
-                      );
-                    });
-                  } else {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    displayDuplicatesMessage(context);
-                  }
-                }
+                                        // Submit
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Color.fromRGBO(
+                                                  184, 163, 255, 1),
+                                              foregroundColor:
+                                                  Colors.black, // Black text
+                                            ),
+                                            onPressed: () async {
+                                              // Validating Part
+                                              // setState(() {
+                                              validate_course_name =
+                                                  course_name.text.isEmpty;
+                                              validate_course_code =
+                                                  course_code.text.isEmpty;
+                                              validate_classes_held =
+                                                  classes_held.text.isEmpty;
+                                              // });
+                                              setState(() {});
 
-                // For CSE
-                if (dropdownvalue_branch == "CSE") {
-                  var semSecBranch = "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
-                  var addCourseCode = course_code.text.toString();
+                                              // Apppending
+                                              // For Other Branches
+                                              if (!validate_classes_held &&
+                                                  !validate_course_code &&
+                                                  !validate_course_name &&
+                                                  dropdownvalue_branch !=
+                                                      "CSE") {
+                                                Store_Course_Name =
+                                                    course_name.text.toString();
+                                                sem_sec_branch =
+                                                    "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
 
-                  // Checking Duplicates
-                  if (await check_duplicates2(addCourseCode, dropdownvalue_semester, dropdownvalue_section, dropdownvalue_branch)) {
-                    setState(() {
-                      _isLoading = true;
-                    });
+                                                // Checking Duplicates
+                                                if ((await check_duplicates2(
+                                                    course_code.text.toString(),
+                                                    dropdownvalue_semester,
+                                                    dropdownvalue_section,
+                                                    dropdownvalue_branch))) {
+                                                  setState(() {
+                                                    _isLoading = true;
+                                                  });
 
-                    // Adding Data to firebase
-                    add_Teachers_data(1);
+                                                  print("in non cse");
+                                                  // Adding Data to firebase
+                                                  add_Teachers_data(1);
 
-                    Timer(Duration(seconds: 1), () {
-                      widget.controller.animateToPage(
-                        1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.ease,
-                      );
-                    });
-                  } else {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    displayDuplicatesMessage(context);
-                  }
-                }
+                                                  Timer(Duration(seconds: 1),
+                                                      () {
+                                                    widget.controller
+                                                        .animateToPage(
+                                                            1,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    400),
+                                                            curve: Curves.ease);
+                                                  });
+                                                } else {
+                                                  _isLoading = false;
+                                                  displayDuplicatesMessage(
+                                                      context);
+                                                }
+                                              }
 
-                // Transition fixed
-                setState(() {
-                  _isLoading = false;
-                });
-              },
-              child: Text(
-                "ADD",
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                                              // For CSE
+                                              if (!validate_classes_held &&
+                                                  !validate_course_code &&
+                                                  dropdownvalue_branch ==
+                                                      "CSE") {
+                                                //
+                                                var semSecBranch =
+                                                    "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
+                                                var addCourseCode =
+                                                    course_code.text.toString();
+
+                                                // Checking Duplicates
+                                                if ((await check_duplicates2(
+                                                    addCourseCode,
+                                                    dropdownvalue_semester,
+                                                    dropdownvalue_section,
+                                                    dropdownvalue_branch))) {
+                                                  setState(() {
+                                                    _isLoading = true;
+                                                  });
+
+                                                  // Adding Data to firebase
+                                                  add_Teachers_data(1);
+
+                                                  Timer(Duration(seconds: 1),
+                                                      () {
+                                                    widget.controller
+                                                        .animateToPage(
+                                                            1,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    400),
+                                                            curve: Curves.ease);
+                                                  });
+                                                } else {
+                                                  _isLoading = false;
+                                                  displayDuplicatesMessage(
+                                                      context);
+                                                }
+                                              }
+
+                                              // transition fixed
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                            },
+                                            child: Text(
+                                              "ADD",
+                                              style: GoogleFonts.poppins(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white),
                                               ),
                                             )),
                                       ],
@@ -800,18 +830,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // Separate Widgets of Course Details
 
-class Get_Course_Name extends StatefulWidget {
-  final bool validate_course_name;
-  final TextEditingController course_name;
-  final bool enable_manual_course_name;
+class Get_Course_Name extends StatelessWidget {
+  const Get_Course_Name({super.key});
 
-  Get_Course_Name({required this.validate_course_name, required this.course_name, required this.enable_manual_course_name});
-
-  @override
-  _Get_Course_NameState createState() => _Get_Course_NameState();
-}
-
-class _Get_Course_NameState extends State<Get_Course_Name> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -833,27 +854,39 @@ class _Get_Course_NameState extends State<Get_Course_Name> {
             flex: 3, // Adjust the flex value as needed
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width *
+                  0.6, // Adjust width as needed
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                enabled: widget.enable_manual_course_name, // non CSE branches
-                controller: widget.course_name, // Extracting course name from the text field
+                // non CSE branches
+                enabled: enable_manual_course_name,
+                // Extracting course name from the text field
+                controller: course_name,
+                // Restriction to alphabets
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')), // Restriction to alphabets
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]+$')),
                 ],
                 decoration: InputDecoration(
                   hintText: "Enter Course Name",
-                  errorText: widget.validate_course_name ? "Field cannot be empty" : null,
+                  errorText:
+                      validate_course_name ? "Field cannot be empty" : null,
+                  // Initial border
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
+                  // After selecting
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(width: 2, color: Colors.purple),
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Colors.purple,
+                    ),
                   ),
                 ),
               ),
@@ -865,17 +898,9 @@ class _Get_Course_NameState extends State<Get_Course_Name> {
   }
 }
 
-class Get_Course_Code extends StatefulWidget {
-  final bool validate_course_code;
-  final TextEditingController course_code;
+class Get_Course_Code extends StatelessWidget {
+  const Get_Course_Code({super.key});
 
-  Get_Course_Code({required this.validate_course_code, required this.course_code});
-
-  @override
-  _Get_Course_CodeState createState() => _Get_Course_CodeState();
-}
-
-class _Get_Course_CodeState extends State<Get_Course_Code> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -897,26 +922,33 @@ class _Get_Course_CodeState extends State<Get_Course_Code> {
             flex: 3, // Adjust the flex value as needed
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width *
+                  0.6, // Adjust width as needed
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                controller: widget.course_code,
+                controller: course_code,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z ]+$')),
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z ]+$'))
                 ],
                 decoration: InputDecoration(
                   hintText: "Enter course code",
-                  errorText: widget.validate_course_code ? "Field cannot be empty" : null,
+                  errorText:
+                      validate_course_code ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(width: 2, color: Colors.purple),
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Colors.purple,
+                    ),
                   ),
                 ),
               ),
@@ -928,17 +960,9 @@ class _Get_Course_CodeState extends State<Get_Course_Code> {
   }
 }
 
-class Get_Classes_Held extends StatefulWidget {
-  final bool validate_classes_held;
-  final TextEditingController classes_held;
+class Get_Classes_Held extends StatelessWidget {
+  const Get_Classes_Held({super.key});
 
-  Get_Classes_Held({required this.validate_classes_held, required this.classes_held});
-
-  @override
-  _Get_Classes_HeldState createState() => _Get_Classes_HeldState();
-}
-
-class _Get_Classes_HeldState extends State<Get_Classes_Held> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -960,27 +984,34 @@ class _Get_Classes_HeldState extends State<Get_Classes_Held> {
             flex: 3, // Adjust the flex value as needed
             child: Container(
               margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width * 0.6, // Adjust width as needed
+              width: MediaQuery.of(context).size.width *
+                  0.6, // Adjust width as needed
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(radius_12()),
                 color: Colors.white60,
               ),
               child: TextField(
-                controller: widget.classes_held,
+                controller: classes_held,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "Enter no of classes held",
-                  errorText: widget.validate_classes_held ? "Field cannot be empty" : null,
+                  errorText:
+                      validate_classes_held ? "Field cannot be empty" : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(width: 2, color: Colors.purple),
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Colors.purple,
+                    ),
                   ),
                 ),
               ),
