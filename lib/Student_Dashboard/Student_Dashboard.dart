@@ -814,13 +814,14 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
       DocumentSnapshot studentDoc = await studentRef.get();
 
       List<dynamic> courseIDs = studentDoc['Courses_list'];
-
+      Map<String, dynamic> attend_data=studentDoc['Attendance_data'];
       // Add the course ID if it's not already in the list
       if (!courseIDs.contains(courseId)) {
         courseIDs.add(courseId);
-
+        attend_data[courseId]=[0,0];
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
+        await studentRef.update({'Attendance_data': attend_data});
       } else
         displayDuplicatesMessage(context);
       // Updating students list in Courses Collection

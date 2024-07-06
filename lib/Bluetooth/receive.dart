@@ -7,7 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/ui_components/util.dart';
+
 String searchUUID = "";
+ValueNotifier<bool> attend_flag = ValueNotifier(false);
+
 class BeaconPage extends StatefulWidget {
   final String text;
   BeaconPage(this.text) {
@@ -22,6 +25,7 @@ class _BeaconPageState extends State<BeaconPage> {
   String genratedUUID = "";
   final regions = <Region>[];
   StreamSubscription<RangingResult>? _streamRanging;
+  bool hasUpdatedAttendance = false;  // Variable to track if the function has been executed
 
   @override
   void initState() {
@@ -53,7 +57,8 @@ class _BeaconPageState extends State<BeaconPage> {
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     DateFormat format = DateFormat("HH");
     String hour = format.format(now);
-    String stud_attendance_id = '${formattedDate}_${searchUUID.toLowerCase()}_${hour}';
+    String stud_attendance_id =
+        '${formattedDate}_${searchUUID.toLowerCase()}_${hour}';
 
     regions.add(Region(identifier: 'AltBeacon Region'));
 
@@ -64,10 +69,15 @@ class _BeaconPageState extends State<BeaconPage> {
         });
 
         for (var beacon in result.beacons) {
-          if (beacon.proximityUUID.toLowerCase() == searchUUID && beacon.accuracy <= 10) {
-            print('Beacon detected: ${beacon.proximityUUID} - ${beacon.accuracy} meters away');
+          if (beacon.proximityUUID.toLowerCase() == searchUUID &&
+              beacon.accuracy <= 10) {
+            print(
+                'Beacon detected: ${beacon.proximityUUID} - ${beacon.accuracy} meters away');
 
-            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Attendance").doc(stud_attendance_id).get();
+            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+                .collection("Attendance")
+                .doc(stud_attendance_id)
+                .get();
             List<dynamic> attendees_list = documentSnapshot.exists
                 ? List<String>.from(documentSnapshot["Attendees"])
                 : [];
@@ -78,8 +88,13 @@ class _BeaconPageState extends State<BeaconPage> {
                   .collection("Attendance")
                   .doc(stud_attendance_id)
                   .update({"Attendees": attendees_list});
-              
+
               print("Updated attendees list: $attendees_list");
+            }
+            attend_flag.value = true;
+            if (!hasUpdatedAttendance) {  // Check if the function has already been called
+              update_attend_count(attend_flag.value);
+              hasUpdatedAttendance = true;  // Set the flag to true after calling the function
             }
           }
         }
@@ -107,5 +122,25 @@ class _BeaconPageState extends State<BeaconPage> {
         ],
       ),
     );
+  }
+}
+
+void update_attend_count(bool flag) async {
+  if (flag) {
+    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(emailName)
+        .get();
+    var stud_attend_data = documentSnapshot1.data() as Map<String, dynamic>?;
+
+    if (documentSnapshot1.exists && stud_attend_data != null) {
+      Map<String, dynamic> update_attend_count =
+          Map.from(stud_attend_data["Attendance_data"] ?? {});
+      update_attend_count[searchUUID][0] += 1;
+      await FirebaseFirestore.instance
+          .collection("Students")
+          .doc(emailName)
+          .update({"Attendance_data": update_attend_count});
+    }
   }
 }

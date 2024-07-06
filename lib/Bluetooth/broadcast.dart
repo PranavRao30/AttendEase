@@ -210,7 +210,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           await requestPermissions();
                           await startBeaconBroadcast();
                           print("Button Pressed");
-
+                          
                           creating_attendance_collection(genratedUUID);
                           // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
@@ -219,9 +219,35 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                             List<dynamic> after_update_attend_list = documentSnapshot.exists
                             ? List<String>.from(documentSnapshot["Attendees"])
                             : [];
-                            print(after_update_attend_list);
                             update_A_P(after_update_attend_list);
-                        });
+                            });
+
+                                var get_data1;
+                            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+                                .collection("Courses")
+                                .doc(genratedUUID)
+                                .get();
+
+                            if (documentSnapshot.exists) get_data1 = documentSnapshot.data();
+
+                            // Accessing students_list from courses collection
+                            students_list = List<String>.from(get_data1["Student_list"]);
+                            for(int i=0;i<students_list.length;i++){
+                              DocumentSnapshot documentSnapshot1=await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).get();
+                              var stud_data=documentSnapshot1.data() as Map<String ,dynamic>?;
+
+                            if (documentSnapshot1.exists && stud_data != null) {
+                            Map<String, dynamic> Attend_Map = Map.from(stud_data["Attendance_data"] ?? {});
+
+
+                            Attend_Map[genratedUUID][1]+=1;
+                            print("Attendance data ${Attend_Map[genratedUUID]}");
+
+                            await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({"Attendance_data":Attend_Map});
+                        }
+                            }
+                            
+                        
                             
 
 

@@ -68,6 +68,7 @@ class StartScreen extends StatelessWidget {
                       "Semester": "",
                       "Section": "",
                       "Courses_list": [],
+                      "Attendance_data": <String, List<int>>{},
                     };
 
                     await FirebaseFirestore.instance
