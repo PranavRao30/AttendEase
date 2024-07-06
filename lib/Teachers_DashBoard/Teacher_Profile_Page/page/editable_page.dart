@@ -152,13 +152,13 @@ class _EditablePageState extends State<EditablePage> {
         return DataRow(
           cells: Utils.modelBuilder(cells, (index, cell) {
             // Showing edit icon
-            final showEditIcon = index == 1;
+            // final showEditIcon = index == 1;
             // || index == 2 || index == 3;
             return DataCell(
               Text('$cell'),
 
               // showing edit icon
-              showEditIcon: showEditIcon,
+              // showEditIcon: showEditIcon,
               onTap: () {
                 // Looking for index
                 switch (index) {
