@@ -5,8 +5,6 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
-import 'package:attend_ease/start_screen.dart';
-import 'package:attend_ease/ui_components/util.dart';
 
 String searchUUID = "";
 ValueNotifier<bool> attend_flag = ValueNotifier(false);
