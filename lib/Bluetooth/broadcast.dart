@@ -10,10 +10,11 @@ import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:attend_ease/ui_components/util.dart';
 import 'package:intl/intl.dart';
 import "dart:ui" as ui;
+
+
 String genratedUUID = "";
 ValueNotifier<bool> util_flag = ValueNotifier(false);
 DateTime now = DateTime.now();
