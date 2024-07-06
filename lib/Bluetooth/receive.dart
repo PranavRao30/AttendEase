@@ -5,8 +5,6 @@ import 'package:flutter_beacon/flutter_beacon.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
-import 'package:attend_ease/start_screen.dart';
-import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 
