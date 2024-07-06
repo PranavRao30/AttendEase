@@ -98,7 +98,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
         // First Adding
         if (Students_data.isEmpty) {
           Students_data!.add(
-            get_table(slno: 1, name: get_data["student_name"], Present: "A", Email_ID:"${get_data['student_id']}"),
+            get_table(
+                slno: 1,
+                name: get_data["student_name"],
+                Present: "A",
+                Email_ID: "${get_data['student_id']}"),
           );
         }
 
@@ -108,14 +112,20 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
             slno++;
             Students_data!.add(
               get_table(
-                  slno: slno, name: get_data["student_name"], Present: "A", Email_ID:"${get_data['student_id']}"),
+                  slno: slno,
+                  name: get_data["student_name"],
+                  Present: "A",
+                  Email_ID: "${get_data['student_id']}"),
             );
           }
-          
         }
         print(Students_data[0].Email_ID);
+        
+      
         initTemp(Students_data);
-        Students_data = List.from(Stud_details);
+      
+
+        // Students_data = List.from(Stud_details);
       }
     }
 
@@ -124,11 +134,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     });
   }
 
-   
-
   bool is_sort = true;
-  
-
 
   bool _isGlowing = false;
   Timer? _glowTimer;
@@ -152,19 +158,18 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     _glowTimer?.cancel();
     super.dispose();
   }
-    void update_A_P(attend_stud){
-      for(int i=0;i<attend_stud.length;i++){
-        for(int j=0;j<Students_data.length;j++){
-          if(Students_data[j].Email_ID==attend_stud[i]){
-            Students_data[j].Present="P";
-          }
-        }
-        setState(() {
-          
-        });
-      }
-    }
-  
+
+  // void update_A_P(attend_stud) {
+  //   for (int i = 0; i < attend_stud.length; i++) {
+  //     for (int j = 0; j < Students_data.length; j++) {
+  //       if (Students_data[j].Email_ID == attend_stud[i]) {
+  //         Students_data[j].Present = "P";
+  //       }
+  //     }
+  //     setState(() {});
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,11 +201,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                           print("Button Pressed");
 
                           creating_attendance_collection(genratedUUID);
-                      
-                          
-
-
-
                         },
                       ),
                       radius: 40.0,
@@ -286,6 +286,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     color:
                         e.Present == 'P' ? Colors.lightGreen : Colors.red[400]),
               ))),
+          DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );

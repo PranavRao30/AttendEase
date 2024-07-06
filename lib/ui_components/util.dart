@@ -33,3 +33,13 @@ void update_A_P(attend_stud){
         }
       }
     }
+
+
+class Utils{
+  static List<T> modeBuilder<M, T>(
+    List<M> models, T Function(int index, M model) builder) => 
+    models.asMap().map<int, T>((index, model) => MapEntry(index, builder(index, model))).
+    values.toList();
+
+  static modelBuilder(List<dynamic> cells, DataCell Function(dynamic index, dynamic cell) param1) {}
+}
