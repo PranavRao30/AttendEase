@@ -187,6 +187,7 @@ class _EditablePageState extends State<EditablePage> {
       ...attendanceRecords
           .map((record) => record['date']!)
           .toList(), // Use non-nullable strings
+      'Eligibility',
     ];
 
     return DataTable(
@@ -250,10 +251,65 @@ class _EditablePageState extends State<EditablePage> {
               ),
             );
           }).toList(),
+          // Calculate eligibility percentage here
+          DataCell(calculateEligibility(user)),
         ];
 
         return DataRow(
           cells: cells,
         );
       }).toList();
+
+  Widget calculateEligibility(User1 user) {
+    if (user.attendance.isEmpty) {
+      return Text(
+        'N/A',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+
+    int presentClasses = 0;
+    int totalClasses = 0;
+
+    // Example logic to iterate through attendance records
+    user.attendance.forEach((date, status) {
+      if (status == 'P') {
+        presentClasses++;
+      }
+      totalClasses++;
+    });
+
+    if (totalClasses == 0) {
+      return Text(
+        'N/A',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+
+    double percentage = (presentClasses / totalClasses) * 100;
+    String eligibility = percentage.toStringAsFixed(2) + '%';
+
+    // Determine color based on percentage
+    Color color;
+    if (percentage > 85) {
+      color = Colors.green;
+    } else if (percentage > 75) {
+      color = Colors.yellow;
+    } else {
+      color = Colors.red;
+    }
+
+    // Return styled text with color
+    return Text(
+      eligibility,
+      style: TextStyle(
+        color: color,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
 }
