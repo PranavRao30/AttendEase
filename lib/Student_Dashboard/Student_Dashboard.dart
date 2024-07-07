@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:attend_ease/Bluetooth/receive.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
+import 'package:attend_ease/Student_Dashboard/Student_Status.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:flutter/material.dart';
@@ -75,14 +76,10 @@ class Student_Dashboard extends StatelessWidget {
 
 var flag = 0;
 // Variables
-var Course_Names = [];
-
-var Course_Code = [];
-
-var classesHeld = [];
-var total_class = [18, 22, 26, 16, 23, 26];
-var attended_class = [18, 20, 23, 16, 20, 25];
-var sections_branch_list = [];
+var Eligibilty;
+var total_class;
+var total_attended;
+var Absent;
 // var section = "4D";
 // var branch = "CSE";
 // var sec_branch = section + " | " + branch;
@@ -382,7 +379,7 @@ class _StudentHomePageState extends State<Student_Home_Page> {
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
@@ -548,12 +545,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CourseData courseData = courseDataList[index];
                             return InkWell(
                                 onTap: () {
-                                  print("Pressed Card: ${courseData.CourseID}");
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             BeaconPage(courseData.CourseID)));
+                                  print(
+                                      "Profile Pressed Card: ${courseData.CourseID}");
                                 },
                                 child: Container(
                                     margin: const EdgeInsets.all(10),
@@ -604,31 +597,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                             ),
-                                            Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 6, 0, 0),
-                                                child: Row(
-                                                  children: [
-                                                    const Text(
-                                                      "Classes Held: ",
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      courseData.classesHeld,
-                                                      style: const TextStyle(
-                                                          fontSize: 10),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                            // Align(
+                                            //   alignment: Alignment.topLeft,
+                                            //   child: Padding(
+                                            //     padding:
+                                            //         const EdgeInsets.fromLTRB(
+                                            //             0, 6, 0, 0),
+                                            //     child: Row(
+                                            //       children: [
+                                            //         const Text(
+                                            //           "Classes Held: ",
+                                            //           style: TextStyle(
+                                            //             fontSize: 10,
+                                            //             fontWeight:
+                                            //                 FontWeight.bold,
+                                            //           ),
+                                            //         ),
+                                            //         Text(
+                                            //           courseData.classesHeld,
+                                            //           style: const TextStyle(
+                                            //               fontSize: 10),
+                                            //         ),
+                                            //       ],
+                                            //     ),
+                                            //   ),
+                                            // ),
                                             Align(
                                               alignment: Alignment.topLeft,
                                               child: Padding(
@@ -653,6 +646,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ],
                                                 ),
                                               ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("Get Details"),
+                                                SizedBox(width: 10),
+                                                IconButton(
+                                                  icon: const Icon(Icons.list,
+                                                      size: 20),
+                                                  onPressed: () async {
+                                                    print("Inside onpress");
+                                                    // await fetch_student_att_details();
+                                                    // print(studentId);
+
+                                                    DocumentSnapshot
+                                                        documentSnapshot1 =
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                "Students")
+                                                            .doc(emailName)
+                                                            .get();
+                                                    var stud_data =
+                                                        documentSnapshot1.data()
+                                                            as Map<String,
+                                                                dynamic>?;
+
+                                                    if (documentSnapshot1
+                                                            .exists &&
+                                                        stud_data != null) {
+                                                      Map<String, dynamic>
+                                                          Attend_Map =
+                                                          Map.from(stud_data[
+                                                                  "Attendance_data"] ??
+                                                              {});
+
+                                                      print(Attend_Map[
+                                                          courseData.CourseID]);
+
+                                                      total_attended =
+                                                          Attend_Map[courseData
+                                                              .CourseID][0];
+                                                      total_class = Attend_Map[
+                                                          courseData
+                                                              .CourseID][1];
+                                                      Eligibilty =
+                                                          (total_attended /
+                                                                  total_class) *
+                                                              100;
+                                                      Absent = total_class -
+                                                          total_attended;
+                                                    }
+
+                                                    Timer(Duration(seconds: 3),
+                                                        () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  Student_Status_Page(
+                                                                    courseData
+                                                                        .CourseID,
+                                                                    total_attended,
+                                                                    total_class,
+                                                                    Eligibilty,
+                                                                    Absent,
+                                                                  )));
+                                                    });
+                                                  },
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),

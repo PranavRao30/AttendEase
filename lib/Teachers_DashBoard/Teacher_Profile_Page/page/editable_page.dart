@@ -32,7 +32,6 @@ class User1 {
 String id = "";
 void initializecourse_id(cid) {
   id = cid;
-  print("Inside get course0 $id");
 }
 
 class EditablePage extends StatefulWidget {
@@ -100,13 +99,24 @@ class _EditablePageState extends State<EditablePage> {
               .where("Course_id", isEqualTo: widget.courseId)
               .get();
 
+
+          // Iterating through document of Attendance Collection and getting data
           for (var doc in attendanceSnapshot.docs) {
             Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
             if (data != null && data.containsKey('Date')) {
+
+              // if it date as key
               String date = data['Date'];
               String attendanceId = doc.id; // Unique identifier for attendance
+              
+              // attendanceRecordsList containing map date and doc id.
               attendanceRecordsList.add({'date': date, 'id': attendanceId});
+                      
+              // Extracting attendees list 
               List<String> attendees = List<String>.from(data['Attendees']);
+              
+              
+              // If the user present in attendees list is there in allusers list
               for (var user in allUsers) {
                 if (attendees.contains(user.email)) {
                   user.attendance['${date}_$attendanceId'] = 'P'; // Present
@@ -118,6 +128,7 @@ class _EditablePageState extends State<EditablePage> {
           }
 
           setState(() {
+            // rows
             users = allUsers;
             attendanceRecords = attendanceRecordsList;
           });
@@ -136,11 +147,13 @@ class _EditablePageState extends State<EditablePage> {
         FirebaseFirestore.instance.collection("Attendance").doc(attendanceId);
 
     DocumentSnapshot studentSnapshot = await studentRef.get();
+    
+    // this contains tuple of attended and total classes held
     List<dynamic>? attendanceData =
         studentSnapshot['Attendance_data'][widget.courseId];
 
     if (isPresent) {
-      // Change attendance from 'A' to 'P'
+      // Change attendance from 'A' to 'P' and changing attended count 
       if (attendanceData != null && attendanceData.length >= 2) {
         int presentCount = attendanceData[0] + 1;
         await studentRef.update({
@@ -150,11 +163,14 @@ class _EditablePageState extends State<EditablePage> {
           ],
         });
       }
+      // A TO P merging attended student list 
       await attendanceRef.update({
         'Attendees': FieldValue.arrayUnion([userId]),
       });
-    } else {
-      // Change attendance from 'P' to 'A'
+    }
+
+    // Change attendance from 'P' to 'A'
+    else {    
       if (attendanceData != null && attendanceData.length >= 2) {
         int presentCount = attendanceData[0] - 1;
         await studentRef.update({
@@ -184,18 +200,23 @@ class _EditablePageState extends State<EditablePage> {
       'Sl no',
       'Student Name',
       'Email',
+
+      // Here ...attendanceRecords means it extends previous value along with present value
       ...attendanceRecords
           .map((record) => record['date']!)
-          .toList(), // Use non-nullable strings
+          .toList(), 
       'Eligibility',
     ];
 
+    // Returning to data table
     return DataTable(
       columns: getColumns(columns),
       rows: getRows(users),
     );
   }
 
+
+  // Function to get data columns
   List<DataColumn> getColumns(List<String> columns) {
     return columns.map((String column) {
       return DataColumn(
@@ -204,14 +225,19 @@ class _EditablePageState extends State<EditablePage> {
     }).toList();
   }
 
+  // Function to get data rows
   List<DataRow> getRows(List<User1> users) => users.map((User1 user) {
         final cells = [
           DataCell(Text('${user.slno}')),
           DataCell(Text(user.firstName)),
           DataCell(Text(user.email)),
+
+          // Spread operator
           ...attendanceRecords.map((record) {
             final date = record['date']!;
             final attendanceId = record['id']!;
+            
+            // Getting P or A
             final attendanceStatus =
                 user.attendance['${date}_$attendanceId'] ?? 'A';
 
