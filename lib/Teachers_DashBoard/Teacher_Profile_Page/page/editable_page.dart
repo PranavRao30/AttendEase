@@ -46,13 +46,13 @@ class EditablePage extends StatefulWidget {
 
 class _EditablePageState extends State<EditablePage> {
   late List<User1> users;
-  late List<String> dates;
+  late List<Map<String, String>> attendanceRecords;
 
   @override
   void initState() {
     super.initState();
     users = [];
-    dates = [];
+    attendanceRecords = [];
     addProfileDetails();
   }
 
@@ -94,7 +94,7 @@ class _EditablePageState extends State<EditablePage> {
           }
 
           // Fetch attendance data
-          List<String> attendanceDates = [];
+          List<Map<String, String>> attendanceRecordsList = [];
           QuerySnapshot attendanceSnapshot = await FirebaseFirestore.instance
               .collection("Attendance")
               .where("Course_id", isEqualTo: widget.courseId)
@@ -104,13 +104,14 @@ class _EditablePageState extends State<EditablePage> {
             Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
             if (data != null && data.containsKey('Date')) {
               String date = data['Date'];
-              attendanceDates.add(date);
+              String attendanceId = doc.id; // Unique identifier for attendance
+              attendanceRecordsList.add({'date': date, 'id': attendanceId});
               List<String> attendees = List<String>.from(data['Attendees']);
               for (var user in allUsers) {
                 if (attendees.contains(user.email)) {
-                  user.attendance[date] = 'P'; // Present
+                  user.attendance['${date}_$attendanceId'] = 'P'; // Present
                 } else {
-                  user.attendance[date] = 'A'; // Absent
+                  user.attendance['${date}_$attendanceId'] = 'A'; // Absent
                 }
               }
             }
@@ -118,12 +119,54 @@ class _EditablePageState extends State<EditablePage> {
 
           setState(() {
             users = allUsers;
-            dates = attendanceDates;
+            attendanceRecords = attendanceRecordsList;
           });
         }
       }
     } catch (e) {
       print("Error fetching student details: $e");
+    }
+  }
+
+  Future<void> updateAttendance(String userId, String courseId, String date,
+      String attendanceId, bool isPresent) async {
+    final studentRef =
+        FirebaseFirestore.instance.collection("Students").doc(userId);
+    final attendanceRef =
+        FirebaseFirestore.instance.collection("Attendance").doc(attendanceId);
+
+    DocumentSnapshot studentSnapshot = await studentRef.get();
+    List<dynamic>? attendanceData =
+        studentSnapshot['Attendance_data'][widget.courseId];
+
+    if (isPresent) {
+      // Change attendance from 'A' to 'P'
+      if (attendanceData != null && attendanceData.length >= 2) {
+        int presentCount = attendanceData[0] + 1;
+        await studentRef.update({
+          'Attendance_data.${widget.courseId}': [
+            presentCount,
+            attendanceData[1]
+          ],
+        });
+      }
+      await attendanceRef.update({
+        'Attendees': FieldValue.arrayUnion([userId]),
+      });
+    } else {
+      // Change attendance from 'P' to 'A'
+      if (attendanceData != null && attendanceData.length >= 2) {
+        int presentCount = attendanceData[0] - 1;
+        await studentRef.update({
+          'Attendance_data.${widget.courseId}': [
+            presentCount,
+            attendanceData[1]
+          ],
+        });
+      }
+      await attendanceRef.update({
+        'Attendees': FieldValue.arrayRemove([userId]),
+      });
     }
   }
 
@@ -133,7 +176,7 @@ class _EditablePageState extends State<EditablePage> {
       );
 
   Widget buildDataTable() {
-    if (dates.isEmpty) {
+    if (attendanceRecords.isEmpty) {
       return Center(child: CircularProgressIndicator());
     }
 
@@ -141,7 +184,9 @@ class _EditablePageState extends State<EditablePage> {
       'Sl no',
       'Student Name',
       'Email',
-      ...dates,
+      ...attendanceRecords
+          .map((record) => record['date']!)
+          .toList(), // Use non-nullable strings
     ];
 
     return DataTable(
@@ -160,14 +205,32 @@ class _EditablePageState extends State<EditablePage> {
 
   List<DataRow> getRows(List<User1> users) => users.map((User1 user) {
         final cells = [
-          user.slno,
-          user.firstName,
-          user.email,
-          ...dates.map((date) => user.attendance[date] ?? 'A').toList(),
+          DataCell(Text('${user.slno}')),
+          DataCell(Text(user.firstName)),
+          DataCell(Text(user.email)),
+          ...attendanceRecords.map((record) {
+            final date = record['date']!;
+            final attendanceId = record['id']!;
+            return DataCell(
+              InkWell(
+                child: Text(user.attendance['${date}_$attendanceId'] ?? 'A'),
+                onTap: () {
+                  setState(() {
+                    final isPresent =
+                        user.attendance['${date}_$attendanceId'] == 'P';
+                    user.attendance['${date}_$attendanceId'] =
+                        isPresent ? 'A' : 'P';
+                    updateAttendance(user.email, widget.courseId, date,
+                        attendanceId, !isPresent);
+                  });
+                },
+              ),
+            );
+          }).toList(),
         ];
 
         return DataRow(
-          cells: cells.map((cell) => DataCell(Text('$cell'))).toList(),
+          cells: cells,
         );
       }).toList();
 }
