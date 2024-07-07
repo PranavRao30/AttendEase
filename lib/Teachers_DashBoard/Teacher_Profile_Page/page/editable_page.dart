@@ -211,9 +211,22 @@ class _EditablePageState extends State<EditablePage> {
           ...attendanceRecords.map((record) {
             final date = record['date']!;
             final attendanceId = record['id']!;
+            final attendanceStatus =
+                user.attendance['${date}_$attendanceId'] ?? 'A';
+
+            Color textColor = Colors.black;
+            FontWeight fontWeight = FontWeight.normal;
+
+            if (attendanceStatus == 'P') {
+              textColor = Colors.green;
+              fontWeight = FontWeight.bold;
+            } else if (attendanceStatus == 'A') {
+              textColor = Colors.red;
+              fontWeight = FontWeight.bold;
+            }
+
             return DataCell(
               InkWell(
-                child: Text(user.attendance['${date}_$attendanceId'] ?? 'A'),
                 onTap: () {
                   setState(() {
                     final isPresent =
@@ -224,6 +237,16 @@ class _EditablePageState extends State<EditablePage> {
                         attendanceId, !isPresent);
                   });
                 },
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    attendanceStatus,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: fontWeight,
+                    ),
+                  ),
+                ),
               ),
             );
           }).toList(),
