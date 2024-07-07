@@ -1,7 +1,4 @@
-import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
-import 'package:attend_ease/Bluetooth/broadcast.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class get_table1 {

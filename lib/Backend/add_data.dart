@@ -1,10 +1,7 @@
-import 'package:attend_ease/Backend/fetch_data.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/v4.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
@@ -63,7 +60,6 @@ remove_concurrency() async {
     print(sortedTime);
 
     QuerySnapshot get_removing_id;
-    DocumentSnapshot get_teachers_courseid;
     // get_removing_id = await FirebaseFirestore.instance
     //     .collection("Courses")
     //     .where("Time_of_adding", isEqualTo: sortedTime[1])

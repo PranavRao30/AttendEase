@@ -6,9 +6,7 @@ import 'package:attend_ease/Teachers_DashBoard/Teachers_DashBoard.dart';
 import 'package:provider/provider.dart';
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Student_Dashboard/Add_Details.dart';
-import 'package:attend_ease/Backend/fetch_data.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 var get_student_data;
 var status_of_joining = false;

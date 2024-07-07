@@ -1,15 +1,11 @@
-import 'package:attend_ease/Backend/add_data.dart';
-
-import '../data/users.dart';
 import '../model/user.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/utils.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/widget/scrollable_widget.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/widget/text_dialog_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
+// ignore: must_be_immutable
 class EditablePage extends StatefulWidget {
 String course_id="";
 EditablePage(this.course_id);

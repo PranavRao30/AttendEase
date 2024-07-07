@@ -1,10 +1,6 @@
-import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/page/editable_page.dart';
-import 'page/editable_page.dart';
 import 'widget/tabbar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 
 

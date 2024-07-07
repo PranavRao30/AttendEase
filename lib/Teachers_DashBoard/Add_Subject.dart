@@ -1,13 +1,11 @@
 import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Sections.dart';
 import 'package:attend_ease/ui_components/util.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
 import 'package:attend_ease/Teachers_DashBoard/Subjects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:info_popup/info_popup.dart';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // void main() {
@@ -506,7 +504,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 '$dropdownvalue_semester'];
 
                                                             enable_section =
-                                                                newVal != null;
+                                                                true;
 
                                                             if (dropdownvalue_branch ==
                                                                 "CSE") {
@@ -588,8 +586,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       dropdownvalue_section =
                                                                           newVal!;
                                                                       enable_Course =
-                                                                          newVal !=
-                                                                              null;
+                                                                          true;
                                                                     });
                                                                   }
                                                                 : null,
@@ -776,8 +773,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   dropdownvalue_branch ==
                                                       "CSE") {
                                                 //
-                                                var semSecBranch =
-                                                    "$dropdownvalue_semester$dropdownvalue_section | $dropdownvalue_branch";
                                                 var addCourseCode =
                                                     course_code.text.toString();
 

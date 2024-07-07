@@ -12,10 +12,7 @@ import 'package:attend_ease/Bluetooth/broadcast.dart';
 import 'package:attend_ease/start_screen.dart';
 import 'package:attend_ease/gradient_container.dart';
 import 'package:attend_ease/Sign_in/Sign_In.dart';
-import 'package:attend_ease/Backend/fetch_data.dart';
-import 'package:attend_ease/Backend/add_data.dart';
 import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
-import 'package:attend_ease/Bluetooth/broadcast.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/main1.dart';
 
 var students_list;
@@ -128,8 +125,6 @@ class Teacher_Home_Page extends StatefulWidget {
 
 class _TeacherHomePageState extends State<Teacher_Home_Page> {
   late Future<List<CourseData>> _courseDataFuture;
-
-  List<get_table> _data = [];
 
   @override
   void initState() {
@@ -491,7 +486,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (user != null) {
       setState(() {
         _nameController.text = user.displayName ?? '';
-        _emailController.text = user.email ?? '';
+        _emailController.text = user.email;
         _photoUrlController.text = user.photoUrl ?? '';
       });
     }

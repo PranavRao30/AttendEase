@@ -1,5 +1,3 @@
-import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
-
 var sections = Map();
 var sem;
 select_sections(dropdownvalue_branch, current_cycle) {

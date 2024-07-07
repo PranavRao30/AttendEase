@@ -10,7 +10,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 
 void main() {
   runApp(const Student_Dashboard());
@@ -430,7 +429,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (user != null) {
       setState(() {
         _nameController.text = user.displayName ?? '';
-        _emailController.text = user.email ?? '';
+        _emailController.text = user.email;
         _photoUrlController.text = user.photoUrl ?? '';
       });
 
@@ -447,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (userData.exists) {
         var userDataMap = userData.data() as Map<String, dynamic>;
         setState(() {
-          _semesterController.text = userDataMap["Semester"].toString() ?? '';
+          _semesterController.text = userDataMap["Semester"].toString();
           _branchController.text = userDataMap["Branch"] ?? '';
           _sectionController.text = userDataMap["Section"] ?? '';
         });
