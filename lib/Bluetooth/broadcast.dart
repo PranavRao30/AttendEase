@@ -12,14 +12,14 @@ import 'package:attend_ease/ui_components/util.dart';
 import 'package:intl/intl.dart';
 import "dart:ui" as ui;
 
-
 String genratedUUID = "";
 ValueNotifier<bool> util_flag = ValueNotifier(false);
-DateTime now = DateTime.now();
-    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    DateFormat format = DateFormat("HH");
-    String hour = format.format(now);
-    String stud_attendance_id = '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
+// DateTime now = DateTime.now();
+// String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+// DateFormat format = DateFormat("HH");
+// String hour = format.format(now);
+// String stud_attendance_id =
+//     '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
 // List<get_table>? Students_data = [];
 
 // class get_table {
@@ -33,12 +33,20 @@ DateTime now = DateTime.now();
 //     required this.Present,
 //   });
 // }
+String? stud_attendance_id;
 
 // ignore: must_be_immutable
 class Broadcast_Land extends StatelessWidget {
   String text;
   Broadcast_Land(this.text) {
     genratedUUID = text;
+    print("GEN$genratedUUID");
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    DateFormat format = DateFormat("HH");
+    String hour = format.format(now);
+    stud_attendance_id =
+        '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
   }
 
   @override
@@ -68,12 +76,12 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   List<get_table> Students_data = [];
   // Initialize _data as an empty list
 
-    @override
+  @override
   void initState() {
     super.initState();
     get_table_data();
     Timer(Duration(seconds: 15), () => setState(() {}));
-    
+
     // Add listener to util_flag
     util_flag.addListener(() {
       if (util_flag.value) {
@@ -84,9 +92,6 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       }
     });
   }
-
-
-
 
   void get_table_data() async {
     // Getting Students details on table
@@ -139,8 +144,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
           }
         }
         print(Students_data[0].Email_ID);
-        
-      
+
         initTemp(Students_data);
       }
     }
@@ -149,6 +153,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       _data = List.from(Students_data);
     });
   }
+
   bool is_sort = true;
   bool _isGlowing = false;
   Timer? _glowTimer;
@@ -173,7 +178,36 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
     super.dispose();
   }
 
+// Display Attendance Status
+  void displayAttendanceStatus(BuildContext context) {
+    final snackbar = SnackBar(
+      content: Text("Attendance Taken Successfully!!"),
+      duration: Duration(seconds: 3),
+      action: SnackBarAction(
+          label: "Ok",
+          onPressed: () {
+            print("Attendance Taken Successfully!!");
+          }),
+    );
 
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  void retakeAttendanceStatus(BuildContext context) {
+    final snackbar = SnackBar(
+      content: Text("Attendance Already Taken."),
+      duration: Duration(seconds: 3),
+      action: SnackBarAction(
+          label: "Ok",
+          onPressed: () {
+            print("Attendance Already Taken");
+          }),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  bool retake_attendance_flag = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,59 +229,245 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                     child: CircleAvatar(
                       backgroundColor: Color.fromARGB(180, 193, 95, 240),
                       child: IconButton(
-                        icon: Icon(Icons.add,
-                            color: const Color.fromARGB(255, 255, 206, 248)),
-                        onPressed: () async {
-                          _startGlow();
-                          await FlutterBluePlus.turnOn();
-                          await requestPermissions();
-                          await startBeaconBroadcast();
-                          print("Button Pressed");
-                          
-                          creating_attendance_collection(genratedUUID);
-                          // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
+                          icon: Icon(Icons.add,
+                              color: const Color.fromARGB(255, 255, 206, 248)),
+                          onPressed: () async {
+                            print(stud_attendance_id);
+                            // CREATING ATTENDANCE COLLECTION
+                            DocumentSnapshot documentSnapshot0 =
+                                await FirebaseFirestore.instance
+                                    .collection("Attendance")
+                                    .doc(stud_attendance_id)
+                                    .get();
+                            if (!documentSnapshot0.exists) {
+                              creating_attendance_collection(genratedUUID);
 
-                            Timer(Duration(seconds: 10), () async {
-                            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Attendance").doc(stud_attendance_id).get();
-                            List<dynamic> after_update_attend_list = documentSnapshot.exists
-                            ? List<String>.from(documentSnapshot["Attendees"])
-                            : [];
-                            
-                            update_A_P(after_update_attend_list);
-                            });
+                              Timer(Duration(seconds: 2), () async {
+                                DocumentSnapshot documentSnapshot0 =
+                                    await FirebaseFirestore.instance
+                                        .collection("Attendance")
+                                        .doc(stud_attendance_id)
+                                        .get();
+                                var stud_attendance;
+                                if (documentSnapshot0.exists) {
+                                  stud_attendance = documentSnapshot0.data();
+                                }
 
+                                if (stud_attendance["Attendance_Status"] ==
+                                    true) {
+                                  retakeAttendanceStatus(context);
+                                } else {
+                                  _startGlow();
+                                  await FlutterBluePlus.turnOn();
+                                  await requestPermissions();
+                                  await startBeaconBroadcast();
+                                  print("Button Pressed");
+
+                                  // // CREATING ATTENDANCE COLLECTION
+                                  // creating_attendance_collection(genratedUUID);
+                                  // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
+
+                                  Timer(Duration(seconds: 10), () async {
+                                    DocumentSnapshot documentSnapshot =
+                                        await FirebaseFirestore.instance
+                                            .collection("Attendance")
+                                            .doc(stud_attendance_id)
+                                            .get();
+
+                                    List<dynamic> after_update_attend_list =
+                                        documentSnapshot.exists
+                                            ? List<String>.from(
+                                                documentSnapshot["Attendees"])
+                                            : [];
+
+                                    update_A_P(after_update_attend_list);
+                                    await FirebaseFirestore.instance
+                                        .collection("Attendance")
+                                        .doc(stud_attendance_id)
+                                        .update({"Attendance_Status": true});
+
+                                    Timer(Duration(seconds: 2), () async {
+                                      DocumentSnapshot documentSnapshot =
+                                          await FirebaseFirestore.instance
+                                              .collection("Attendance")
+                                              .doc(stud_attendance_id)
+                                              .get();
+                                      if (documentSnapshot[
+                                              "Attendance_Status"] ==
+                                          true) {
+                                        // retake_attendance_flag = true;
+                                        displayAttendanceStatus(context);
+                                      }
+                                    });
+                                  });
+
+                                  // getting course collection
+                                  var get_data1;
+                                  DocumentSnapshot documentSnapshot =
+                                      await FirebaseFirestore.instance
+                                          .collection("Courses")
+                                          .doc(genratedUUID)
+                                          .get();
+
+                                  if (documentSnapshot.exists)
+                                    get_data1 = documentSnapshot.data();
+
+                                  // Accessing the class held variable from Courses collection
+                                  int total_class_held =
+                                      int.parse(get_data1['Classes_Held']);
+
+                                  // Accessing students_list from courses collection
+                                  students_list = List<String>.from(
+                                      get_data1["Student_list"]);
+                                  for (int i = 0;
+                                      i < students_list.length;
+                                      i++) {
+                                    DocumentSnapshot documentSnapshot1 =
+                                        await FirebaseFirestore.instance
+                                            .collection("Students")
+                                            .doc(students_list[i])
+                                            .get();
+                                    var stud_data = documentSnapshot1.data()
+                                        as Map<String, dynamic>?;
+
+                                    if (documentSnapshot1.exists &&
+                                        stud_data != null) {
+                                      Map<String, dynamic> Attend_Map =
+                                          Map.from(
+                                              stud_data["Attendance_data"] ??
+                                                  {});
+
+                                      Attend_Map[genratedUUID][1] =
+                                          total_class_held + 1;
+                                      print(
+                                          "Attendance data ${Attend_Map[genratedUUID]}");
+
+                                      await FirebaseFirestore.instance
+                                          .collection("Students")
+                                          .doc(students_list[i])
+                                          .update(
+                                              {"Attendance_data": Attend_Map});
+
+                                      await FirebaseFirestore.instance
+                                          .collection("Courses")
+                                          .doc(genratedUUID)
+                                          .update({
+                                        "Classes_Held": Attend_Map[genratedUUID]
+                                                [1]
+                                            .toString()
+                                      });
+                                    }
+                                  }
+                                }
+                              });
+                            } else {
+                              var stud_attendance;
+                              if (documentSnapshot0.exists) {
+                                stud_attendance = documentSnapshot0.data();
+                              }
+
+                              if (stud_attendance["Attendance_Status"] ==
+                                  true) {
+                                retakeAttendanceStatus(context);
+                              } else {
+                                _startGlow();
+                                await FlutterBluePlus.turnOn();
+                                await requestPermissions();
+                                await startBeaconBroadcast();
+                                print("Button Pressed");
+
+                                // // CREATING ATTENDANCE COLLECTION
+                                // creating_attendance_collection(genratedUUID);
+                                // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
+
+                                Timer(Duration(seconds: 10), () async {
+                                  DocumentSnapshot documentSnapshot =
+                                      await FirebaseFirestore.instance
+                                          .collection("Attendance")
+                                          .doc(stud_attendance_id)
+                                          .get();
+
+                                  List<dynamic> after_update_attend_list =
+                                      documentSnapshot.exists
+                                          ? List<String>.from(
+                                              documentSnapshot["Attendees"])
+                                          : [];
+
+                                  update_A_P(after_update_attend_list);
+                                  await FirebaseFirestore.instance
+                                      .collection("Attendance")
+                                      .doc(stud_attendance_id)
+                                      .update({"Attendance_Status": true});
+
+                                  Timer(Duration(seconds: 2), () async {
+                                    DocumentSnapshot documentSnapshot =
+                                        await FirebaseFirestore.instance
+                                            .collection("Attendance")
+                                            .doc(stud_attendance_id)
+                                            .get();
+                                    if (documentSnapshot["Attendance_Status"] ==
+                                        true) {
+                                      // retake_attendance_flag = true;
+                                      displayAttendanceStatus(context);
+                                    }
+                                  });
+                                });
+
+                                // getting course collection
                                 var get_data1;
-                            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-                                .collection("Courses")
-                                .doc(genratedUUID)
-                                .get();
+                                DocumentSnapshot documentSnapshot =
+                                    await FirebaseFirestore.instance
+                                        .collection("Courses")
+                                        .doc(genratedUUID)
+                                        .get();
 
-                            if (documentSnapshot.exists) get_data1 = documentSnapshot.data();
+                                if (documentSnapshot.exists)
+                                  get_data1 = documentSnapshot.data();
 
-                            // Accessing students_list from courses collection
-                            students_list = List<String>.from(get_data1["Student_list"]);
-                            for(int i=0;i<students_list.length;i++){
-                              DocumentSnapshot documentSnapshot1=await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).get();
-                              var stud_data=documentSnapshot1.data() as Map<String ,dynamic>?;
+                                // Accessing the class held variable from Courses collection
+                                int total_class_held =
+                                    int.parse(get_data1['Classes_Held']);
 
-                            if (documentSnapshot1.exists && stud_data != null) {
-                            Map<String, dynamic> Attend_Map = Map.from(stud_data["Attendance_data"] ?? {});
+                                // Accessing students_list from courses collection
+                                students_list = List<String>.from(
+                                    get_data1["Student_list"]);
+                                for (int i = 0; i < students_list.length; i++) {
+                                  DocumentSnapshot documentSnapshot1 =
+                                      await FirebaseFirestore.instance
+                                          .collection("Students")
+                                          .doc(students_list[i])
+                                          .get();
+                                  var stud_data = documentSnapshot1.data()
+                                      as Map<String, dynamic>?;
 
+                                  if (documentSnapshot1.exists &&
+                                      stud_data != null) {
+                                    Map<String, dynamic> Attend_Map = Map.from(
+                                        stud_data["Attendance_data"] ?? {});
 
-                            Attend_Map[genratedUUID][1]+=1;
-                            print("Attendance data ${Attend_Map[genratedUUID]}");
+                                    Attend_Map[genratedUUID][1] =
+                                        total_class_held + 1;
+                                    print(
+                                        "Attendance data ${Attend_Map[genratedUUID]}");
 
-                            await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({"Attendance_data":Attend_Map});
-                        }
+                                    await FirebaseFirestore.instance
+                                        .collection("Students")
+                                        .doc(students_list[i])
+                                        .update(
+                                            {"Attendance_data": Attend_Map});
+
+                                    await FirebaseFirestore.instance
+                                        .collection("Courses")
+                                        .doc(genratedUUID)
+                                        .update({
+                                      "Classes_Held":
+                                          Attend_Map[genratedUUID][1].toString()
+                                    });
+                                  }
+                                }
+                              }
                             }
-                            
-                        
-                            
-
-
-
-                        },
-                      ),
+                          }),
                       radius: 40.0,
                     ),
                   ),
@@ -320,26 +540,27 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
           DataCell(Text(e.slno.toString())),
           DataCell(Text(e.name)),
           DataCell(
-  InkWell(
-    onTap: () {
-      setState(() {
-        e.Present = e.Present == 'P' ? 'A' : 'P';
-      });
-    },
-    child: Container(
-      padding: EdgeInsets.all(16.0),  // Adjust the padding as needed
-      child: Text(
-        e.Present,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16.0,  // Increase the font size
-          color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
-        ),
-      ),
-    ),
-  ),
-),
-            DataCell(Text(e.Email_ID)),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  e.Present = e.Present == 'P' ? 'A' : 'P';
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+                child: Text(
+                  e.Present,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0, // Increase the font size
+                    color:
+                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          DataCell(Text(e.Email_ID)),
         ],
         // onSelectChanged: (_) => toggleStatus(e.Present),
       );

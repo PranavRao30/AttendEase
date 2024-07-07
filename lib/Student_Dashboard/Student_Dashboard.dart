@@ -439,7 +439,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // final userData = await usersCollection.doc(user.email).get();
       // print(user.email);
 
-      DocumentSnapshot userData = await FirebaseFirestore.instance.collection("Students").doc(user.email).get();
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+          .collection("Students")
+          .doc(user.email)
+          .get();
       if (userData.exists) {
         var userDataMap = userData.data() as Map<String, dynamic>;
         setState(() {
@@ -651,7 +654,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                             ),
-                                          
                                           ],
                                         ),
                                       ),
@@ -691,60 +693,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 20),
-
-               ElevatedButton(
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(255, 106, 106, 1),
                   foregroundColor: Colors.black, // Black text
                 ),
-                onPressed: () async{
-
+                onPressed: () async {
                   edit_delete_joining(false);
-                   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("Students").doc(emailName).get();
-            List<dynamic> stud_course_list = documentSnapshot.exists
-                ? List<String>.from(documentSnapshot["Courses_list"])
-                : [];
+                  DocumentSnapshot documentSnapshot = await FirebaseFirestore
+                      .instance
+                      .collection("Students")
+                      .doc(emailName)
+                      .get();
+                  List<dynamic> stud_course_list = documentSnapshot.exists
+                      ? List<String>.from(documentSnapshot["Courses_list"])
+                      : [];
 
-                for(int i=0;i<stud_course_list.length;i++)
-                {
-      //             QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      // .collection("Courses")
-      // .where('Course_id', isEqualTo: stud_course_list[i])
-      // .get();
+                  for (int i = 0; i < stud_course_list.length; i++) {
+                    //             QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                    // .collection("Courses")
+                    // .where('Course_id', isEqualTo: stud_course_list[i])
+                    // .get();
 
-      DocumentSnapshot documentSnapshot1 = await FirebaseFirestore.instance.collection("Courses").doc(stud_course_list[i]).get();
-      List<dynamic> course_stud_list = documentSnapshot1.exists
-                ? List<String>.from(documentSnapshot1["Student_list"])
-                : [];
-                
-                course_stud_list.remove(emailName);
+                    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
+                        .instance
+                        .collection("Courses")
+                        .doc(stud_course_list[i])
+                        .get();
+                    List<dynamic> course_stud_list = documentSnapshot1.exists
+                        ? List<String>.from(documentSnapshot1["Student_list"])
+                        : [];
 
-                await FirebaseFirestore.instance.collection("Courses").doc(stud_course_list[i]).update({"Student_list":course_stud_list});
+                    course_stud_list.remove(emailName);
 
-                }
-                  
+                    await FirebaseFirestore.instance
+                        .collection("Courses")
+                        .doc(stud_course_list[i])
+                        .update({"Student_list": course_stud_list});
+                  }
+
                   // await FirebaseFirestore.instance.collection("Students").doc(emailName).delete();
 
                   // Deleting particular fields from the document
                   // FieldValue.delete()
-                              await FirebaseFirestore.instance
-                .collection("Students")
-                .doc(emailName)
-                .update({
-                  'Section': "",
-                  'Semester': 0,
-                  'Courses_list':[],
-                  // Add more fields as needed
-                });
+                  await FirebaseFirestore.instance
+                      .collection("Students")
+                      .doc(emailName)
+                      .update({
+                    'Section': "",
+                    'Semester': 0,
+                    'Courses_list': [],
+                    // Add more fields as needed
+                  });
 
-                // updating status to false
-                await FirebaseFirestore.instance
-                .collection("Students")
-                .doc(emailName)
-                .update({
-                  'status_of_joining': false,
-
-                });
+                  // updating status to false
+                  await FirebaseFirestore.instance
+                      .collection("Students")
+                      .doc(emailName)
+                      .update({
+                    'status_of_joining': false,
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -755,7 +763,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                   );
                 },
-                
                 child: Text(
                   "LEAVE CLASS",
                   style: GoogleFonts.poppins(
@@ -836,11 +843,11 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
       DocumentSnapshot studentDoc = await studentRef.get();
 
       List<dynamic> courseIDs = studentDoc['Courses_list'];
-      Map<String, dynamic> attend_data=studentDoc['Attendance_data'];
+      Map<String, dynamic> attend_data = studentDoc['Attendance_data'];
       // Add the course ID if it's not already in the list
       if (!courseIDs.contains(courseId)) {
         courseIDs.add(courseId);
-        attend_data[courseId]=[0,0];
+        attend_data[courseId] = [0, 0];
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
         await studentRef.update({'Attendance_data': attend_data});
