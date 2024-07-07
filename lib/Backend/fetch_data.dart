@@ -20,11 +20,10 @@ class get_table1 {
 
 // Table
 
-
 var attendance_id;
-  var attendance_course_id;
-  List attendees=[];
-  var attendance_map;
+var attendance_course_id;
+List attendees = [];
+var attendance_map;
 creating_attendance_collection(uid) async {
   DateTime now = DateTime.now();
   // Format the date
@@ -33,13 +32,19 @@ creating_attendance_collection(uid) async {
   String hour = format.format(now);
   attendance_id = '${formattedDate}_${uid}_${hour}';
   attendance_course_id = uid;
-  attendees =[];
+  attendees = [];
 
-  attendance_map = {"Course_id": attendance_course_id, "Attendees":attendees, "Date": formattedDate,};
-await FirebaseFirestore.instance.collection("Attendance").doc(attendance_id).set(
-    attendance_map
-  ).then((value) => print("Attendance collection created"));
-
+  attendance_map = {
+    "Course_id": attendance_course_id,
+    "Attendees": attendees,
+    "Date": formattedDate,
+    "Attendance_Status": false
+  };
+  await FirebaseFirestore.instance
+      .collection("Attendance")
+      .doc(attendance_id)
+      .set(attendance_map)
+      .then((value) => print("Attendance collection created"));
 }
 
 List<get_table1> Students_data = [

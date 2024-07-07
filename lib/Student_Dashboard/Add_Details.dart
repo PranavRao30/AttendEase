@@ -1,6 +1,8 @@
+import 'package:attend_ease/Sign_in/Sign_In.dart';
 import 'package:attend_ease/Student_DashBoard/Add_Details.dart';
 import 'package:attend_ease/Student_DashBoard/Sections_student.dart';
 import 'package:attend_ease/ui_components/util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +13,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(const AddASubject());
+}
+
+// Display duplicates
+void displayAlreadyExistingMessage(BuildContext context) {
+  final snackbar = SnackBar(
+    content: Text(
+        "You are not registered to this section, kindly check the details"),
+    duration: Duration(seconds: 3),
+    action: SnackBarAction(
+        label: "Ok",
+        onPressed: () {
+          print("Student not registered");
+        }),
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
 }
 
 class AddASubject extends StatelessWidget {
@@ -401,24 +419,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 50,
               ),
               ElevatedButton(
-                onPressed: () {
-                  get_Students_data(dropdownvalue_branch,
-                      dropdownvalue_semester, dropdownvalue_section);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Student_Dashboard()),
-                  );
-                  
+                onPressed: () async {
+                  var validate_student_join =
+                      "${dropdownvalue_semester}${dropdownvalue_section}_${dropdownvalue_branch}";
+                  DocumentSnapshot documentSnapshot = await FirebaseFirestore
+                      .instance
+                      .collection("Students_Data")
+                      .doc(validate_student_join)
+                      .get();
+
+                  List<dynamic> students_list = documentSnapshot.exists
+                      ? List<String>.from(documentSnapshot["student_list"])
+                      : [];
+                  // if (documentSnapshot.exists) {
+                  //   var get_data = documentSnapshot.data();
+                  //   List<dynamic> students_list =
+                  //       List.from(get_data["student_list"]);
+                  if (students_list.contains(emailName)) {
+                    get_Students_data(dropdownvalue_branch,
+                        dropdownvalue_semester, dropdownvalue_section);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Student_Dashboard()),
+                    );
+                  } else {
+                    displayAlreadyExistingMessage(context);
+                  }
                 },
                 child: Text(
                   "Join Class",
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white
-                    ),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
                   ),
                 ),
                 style: ElevatedButton.styleFrom(

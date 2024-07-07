@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 
 var get_student_data;
 var status_of_joining = false;
+
+// if student leaves the class
 edit_delete_joining(status){
   status_of_joining  = status;
 }
