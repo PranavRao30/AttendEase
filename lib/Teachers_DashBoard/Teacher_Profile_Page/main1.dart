@@ -1,25 +1,11 @@
-import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/page/editable_page.dart';
-import 'widget/tabbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/page/editable_page.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teachers_Dashboard.dart';
-
-
-
-// Future main() async {/
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await SystemChrome.setPreferredOrientations([
-//     DeviceOrientation.portraitUp,
-//     DeviceOrientation.portraitDown,
-//   ]);
-
-//   runApp(Teacher_Profile_Table());
-// }
+import 'widget/tabbar_widget.dart';
 
 class Teacher_Profile_Table extends StatelessWidget {
   static final String title = 'Data Table';
-  // final String courseid;
 
-  // Teacher_Profile_Table({required this.courseid});
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -29,40 +15,33 @@ class Teacher_Profile_Table extends StatelessWidget {
       );
 }
 
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-String courseID="";
-void get_courseid(var temp){
-  
-  courseID=temp;
+String courseID = "";
+
+void get_courseid(var temp) {
+  courseID = temp;
   print("Inside get course0 $courseID");
   initializecourse_id(courseID);
   print("Inside get course0 $courseID");
 }
+
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
 class _MainPageState extends State<MainPage> {
-@override
+  @override
   void initState() {
-    super.initState();    
+    super.initState();
   }
 
-  
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Table'),
+        title: Text('Edit Attendance'),
       ),
-      body: TabBarWidget(
-        title: 'Data Table',
-        tabs: [
-          Tab(icon: Icon(Icons.edit), text: 'Editable'),
-        ],
-        children: [
-          EditablePage(courseID),
-        ],
-      ),
+      body: EditablePage(courseID),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -73,6 +52,8 @@ class _MainPageState extends State<MainPage> {
           );
         },
         child: Icon(Icons.arrow_back),
+        backgroundColor:
+            Color.fromRGBO(184, 163, 255, 1), // Change floating action button color
       ),
     );
   }

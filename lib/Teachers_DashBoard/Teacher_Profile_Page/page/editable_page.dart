@@ -1,60 +1,67 @@
-import '../model/user.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/utils.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/widget/scrollable_widget.dart';
-import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/widget/text_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// ignore: must_be_immutable
+class User1 {
+  final int slno;
+  final String firstName;
+  final String email;
+  final Map<String, String> attendance;
+
+  User1({
+    required this.slno,
+    required this.firstName,
+    required this.email,
+    required this.attendance,
+  });
+
+  User1 copy({
+    int? slno,
+    String? firstName,
+    String? email,
+    Map<String, String>? attendance,
+  }) =>
+      User1(
+        slno: slno ?? this.slno,
+        firstName: firstName ?? this.firstName,
+        email: email ?? this.email,
+        attendance: attendance ?? this.attendance,
+      );
+}
+
+String id = "";
+void initializecourse_id(cid) {
+  id = cid;
+  print("Inside get course0 $id");
+}
+
 class EditablePage extends StatefulWidget {
-String course_id="";
-EditablePage(this.course_id);
-  
+  final String courseId;
+
+  EditablePage(this.courseId);
+
   @override
   _EditablePageState createState() => _EditablePageState();
-
-
 }
-String id="";
-void initializecourse_id(cid){
 
-    id = cid;
-    print("Inside get course0 $id");
-}
 class _EditablePageState extends State<EditablePage> {
   late List<User1> users;
-  // final allUsers = <User1>[
-  //   // User1(
-  //   //     slno: 1,
-  //   //     firstName: "PPPP",
-  //   //     total_attended: 20,
-  //   //     total_conducted: 20,
-  //   //     percentage: 100),
-  // ];
+  late List<String> dates;
 
   @override
   void initState() {
     super.initState();
     users = [];
-    // print(course_id);
-
+    dates = [];
     addProfileDetails();
-
-
-
-    // setState(() {
-    //   this.users = List.of(allUsers);
-    // });
   }
 
   Future<void> addProfileDetails() async {
     try {
-      print("kj0");
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection("Courses")
-          .doc(id)
+          .doc(widget.courseId)
           .get();
-      print(documentSnapshot.exists);
 
       if (documentSnapshot.exists) {
         Map<String, dynamic>? getData =
@@ -67,31 +74,51 @@ class _EditablePageState extends State<EditablePage> {
 
           for (String docId in studentsList) {
             count++;
-
             DocumentSnapshot studentSnapshot = await FirebaseFirestore.instance
                 .collection("Students")
                 .doc(docId)
                 .get();
 
             if (studentSnapshot.exists) {
-              print("Ad");
               Map<String, dynamic>? studentData =
                   studentSnapshot.data() as Map<String, dynamic>?;
               if (studentData != null) {
-                print("RECEIVER NAME ${studentData["student_name"]}");
                 allUsers.add(User1(
                   slno: count,
                   firstName: studentData['student_name'],
-                  total_attended: 20,
-                  total_conducted: 20,
-                  percentage: 100,
+                  email: studentData['student_id'],
+                  attendance: {},
                 ));
+              }
+            }
+          }
+
+          // Fetch attendance data
+          List<String> attendanceDates = [];
+          QuerySnapshot attendanceSnapshot = await FirebaseFirestore.instance
+              .collection("Attendance")
+              .where("Course_id", isEqualTo: widget.courseId)
+              .get();
+
+          for (var doc in attendanceSnapshot.docs) {
+            Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+            if (data != null && data.containsKey('Date')) {
+              String date = data['Date'];
+              attendanceDates.add(date);
+              List<String> attendees = List<String>.from(data['Attendees']);
+              for (var user in allUsers) {
+                if (attendees.contains(user.email)) {
+                  user.attendance[date] = 'P'; // Present
+                } else {
+                  user.attendance[date] = 'A'; // Absent
+                }
               }
             }
           }
 
           setState(() {
             users = allUsers;
+            dates = attendanceDates;
           });
         }
       }
@@ -106,12 +133,15 @@ class _EditablePageState extends State<EditablePage> {
       );
 
   Widget buildDataTable() {
+    if (dates.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     final columns = [
       'Sl no',
       'Student Name',
-      'Total Attended',
-      'Total Classes Held',
-      "Eligibility"
+      'Email',
+      ...dates,
     ];
 
     return DataTable(
@@ -121,17 +151,9 @@ class _EditablePageState extends State<EditablePage> {
   }
 
   List<DataColumn> getColumns(List<String> columns) {
-    // mapping from columns list
     return columns.map((String column) {
-      final isAge = column == columns[2];
-
       return DataColumn(
-        // label used for text
-
         label: Text(column),
-
-        // numeric used for numbers
-        numeric: isAge,
       );
     }).toList();
   }
@@ -140,81 +162,12 @@ class _EditablePageState extends State<EditablePage> {
         final cells = [
           user.slno,
           user.firstName,
-          user.total_attended,
-          user.total_conducted,
-          user.percentage
+          user.email,
+          ...dates.map((date) => user.attendance[date] ?? 'A').toList(),
         ];
 
         return DataRow(
-          cells: Utils.modelBuilder(cells, (index, cell) {
-            // Showing edit icon
-            // final showEditIcon = index == 1;
-            // || index == 2 || index == 3;
-            return DataCell(
-              Text('$cell'),
-
-              // showing edit icon
-              // showEditIcon: showEditIcon,
-              onTap: () {
-                // Looking for index
-                switch (index) {
-                  case 1:
-                    editFirstName(user);
-                    break;
-                  // case 2:
-                  //   edittotalattended(user);
-                  //   break;
-                  // case 3:
-                  //   edit_total_class_held(user);
-                  //   break;
-                }
-              },
-            );
-          }),
+          cells: cells.map((cell) => DataCell(Text('$cell'))).toList(),
         );
       }).toList();
-
-  Future editFirstName(User1 editUser) async {
-    // getting first name
-    final firstName = await showTextDialog(
-      context,
-      title: 'Change First Name',
-      value: editUser.firstName,
-    );
-
-    setState(() => users = users.map((user) {
-          // status of changing
-          final isEditedUser = user == editUser;
-
-          return isEditedUser ? user.copy(firstName: firstName) : user;
-        }).toList());
-  }
-
-  // Future edittotalattended(User1 editUser) async {
-  //   final total_attended = await showTextDialog(
-  //     context,
-  //     title: 'Change total',
-  //     value: editUser.total_attended,
-  //   );
-
-  //   setState(() => users = users.map((user) {
-  //         final isEditedUser = user == editUser;
-
-  //         return isEditedUser ? user.copy(firstName: total_attended) : user;
-  //       }).toList());
-  // }
-
-  // Future edit_total_class_held(User1 editUser) async {
-  //   final total_class = await showTextDialog(
-  //     context,
-  //     title: 'Change Last Name',
-  //     value: editUser.firstName,
-  //   );
-
-  //   setState(() => users = users.map((user) {
-  //         final isEditedUser = user == editUser;
-
-  //         return isEditedUser ? user.copy(firstName: lastName) : user;
-  //       }).toList());
-  // }
 }
