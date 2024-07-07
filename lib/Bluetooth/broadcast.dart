@@ -258,9 +258,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                   retakeAttendanceStatus(context);
                                 } else {
                                   _startGlow();
-                                  // await FlutterBluePlus.turnOn();
-                                  // await requestPermissions();
-                                  // await startBeaconBroadcast();
+                                  await FlutterBluePlus.turnOn();
+                                  await requestPermissions();
+                                  await startBeaconBroadcast();
                                   print("Button Pressed");
 
                                   // // CREATING ATTENDANCE COLLECTION
