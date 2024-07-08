@@ -537,61 +537,57 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
           DataCell(Text(e.name)),
           DataCell(
             InkWell(
-              onTap: () {
-                setState(() async {
-                  e.Present = e.Present == 'P' ? 'A' : 'P';
+             onTap: () async {
+  String newStatus = e.Present == 'P' ? 'A' : 'P';
 
-                  if (e.Present == 'P') {
-                    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
-                        .instance
-                        .collection("Students")
-                        .doc(e.Email_ID)
-                        .get();
-                    var get_data;
-                    if (documentSnapshot1.exists) {
-                      get_data = documentSnapshot1.data();
-                    }
-                    Map<String, dynamic> Attend_Map =
-                        Map.from(get_data["Attendance_data"] ?? {});
+  DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
+      .instance
+      .collection("Students")
+      .doc(e.Email_ID)
+      .get();
 
-                    Attend_Map[genratedUUID][0] += 1;
+   var stud_data = documentSnapshot1.data()
+                                      as Map<String, dynamic>?;
 
-                    await FirebaseFirestore.instance
-                        .doc(e.Email_ID)
-                        .update({"Attendance_data": Attend_Map});
-                  } else if (e.Present == "A") {
-                    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
-                        .instance
-                        .collection("Students")
-                        .doc(e.Email_ID)
-                        .get();
-                    var get_data;
-                    if (documentSnapshot1.exists) {
-                      get_data = documentSnapshot1.data();
-                    }
-                    Map<String, dynamic> Attend_Map =
-                        Map.from(get_data["Attendance_data"] ?? {});
+                                  if (documentSnapshot1.exists &&
+                                      stud_data != null) {
+                                    Map<String, dynamic> Attend_Map = Map.from(
+                                        stud_data["Attendance_data"] ?? {});
 
-                    Attend_Map[genratedUUID][0] -= 1;
+    // Check if Attend_Map[genratedUUID] is null and initialize if necessary
+    if (Attend_Map[genratedUUID] == null) {
+      Attend_Map[genratedUUID] = [0];
+    }
 
-                    await FirebaseFirestore.instance
-                        .doc(e.Email_ID)
-                        .update({"Attendance_data": Attend_Map});
-                  }
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.all(16.0), // Adjust the padding as needed
-                child: Text(
-                  e.Present,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0, // Increase the font size
-                    color:
-                        e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
-                  ),
-                ),
-              ),
+    if (newStatus == 'P') {
+      Attend_Map[genratedUUID][0] += 1;
+    } else if (newStatus == 'A') {
+      Attend_Map[genratedUUID][0] -= 1;
+    }
+
+    await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(e.Email_ID)
+        .update({"Attendance_data": Attend_Map});
+  }
+
+  setState(() {
+    e.Present = newStatus;
+  });
+},
+child: Container(
+  padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+  child: Text(
+    e.Present,
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16.0, // Increase the font size
+      color: e.Present == 'P' ? Colors.lightGreen : Colors.red[400],
+    ),
+  ),
+),
+
+
             ),
           ),
           DataCell(Text(e.Email_ID)),
