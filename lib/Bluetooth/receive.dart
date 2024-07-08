@@ -70,7 +70,7 @@ class _BeaconPageState extends State<BeaconPage> {
 
         for (var beacon in result.beacons) {
           if (beacon.proximityUUID.toLowerCase() == searchUUID &&
-              beacon.accuracy <= 10) {
+              beacon.accuracy <= 5) {
             print(
                 'Beacon detected: ${beacon.proximityUUID} - ${beacon.accuracy} meters away');
 

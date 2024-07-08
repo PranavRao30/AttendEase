@@ -25,14 +25,7 @@ void initTemp(temp){
 
 ValueNotifier<bool> util_flag = ValueNotifier(false);
 void update_A_P(attend_stud){
-      for(int i=0;i<attend_stud.length;i++){
-        for(int j=0;j<Stud_details.length;j++){
-          if(Stud_details[j].Email_ID==attend_stud[i]){
-            Stud_details[j].Present="P";
-            print(Stud_details[j]);
-          }
-        }
-      }
+      
     // Stud_details[0].Present="P";
     // Stud_details[3].Present="P";
     util_flag.value=true;

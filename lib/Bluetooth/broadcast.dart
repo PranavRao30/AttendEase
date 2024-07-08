@@ -45,8 +45,7 @@ class Broadcast_Land extends StatelessWidget {
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     DateFormat format = DateFormat("HH");
     String hour = format.format(now);
-    stud_attendance_id =
-        '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
+    stud_attendance_id ='${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
   }
 
   @override
@@ -80,16 +79,12 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   void initState() {
     super.initState();
     get_table_data();
-    Timer(Duration(seconds: 15), () => setState(() {}));
+    // Timer(Duration(seconds: 15), () => setState(() {}));
 
     // Add listener to util_flag
-    util_flag.addListener(() {
-      if (util_flag.value) {
-        setState(() {
-          _data = List.from(Stud_details);
-        });
-        util_flag.value = false; // Reset the flag after updating
-      }
+    //
+    setState(() {
+       _data=Students_data;
     });
   }
 
@@ -268,6 +263,12 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                   // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
                                   Timer(Duration(seconds: 10), () async {
+                                    
+                                    await FirebaseFirestore.instance
+                                        .collection("Attendance")
+                                        .doc(stud_attendance_id)
+                                        .update({"Attendance_Status": true});
+                                    
                                     DocumentSnapshot documentSnapshot =
                                         await FirebaseFirestore.instance
                                             .collection("Attendance")
@@ -280,11 +281,18 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                                 documentSnapshot["Attendees"])
                                             : [];
 
-                                    update_A_P(after_update_attend_list);
-                                    await FirebaseFirestore.instance
-                                        .collection("Attendance")
-                                        .doc(stud_attendance_id)
-                                        .update({"Attendance_Status": true});
+                                    for(int i=0;i<after_update_attend_list.length;i++){
+                                      for(int j=0;j<Students_data.length;j++){
+                                        if(Students_data[j].Email_ID==after_update_attend_list[i]){
+                                          Students_data[j].Present="P";
+                                          print(Students_data[j]);
+                                        }
+                                      }
+                                    }
+
+                                    setState(() {
+                                      _data=Students_data;
+                                    });
 
                                     Timer(Duration(seconds: 2), () async {
                                       DocumentSnapshot documentSnapshot =
@@ -381,23 +389,36 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                 // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
                                 Timer(Duration(seconds: 10), () async {
-                                  DocumentSnapshot documentSnapshot =
-                                      await FirebaseFirestore.instance
-                                          .collection("Attendance")
-                                          .doc(stud_attendance_id)
-                                          .get();
-
-                                  List<dynamic> after_update_attend_list =
-                                      documentSnapshot.exists
-                                          ? List<String>.from(
-                                              documentSnapshot["Attendees"])
-                                          : [];
-
-                                  update_A_P(after_update_attend_list);
+                                 
                                   await FirebaseFirestore.instance
                                       .collection("Attendance")
                                       .doc(stud_attendance_id)
                                       .update({"Attendance_Status": true});
+
+                                  DocumentSnapshot documentSnapshot =
+                                        await FirebaseFirestore.instance
+                                            .collection("Attendance")
+                                            .doc(stud_attendance_id)
+                                            .get();
+
+                                    List<dynamic> after_update_attend_list =
+                                        documentSnapshot.exists
+                                            ? List<String>.from(
+                                                documentSnapshot["Attendees"])
+                                            : [];
+
+                                    for(int i=0;i<after_update_attend_list.length;i++){
+                                      for(int j=0;j<Students_data.length;j++){
+                                        if(Students_data[j].Email_ID==after_update_attend_list[i]){
+                                          Students_data[j].Present="P";
+                                          print(Students_data[j].Email_ID);
+                                        }
+                                      }
+                                    }
+
+                                    setState(() {
+                                      _data=Students_data;
+                                    }); 
 
                                   Timer(Duration(seconds: 2), () async {
                                     DocumentSnapshot documentSnapshot =

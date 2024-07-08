@@ -907,10 +907,23 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
 
       List<dynamic> courseIDs = studentDoc['Courses_list'];
       Map<String, dynamic> attend_data = studentDoc['Attendance_data'];
+
+      DocumentSnapshot courseDoc1 = await FirebaseFirestore.instance
+          .collection("Courses")
+          .doc(courseId)
+          .get();
+
+      var course_data;
+      if(courseDoc1.exists)
+        course_data = courseDoc1.data();
+
+
+
       // Add the course ID if it's not already in the list
       if (!courseIDs.contains(courseId)) {
         courseIDs.add(courseId);
-        attend_data[courseId] = [0, 0];
+        print(course_data["Classes_Held"]);
+        attend_data[courseId] = [0, int.parse(courseDoc1["Classes_Held"])];
         // Update the student's document with the new list of course IDs
         await studentRef.update({'Courses_list': courseIDs});
         await studentRef.update({'Attendance_data': attend_data});
