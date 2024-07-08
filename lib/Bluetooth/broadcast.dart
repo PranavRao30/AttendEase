@@ -546,6 +546,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
       .doc(e.Email_ID)
       .get();
 
+
    var stud_data = documentSnapshot1.data()
                                       as Map<String, dynamic>?;
 
@@ -556,14 +557,34 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
 
     // Check if Attend_Map[genratedUUID] is null and initialize if necessary
     if (Attend_Map[genratedUUID] == null) {
+      
       Attend_Map[genratedUUID] = [0];
     }
+    DocumentSnapshot documentSnapshot =
+                                      await FirebaseFirestore.instance
+                                          .collection("Attendance")
+                                          .doc(stud_attendance_id)
+                                          .get();
+
+                                  List<dynamic> after_update_attend_list =
+                                      documentSnapshot.exists
+                                          ? List<String>.from(
+                                              documentSnapshot["Attendees"])
+                                          : [];
+
 
     if (newStatus == 'P') {
       Attend_Map[genratedUUID][0] += 1;
+      after_update_attend_list.add(e.Email_ID);
     } else if (newStatus == 'A') {
       Attend_Map[genratedUUID][0] -= 1;
+      after_update_attend_list.remove(e.Email_ID);
     }
+
+    await FirebaseFirestore.instance
+        .collection("Attendance")
+        .doc(stud_attendance_id)
+        .update({"Attendees":after_update_attend_list});
 
     await FirebaseFirestore.instance
         .collection("Students")
