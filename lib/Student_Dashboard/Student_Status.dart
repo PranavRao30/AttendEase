@@ -50,48 +50,51 @@ class _TeacherHomePageState extends State<Students_Home_Page> {
   @override
   void initState() {
     super.initState();
-    print("Inside intt $courseID");
+    print("Inside init $courseID");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(255, 255, 255, 1),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Wavy container
-            Container(
-              height: 150,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(184, 163, 255, 1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(
-                  '${Eligibilty.toStringAsFixed(0)}%',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Wavy container
+              Container(
+                height: MediaQuery.of(context).size.height * 0.2,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(184, 163, 255, 1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                  child: Text(
+                    '${Eligibilty.toStringAsFixed(0)}%',
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            // Present, Absent, and Total classes boxes
-            Expanded(
-              child: Row(
+              SizedBox(height: 20),
+              // Spacer to push the boxes to the bottom
+              Spacer(),
+              // Present, Absent, and Total classes boxes
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildInfoCard('Present', total_attended),
-                  _buildInfoCard('Absent', Absent),
-                  _buildInfoCard('Total', total_class),
+                  Flexible(child: _buildInfoCard('Present', total_attended)),
+                  Flexible(child: _buildInfoCard('Absent', Absent)),
+                  Flexible(child: _buildInfoCard('Total', total_class)),
                 ],
               ),
-            ),
-          ],
+              SizedBox(height: 60), // Add space at the bottom to avoid overlap with the FAB
+            ],
+          ),
         ),
       ),
       floatingActionButton: Align(

@@ -652,7 +652,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 Text("Get Details"),
                                                 SizedBox(width: 10),
                                                 IconButton(
-                                                  icon: const Icon(Icons.list,
+                                                  icon: const Icon(Icons.list_alt,
                                                       size: 20),
                                                   onPressed: () async {
                                                     print("Inside onpress");
