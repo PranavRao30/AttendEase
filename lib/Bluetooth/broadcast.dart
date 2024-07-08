@@ -14,25 +14,7 @@ import "dart:ui" as ui;
 
 String genratedUUID = "";
 ValueNotifier<bool> util_flag = ValueNotifier(false);
-// DateTime now = DateTime.now();
-// String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-// DateFormat format = DateFormat("HH");
-// String hour = format.format(now);
-// String stud_attendance_id =
-//     '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
-// List<get_table>? Students_data = [];
 
-// class get_table {
-//   final int slno;
-//   final String name;
-//   final String Present;
-
-//   get_table({
-//     required this.slno,
-//     required this.name,
-//     required this.Present,
-//   });
-// }
 String? stud_attendance_id;
 
 // ignore: must_be_immutable
@@ -45,7 +27,8 @@ class Broadcast_Land extends StatelessWidget {
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     DateFormat format = DateFormat("HH");
     String hour = format.format(now);
-    stud_attendance_id ='${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
+    stud_attendance_id =
+        '${formattedDate}_${genratedUUID.toLowerCase()}_${hour}';
   }
 
   @override
@@ -79,12 +62,9 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
   void initState() {
     super.initState();
     get_table_data();
-    // Timer(Duration(seconds: 15), () => setState(() {}));
 
-    // Add listener to util_flag
-    //
     setState(() {
-       _data=Students_data;
+      _data = Students_data;
     });
   }
 
@@ -263,12 +243,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                   // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
                                   Timer(Duration(seconds: 10), () async {
-                                    
                                     await FirebaseFirestore.instance
                                         .collection("Attendance")
                                         .doc(stud_attendance_id)
                                         .update({"Attendance_Status": true});
-                                    
+
                                     DocumentSnapshot documentSnapshot =
                                         await FirebaseFirestore.instance
                                             .collection("Attendance")
@@ -280,18 +259,23 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                             ? List<String>.from(
                                                 documentSnapshot["Attendees"])
                                             : [];
+                                    for (int i = 0;
+                                        i < after_update_attend_list.length;
+                                        i++) {
+                                      for (int j = 0;
+                                          j < Students_data.length;
+                                          j++) {
+                                        if (Students_data[j].Email_ID ==
+                                            after_update_attend_list[i]) {
+                                          Students_data[j].Present = "P";
 
-                                    for(int i=0;i<after_update_attend_list.length;i++){
-                                      for(int j=0;j<Students_data.length;j++){
-                                        if(Students_data[j].Email_ID==after_update_attend_list[i]){
-                                          Students_data[j].Present="P";
                                           print(Students_data[j]);
                                         }
                                       }
                                     }
 
                                     setState(() {
-                                      _data=Students_data;
+                                      _data = Students_data;
                                     });
 
                                     Timer(Duration(seconds: 2), () async {
@@ -389,36 +373,40 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                 // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
                                 Timer(Duration(seconds: 10), () async {
-                                 
                                   await FirebaseFirestore.instance
                                       .collection("Attendance")
                                       .doc(stud_attendance_id)
                                       .update({"Attendance_Status": true});
 
                                   DocumentSnapshot documentSnapshot =
-                                        await FirebaseFirestore.instance
-                                            .collection("Attendance")
-                                            .doc(stud_attendance_id)
-                                            .get();
+                                      await FirebaseFirestore.instance
+                                          .collection("Attendance")
+                                          .doc(stud_attendance_id)
+                                          .get();
 
-                                    List<dynamic> after_update_attend_list =
-                                        documentSnapshot.exists
-                                            ? List<String>.from(
-                                                documentSnapshot["Attendees"])
-                                            : [];
+                                  List<dynamic> after_update_attend_list =
+                                      documentSnapshot.exists
+                                          ? List<String>.from(
+                                              documentSnapshot["Attendees"])
+                                          : [];
 
-                                    for(int i=0;i<after_update_attend_list.length;i++){
-                                      for(int j=0;j<Students_data.length;j++){
-                                        if(Students_data[j].Email_ID==after_update_attend_list[i]){
-                                          Students_data[j].Present="P";
-                                          print(Students_data[j].Email_ID);
-                                        }
+                                  for (int i = 0;
+                                      i < after_update_attend_list.length;
+                                      i++) {
+                                    for (int j = 0;
+                                        j < Students_data.length;
+                                        j++) {
+                                      if (Students_data[j].Email_ID ==
+                                          after_update_attend_list[i]) {
+                                        Students_data[j].Present = "P";
+                                        print(Students_data[j].Email_ID);
                                       }
                                     }
+                                  }
 
-                                    setState(() {
-                                      _data=Students_data;
-                                    }); 
+                                  setState(() {
+                                    _data = Students_data;
+                                  });
 
                                   Timer(Duration(seconds: 2), () async {
                                     DocumentSnapshot documentSnapshot =
@@ -520,24 +508,11 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                               ),
                             )),
                         SizedBox(height: 5),
-
-                        //   Card(
-                        //   elevation: 4.0,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(16.0),
-                        //     child: Text(
-                        //       genratedUUID,
-                        //       style: TextStyle(fontSize: 18.0),
-                        //     ),
-                        //   ),
-                        // ),
-
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                               columns: _createColumns(), rows: _createRows()),
                         ),
-
                         ElevatedButton(
                           child: Text('Go Back'),
                           onPressed: () {
@@ -563,8 +538,46 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
           DataCell(
             InkWell(
               onTap: () {
-                setState(() {
+                setState(() async {
                   e.Present = e.Present == 'P' ? 'A' : 'P';
+
+                  if (e.Present == 'P') {
+                    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
+                        .instance
+                        .collection("Students")
+                        .doc(e.Email_ID)
+                        .get();
+                    var get_data;
+                    if (documentSnapshot1.exists) {
+                      get_data = documentSnapshot1.data();
+                    }
+                    Map<String, dynamic> Attend_Map =
+                        Map.from(get_data["Attendance_data"] ?? {});
+
+                    Attend_Map[genratedUUID][0] += 1;
+
+                    await FirebaseFirestore.instance
+                        .doc(e.Email_ID)
+                        .update({"Attendance_data": Attend_Map});
+                  } else if (e.Present == "A") {
+                    DocumentSnapshot documentSnapshot1 = await FirebaseFirestore
+                        .instance
+                        .collection("Students")
+                        .doc(e.Email_ID)
+                        .get();
+                    var get_data;
+                    if (documentSnapshot1.exists) {
+                      get_data = documentSnapshot1.data();
+                    }
+                    Map<String, dynamic> Attend_Map =
+                        Map.from(get_data["Attendance_data"] ?? {});
+
+                    Attend_Map[genratedUUID][0] -= 1;
+
+                    await FirebaseFirestore.instance
+                        .doc(e.Email_ID)
+                        .update({"Attendance_data": Attend_Map});
+                  }
                 });
               },
               child: Container(
