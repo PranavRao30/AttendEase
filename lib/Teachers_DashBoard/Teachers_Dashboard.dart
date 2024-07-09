@@ -169,6 +169,68 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
         ),
       );
 
+
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection("Courses")
+        .doc(courseId)
+        .get();
+    var get_data;
+    if (documentSnapshot.exists) get_data = documentSnapshot.data();
+
+    // Accessing students_list from courses collection
+    students_list = List<String>.from(get_data["Student_list"]);
+
+    for(int i = 0;i<students_list.length;i++)
+    {
+      // await FirebaseFirestore.instance
+      //       .collection('Students')
+      //       .doc(students_list[i])
+      //       .update({
+      //     'Courses_list': FieldValue.arrayRemove([courseId])
+      //   });
+
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection("Students")
+        .doc(students_list[i])
+        .get();
+
+        var get_data;
+        
+    if (documentSnapshot.exists) get_data = documentSnapshot.data();
+
+    // Accessing courses_list from courses collection
+    List courses_list = List<String>.from(get_data["Courses_list"]);
+    courses_list.remove(courseId);
+
+    var stud_data = documentSnapshot.data()
+                                        as Map<String, dynamic>?;
+
+                                    if (documentSnapshot.exists &&
+                                        stud_data != null) {
+                                      Map<String, dynamic>  Attend_Map =
+                                          Map.from(
+                                              stud_data["Attendance_data"] ??
+                                                  {});
+                                        Attend_Map.remove(courseId);
+
+                                        await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({"Courses_list": courses_list, "Attendance_data":Attend_Map});
+                                        }
+                                      
+
+
+    
+    }
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Attendance").get();
+
+    for(var doc in querySnapshot.docs){
+        String docid = doc.id;
+        if(docid.contains(courseId)){
+          await FirebaseFirestore.instance.collection("Attendance").doc(docid).delete();
+        }
+    }
+
+
       // Delete the course document from Firestore
       await FirebaseFirestore.instance
           .collection('Courses')
@@ -184,6 +246,8 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
           'Course_id': FieldValue.arrayRemove([courseId])
         });
       }
+
+
     } catch (e) {
       print('Error deleting course: $e');
     }
