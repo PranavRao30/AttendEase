@@ -242,7 +242,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                   // creating_attendance_collection(genratedUUID);
                                   // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
-                                  Timer(Duration(seconds: 10), () async {
+                                  Timer(Duration(seconds: 30), () async {
                                     await FirebaseFirestore.instance
                                         .collection("Attendance")
                                         .doc(stud_attendance_id)
@@ -372,7 +372,7 @@ class _GlowingButtonPageState extends State<GlowingButtonPage> {
                                 // creating_attendance_collection(genratedUUID);
                                 // update_A_P(["pannaga.cs22@bmsce.ac.in","pradeep.cs22@bmsce.ac.in","pranavar.cs22@bmsce.ac.in"]);
 
-                                Timer(Duration(seconds: 10), () async {
+                                Timer(Duration(seconds: 30), () async {
                                   await FirebaseFirestore.instance
                                       .collection("Attendance")
                                       .doc(stud_attendance_id)
@@ -711,7 +711,7 @@ Future<void> startBeaconBroadcast() async {
       print('Chipset or driver is incompatible.');
       break;
   }
-  Timer(Duration(seconds: 10), () {
+  Timer(Duration(seconds: 30), () {
     beaconBroadcast.stop();
     print('Beacon broadcasting stopped after 10 seconds.');
   });
