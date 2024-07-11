@@ -142,35 +142,50 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
   }
 
   Future<void> _deleteCourse(CourseData courseData) async {
-    String courseId = courseData.CourseID;
-    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+  String courseId = courseData.CourseID;
+  String? teacherId = FirebaseAuth.instance.currentUser?.email;
 
-    try {
-      // Remove the course immediately from UI
-      setState(() {
-        _courseDataFuture = _courseDataFuture.then((courseDataList) {
-          return courseDataList
-              .where((course) => course.CourseID != courseId)
-              .toList();
-        });
-      });
-
-      // Show SnackBar with undo option
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("${courseData.name} deleted"),
-          action: SnackBarAction(
-            label: 'Undo',
+  // Show confirmation dialog
+  bool shouldDelete = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirm Deletion'),
+        content: Text(
+            'Are you sure you want to delete the course ${courseData.name}? This action cannot be undone and all associated data will be permanently deleted.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
             onPressed: () {
-              // Undo the deletion
-              undoDeleteCourse(courseData);
+              Navigator.of(context).pop(false); // Return false to indicate cancellation
             },
           ),
-        ),
+          TextButton(
+            child: Text('Proceed'),
+            onPressed: () {
+              Navigator.of(context).pop(true); // Return true to indicate confirmation
+            },
+          ),
+        ],
       );
+    },
+  );
 
+  if (!shouldDelete) {
+    return; // If the user cancels, do nothing
+  }
 
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  try {
+    // Remove the course immediately from UI
+    setState(() {
+      _courseDataFuture = _courseDataFuture.then((courseDataList) {
+        return courseDataList
+            .where((course) => course.CourseID != courseId)
+            .toList();
+      });
+    });
+
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection("Courses")
         .doc(courseId)
         .get();
@@ -180,118 +195,130 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
     // Accessing students_list from courses collection
     students_list = List<String>.from(get_data["Student_list"]);
 
-    for(int i = 0;i<students_list.length;i++)
-    {
-      // await FirebaseFirestore.instance
-      //       .collection('Students')
-      //       .doc(students_list[i])
-      //       .update({
-      //     'Courses_list': FieldValue.arrayRemove([courseId])
-      //   });
-
+    for (int i = 0; i < students_list.length; i++) {
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection("Students")
-        .doc(students_list[i])
-        .get();
+          .collection("Students")
+          .doc(students_list[i])
+          .get();
 
-        var get_data;
-        
-    if (documentSnapshot.exists) get_data = documentSnapshot.data();
+      var get_data;
 
-    // Accessing courses_list from courses collection
-    List courses_list = List<String>.from(get_data["Courses_list"]);
-    courses_list.remove(courseId);
+      if (documentSnapshot.exists) get_data = documentSnapshot.data();
 
-    var stud_data = documentSnapshot.data()
-                                        as Map<String, dynamic>?;
+      // Accessing courses_list from courses collection
+      List courses_list = List<String>.from(get_data["Courses_list"]);
+      courses_list.remove(courseId);
 
-                                    if (documentSnapshot.exists &&
-                                        stud_data != null) {
-                                      Map<String, dynamic>  Attend_Map =
-                                          Map.from(
-                                              stud_data["Attendance_data"] ??
-                                                  {});
-                                        Attend_Map.remove(courseId);
+      var stud_data = documentSnapshot.data() as Map<String, dynamic>?;
 
-                                        await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({"Courses_list": courses_list, "Attendance_data":Attend_Map});
-                                        }
-                                      
+      if (documentSnapshot.exists && stud_data != null) {
+        Map<String, dynamic> Attend_Map = Map.from(stud_data["Attendance_data"] ?? {});
+        Attend_Map.remove(courseId);
 
-
-    
+        await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({
+          "Courses_list": courses_list,
+          "Attendance_data": Attend_Map
+        });
+      }
     }
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Attendance").get();
 
-    for(var doc in querySnapshot.docs){
-        String docid = doc.id;
-        if(docid.contains(courseId)){
-          await FirebaseFirestore.instance.collection("Attendance").doc(docid).delete();
-        }
-    }
-
-
-      // Delete the course document from Firestore
-      await FirebaseFirestore.instance
-          .collection('Courses')
-          .doc(courseId)
-          .delete();
-
-      // Optionally, update the teacher's course list if necessary
-      if (teacherId != null) {
-        await FirebaseFirestore.instance
-            .collection('Teachers')
-            .doc(teacherId)
-            .update({
-          'Course_id': FieldValue.arrayRemove([courseId])
-        });
+    for (var doc in querySnapshot.docs) {
+      String docid = doc.id;
+      if (docid.contains(courseId)) {
+        await FirebaseFirestore.instance.collection("Attendance").doc(docid).delete();
       }
-
-
-    } catch (e) {
-      print('Error deleting course: $e');
     }
-  }
 
-  Future<void> undoDeleteCourse(CourseData courseData) async {
-    String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    // Delete the course document from Firestore
+    await FirebaseFirestore.instance
+        .collection('Courses')
+        .doc(courseId)
+        .delete();
 
-    try {
-      // Add the course back to Firestore
+    // Optionally, update the teacher's course list if necessary
+    if (teacherId != null) {
       await FirebaseFirestore.instance
-          .collection('Courses')
-          .doc(courseData.CourseID)
-          .set({
-        'Course_Name': courseData.name,
-        'Course_Code': courseData.code,
-        'Semester': courseData.section
-            .substring(0, 1), // Assuming format SemesterSection | Branch
-        'Section': courseData.section
-            .substring(1, 2), // Assuming format SemesterSection | Branch
-        'Branch': courseData.section
-            .substring(5), // Assuming format SemesterSection | Branch
-        'Classes_Held': courseData.classesHeld,
-        'Course_id': courseData.CourseID,
+          .collection('Teachers')
+          .doc(teacherId)
+          .update({
+        'Course_id': FieldValue.arrayRemove([courseId])
       });
-
-      // Optionally, update the teacher's course list if necessary
-      if (teacherId != null) {
-        await FirebaseFirestore.instance
-            .collection('Teachers')
-            .doc(teacherId)
-            .update({
-          'Course_id': FieldValue.arrayUnion([courseData.CourseID])
-        });
-      }
-
-      // Refresh the UI
-      setState(() {
-        _courseDataFuture = fetchCourseData(teacherId!);
-      });
-    } catch (e) {
-      print('Error undoing delete: $e');
     }
+  } catch (e) {
+    print('Error deleting course: $e');
   }
+}
+
+
+//   Future<void> undoDeleteCourse(CourseData courseData) async {
+//     String? teacherId = FirebaseAuth.instance.currentUser?.email;
+
+//     try {
+//       // Add the course back to Firestore
+//       await FirebaseFirestore.instance
+//           .collection('Courses')
+//           .doc(courseData.CourseID)
+//           .set({
+//         'Course_Name': courseData.name,
+//         'Course_Code': courseData.code,
+//         'Semester': courseData.section
+//             .substring(0, 1), // Assuming format SemesterSection | Branch
+//         'Section': courseData.section
+//             .substring(1, 2), // Assuming format SemesterSection | Branch
+//         'Branch': courseData.section
+//             .substring(5), // Assuming format SemesterSection | Branch
+//         'Classes_Held': courseData.classesHeld,
+//         'Course_id': courseData.CourseID,
+//         "Student_list": students_list,
+//         "Teacher_id": 
+//       });
+
+//       // Optionally, update the teacher's course list if necessary
+//       if (teacherId != null) {
+//         await FirebaseFirestore.instance
+//             .collection('Teachers')
+//             .doc(teacherId)
+//             .update({
+//           'Course_id': FieldValue.arrayUnion([courseData.CourseID])
+//         });
+//       }
+
+// DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+//         .collection("Courses")
+//         .doc(courseData.CourseID)
+//         .get();
+//     var get_data;
+//     if (documentSnapshot.exists) get_data = documentSnapshot.data();
+
+//     // Accessing students_list from courses collection
+//     students_list = List<String>.from(get_data["Student_list"]);
+
+//     for(int i = 0;i<students_list.length;i++)
+//     {
+//       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+//         .collection("Students")
+//         .doc(students_list[i])
+//         .get();
+
+//         var get_data;
+        
+//     if (documentSnapshot.exists) get_data = documentSnapshot.data();
+
+//     // Accessing courses_list from courses collection
+//     List courses_list = List<String>.from(get_data["Courses_list"]);
+//     courses_list.add(courseData.CourseID);
+//     }
+
+//       // Refresh the UI
+//       setState(() {
+//         _courseDataFuture = fetchCourseData(teacherId!);
+//       });
+//     } catch (e) {
+//       print('Error undoing delete: $e');
+//     }
+//   }
 
   @override
   Widget build(BuildContext context) {
