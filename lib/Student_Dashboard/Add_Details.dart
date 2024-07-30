@@ -97,10 +97,13 @@ var dropdownvalue_section = 'A';
 var sem = [2, 4, 6, 8];
 var section = ['A', 'B'];
 
+// Enabling Sections only after selecting Semester
 bool enable_section = false;
 bool enable_Course = true;
 
 class _MyHomePageState extends State<MyHomePage> {
+  
+  // Checking Semester based on Cycle  
   check(currentCycle) {
     if (currentCycle == "Even") {
       sem = [2, 4, 6, 8];
@@ -234,6 +237,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         } else {
                                           check(current_cycle);
                                         }
+
+                                        // Enabling Sections only after selecting Semester
                                         enable_section = false;
                                       });
                                     },
@@ -348,6 +353,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         // Extracting section
                                         section =
                                             sections['$dropdownvalue_semester'];
+                                        
+                                        // Enabling Sections only after selecting Semester
                                         enable_section = true;
                                       });
                                     },
@@ -359,6 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
+
 
                     // Section Selection
                     Padding(
@@ -421,6 +429,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ElevatedButton(
                 onPressed: () async {
+
+                  // Getting data from small DataBase and validating if the 
+                  // student is registered to that section or not
                   var validate_student_join =
                       "${dropdownvalue_semester}${dropdownvalue_section}_${dropdownvalue_branch}";
                   DocumentSnapshot documentSnapshot = await FirebaseFirestore
@@ -432,10 +443,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   List<dynamic> students_list = documentSnapshot.exists
                       ? List<String>.from(documentSnapshot["student_list"])
                       : [];
-                  // if (documentSnapshot.exists) {
-                  //   var get_data = documentSnapshot.data();
-                  //   List<dynamic> students_list =
-                  //       List.from(get_data["student_list"]);
+                 
+
+                 // Adding join status of Students
                   if (students_list.contains(emailName)) {
                     get_Students_data(dropdownvalue_branch,
                         dropdownvalue_semester, dropdownvalue_section);
@@ -444,7 +454,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(
                           builder: (context) => Student_Dashboard()),
                     );
-                  } else {
+                  } 
+                  // If Student not found in that DB
+                  else {
                     displayAlreadyExistingMessage(context);
                   }
                 },
@@ -503,63 +515,63 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // Names
 
-class Get_Name extends StatelessWidget {
-  const Get_Name({super.key});
+// class Get_Name extends StatelessWidget {
+//   const Get_Name({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Flexible(
-            flex: 2, // Adjust the flex value as needed
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Text(
-                "Course Code:",
-                style: font_details(),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 3, // Adjust the flex value as needed
-            child: Container(
-              margin: const EdgeInsets.only(left: 10),
-              width: MediaQuery.of(context).size.width *
-                  0.6, // Adjust width as needed
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(radius_12()),
-                color: Colors.white60,
-              ),
-              child: TextField(
-                controller: Student_Name,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]'))
-                ],
-                decoration: InputDecoration(
-                  hintText: "Enter Course Code..",
-                  errorText: validate_Name ? "Field cannot be empty" : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(radius_12()),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.purple,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//         children: [
+//           Flexible(
+//             flex: 2, // Adjust the flex value as needed
+//             child: Align(
+//               alignment: AlignmentDirectional.centerStart,
+//               child: Text(
+//                 "Course Code:",
+//                 style: font_details(),
+//               ),
+//             ),
+//           ),
+//           Flexible(
+//             flex: 3, // Adjust the flex value as needed
+//             child: Container(
+//               margin: const EdgeInsets.only(left: 10),
+//               width: MediaQuery.of(context).size.width *
+//                   0.6, // Adjust width as needed
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.all(radius_12()),
+//                 color: Colors.white60,
+//               ),
+//               child: TextField(
+//                 controller: Student_Name,
+//                 inputFormatters: [
+//                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]'))
+//                 ],
+//                 decoration: InputDecoration(
+//                   hintText: "Enter Course Code..",
+//                   errorText: validate_Name ? "Field cannot be empty" : null,
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.all(radius_12()),
+//                     borderSide: const BorderSide(
+//                       color: Colors.black,
+//                     ),
+//                   ),
+//                   focusedBorder: OutlineInputBorder(
+//                     borderRadius: BorderRadius.all(radius_12()),
+//                     borderSide: const BorderSide(
+//                       width: 2,
+//                       color: Colors.purple,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

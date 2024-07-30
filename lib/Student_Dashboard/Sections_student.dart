@@ -7,8 +7,6 @@ select_sections(dropdownvalue_branch, current_cycle) {
   } else if (current_cycle == "Odd") {
     get_sections(dropdownvalue_branch, 1);
   }
-
-  // print(sections);
 }
 
 // Getting Sections

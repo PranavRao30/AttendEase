@@ -94,9 +94,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 // Display duplicates
-void displayDuplicatesMessage(BuildContext context) {
+void displayDuplicatesMessage(BuildContext context, String message) {
   final snackbar = SnackBar(
-    content: Text("Course Already Joined. Try with different course"),
+    content: Text(message),
     duration: Duration(seconds: 3),
     action: SnackBarAction(
         label: "Ok",
@@ -897,6 +897,10 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
     }
   }
 
+
+  // Updating Courses list in Student Collection and 
+  // Students_list in that particular course id
+
   Future<void> joinCourse(String courseId) async {
     try {
       DocumentReference studentRef = FirebaseFirestore.instance
@@ -928,7 +932,8 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         await studentRef.update({'Courses_list': courseIDs});
         await studentRef.update({'Attendance_data': attend_data});
       } else
-        displayDuplicatesMessage(context);
+        displayDuplicatesMessage(context, "Course Already Joined. Try with different course");
+      
       // Updating students list in Courses Collection
       var data;
       DocumentSnapshot courseDoc = await FirebaseFirestore.instance
@@ -1016,7 +1021,6 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
                 onPressed: () async {
                   if (selectedCourse != null) {
                     await joinCourse(selectedCourse!);
-                    // Update the UI or show a success message
                   }
                 },
                 style: ElevatedButton.styleFrom(

@@ -21,6 +21,8 @@ var attendance_id;
 var attendance_course_id;
 List attendees = [];
 var attendance_map;
+
+// Creating Attendance Collections
 creating_attendance_collection(uid) async {
   DateTime now = DateTime.now();
   // Format the date
@@ -43,30 +45,3 @@ creating_attendance_collection(uid) async {
       .set(attendance_map)
       .then((value) => print("Attendance collection created"));
 }
-
-List<get_table1> Students_data = [
-  get_table1(
-    slno: 1,
-    name: "Prajwal P",
-    Present: "P",
-    email_id: "Asd",
-  ),
-  get_table1(
-    slno: 2,
-    name: "Pannaga R Bhat",
-    Present: "A",
-    email_id: "asd",
-  ),
-  get_table1(
-    slno: 2,
-    name: "Pannaga R Bhat",
-    Present: "A",
-    email_id: "asd",
-  ),
-  get_table1(
-    slno: 2,
-    name: "Pannaga R Bhat",
-    Present: "A",
-    email_id: "asd",
-  ),
-];

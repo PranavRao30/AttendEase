@@ -49,6 +49,7 @@ class StartScreen extends StatelessWidget {
                 var email_list = emailName.toString().split('.');
 
                 if (emailName.toString().contains("cse")) {
+                  // Initially adding Teachers with flag = 0
                   add_Teachers_data(0);
 
                   Navigator.push(
@@ -81,22 +82,30 @@ class StartScreen extends StatelessWidget {
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AddASubject()));
-                  } else {
+                  } 
+                  
+                  // if student joins to a class
+                  else {
                     get_student_data = documentSnapshot.data();
                     if (get_student_data["status_of_joining"] == true) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: ((context) => Student_Dashboard())));
-                    } else if (get_student_data["status_of_joining"] == false) {
+                    } 
+                    
+                    // if the student does not join to class on first instance
+                    else if (get_student_data["status_of_joining"] == false) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddASubject()));
                     }
                   }
-                } else {
-                  // Show dialog box for invalid email
+                } 
+                
+                // Show dialog box for invalid email
+                else {                  
                   _showInvalidEmailDialog(context);
                 }
               }

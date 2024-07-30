@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/model/user.dart';
+import 'package:attend_ease/ui_components/util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,8 +20,13 @@ import 'package:attend_ease/Teachers_DashBoard/Add_Subject.dart';
 import 'package:attend_ease/Teachers_DashBoard/Teacher_Profile_Page/main1.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
 
+Map<String, String> selectedTeacherForCourse = {};
 var students_list;
+List<String> dropdownvalue_teachers = [];
+var dropdownvalue_assigned_teacher = "";
+List<String> selected_teacher = [];
 
+// For instance Table which refershes after every session
 class get_table {
   final int slno;
   final String name;
@@ -35,20 +41,101 @@ class get_table {
   });
 }
 
+void displayAssignmentStatus(BuildContext context, String tn) {
+  final snackbar = SnackBar(
+    content: Text(
+        "Subject Assigned to ${tn} Succesfully. Contact the teacher once you come back"),
+    duration: Duration(seconds: 3),
+    action: SnackBarAction(
+        label: "Ok",
+        onPressed: () {
+          print("Assigned Successfully!!");
+        }),
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
+get_teachers_ids() async {
+  dropdownvalue_teachers = [];
+  QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection("Teachers").get();
+  for (var id in querySnapshot.docs) {
+    dropdownvalue_teachers.add(id.id);
+  }
+}
+
+Future<void> updateNewTeacher(String courseId, String newTeacher) async {
+  var get_data, old_teacher_id;
+
+  // Get old teacher id
+  DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+      .collection("Courses")
+      .doc(courseId)
+      .get();
+  if (documentSnapshot.exists) {
+    get_data = documentSnapshot.data();
+    old_teacher_id = get_data["Teacher_id"];
+  }
+
+  // Update old teacher's course list
+  DocumentSnapshot documentSnapshot1 = await FirebaseFirestore.instance
+      .collection("Teachers")
+      .doc(old_teacher_id)
+      .get();
+
+  List<dynamic> get_course_list = documentSnapshot1.exists
+      ? List<String>.from(documentSnapshot1["Course_id"])
+      : [];
+
+  get_course_list.remove(courseId);
+
+  await FirebaseFirestore.instance
+      .collection("Teachers")
+      .doc(old_teacher_id)
+      .update({"Course_id": get_course_list});
+
+  // Update new teacher's course list after assigning
+  DocumentSnapshot documentSnapshot2 = await FirebaseFirestore.instance
+      .collection("Teachers")
+      .doc(newTeacher)
+      .get();
+
+  List<dynamic> get_course_list1 = documentSnapshot2.exists
+      ? List<String>.from(documentSnapshot2["Course_id"])
+      : [];
+
+  get_course_list1.add(courseId);
+
+  await FirebaseFirestore.instance
+      .collection("Teachers")
+      .doc(newTeacher)
+      .update({"Course_id": get_course_list1});
+
+  // Update course with new teacher id
+  await FirebaseFirestore.instance
+      .collection("Courses")
+      .doc(courseId)
+      .update({"Teacher_id": newTeacher});
+}
+
 // Fetch course data from Firestore
 Future<List<CourseData>> fetchCourseData(String teacherId) async {
   List<CourseData> courseDataList = [];
 
   try {
+    // Teachers collections
     DocumentSnapshot teacherSnapshot = await FirebaseFirestore.instance
         .collection('Teachers')
         .doc(teacherId)
         .get();
 
+    // Getting course_id list
     if (teacherSnapshot.exists) {
       List<String> courseIds =
           List<String>.from(teacherSnapshot['Course_id'] ?? []);
 
+      // Iterating through each course id and storing its details in a map
       for (String courseId in courseIds) {
         DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
             .collection('Courses')
@@ -133,7 +220,13 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
   @override
   void initState() {
     super.initState();
+
     String? teacherId = FirebaseAuth.instance.currentUser?.email;
+    dropdownvalue_assigned_teacher = teacherId!;
+
+    // getting teacher ids for assigning
+    get_teachers_ids();
+
     if (teacherId != null) {
       _courseDataFuture = fetchCourseData(teacherId);
     } else {
@@ -169,67 +262,62 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
         ),
       );
 
-
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection("Courses")
-        .doc(courseId)
-        .get();
-    var get_data;
-    if (documentSnapshot.exists) get_data = documentSnapshot.data();
+          .collection("Courses")
+          .doc(courseId)
+          .get();
+      var get_data;
+      if (documentSnapshot.exists) get_data = documentSnapshot.data();
 
-    // Accessing students_list from courses collection
-    students_list = List<String>.from(get_data["Student_list"]);
+      // Accessing students_list from courses collection
+      students_list = List<String>.from(get_data["Student_list"]);
 
-    for(int i = 0;i<students_list.length;i++)
-    {
-      // await FirebaseFirestore.instance
-      //       .collection('Students')
-      //       .doc(students_list[i])
-      //       .update({
-      //     'Courses_list': FieldValue.arrayRemove([courseId])
-      //   });
-
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection("Students")
-        .doc(students_list[i])
-        .get();
+      // Iterating Through students_list
+      for (int i = 0; i < students_list.length; i++) {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+            .collection("Students")
+            .doc(students_list[i])
+            .get();
 
         var get_data;
-        
-    if (documentSnapshot.exists) get_data = documentSnapshot.data();
 
-    // Accessing courses_list from courses collection
-    List courses_list = List<String>.from(get_data["Courses_list"]);
-    courses_list.remove(courseId);
+        if (documentSnapshot.exists) get_data = documentSnapshot.data();
 
-    var stud_data = documentSnapshot.data()
-                                        as Map<String, dynamic>?;
+        // Accessing courses_list from courses collection and removing curse id
+        List courses_list = List<String>.from(get_data["Courses_list"]);
+        courses_list.remove(courseId);
 
-                                    if (documentSnapshot.exists &&
-                                        stud_data != null) {
-                                      Map<String, dynamic>  Attend_Map =
-                                          Map.from(
-                                              stud_data["Attendance_data"] ??
-                                                  {});
-                                        Attend_Map.remove(courseId);
+        var stud_data = documentSnapshot.data() as Map<String, dynamic>?;
 
-                                        await FirebaseFirestore.instance.collection("Students").doc(students_list[i]).update({"Courses_list": courses_list, "Attendance_data":Attend_Map});
-                                        }
-                                      
+        // Attendance map of a particular course id is being deleted
+        if (documentSnapshot.exists && stud_data != null) {
+          Map<String, dynamic> Attend_Map =
+              Map.from(stud_data["Attendance_data"] ?? {});
+          Attend_Map.remove(courseId);
 
-
-    
-    }
-
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Attendance").get();
-
-    for(var doc in querySnapshot.docs){
-        String docid = doc.id;
-        if(docid.contains(courseId)){
-          await FirebaseFirestore.instance.collection("Attendance").doc(docid).delete();
+          await FirebaseFirestore.instance
+              .collection("Students")
+              .doc(students_list[i])
+              .update({
+            "Courses_list": courses_list,
+            "Attendance_data": Attend_Map
+          });
         }
-    }
+      }
 
+      // Deleting Attendance document in deleting the class
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection("Attendance").get();
+
+      for (var doc in querySnapshot.docs) {
+        String docid = doc.id;
+        if (docid.contains(courseId)) {
+          await FirebaseFirestore.instance
+              .collection("Attendance")
+              .doc(docid)
+              .delete();
+        }
+      }
 
       // Delete the course document from Firestore
       await FirebaseFirestore.instance
@@ -246,8 +334,6 @@ class _TeacherHomePageState extends State<Teacher_Home_Page> {
           'Course_id': FieldValue.arrayRemove([courseId])
         });
       }
-
-
     } catch (e) {
       print('Error deleting course: $e');
     }
@@ -607,6 +693,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       List<String> columns = ['Sl no', 'Student Name', 'Email'];
       columns
           .addAll(attendanceRecords.map((record) => record['date']!).toList());
+
       columns.add('Eligibility');
 
       // Add headers to the sheet
@@ -722,12 +809,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       List<Map<String, String>> attendanceRecordsList = [];
 
+      // attendance collection na queried list iterate through it
+      // check if it contains date key, if it contains extract the date
       for (var doc in attendanceSnapshot.docs) {
         final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
         if (data != null && data.containsKey('Date')) {
           String date = data['Date'];
           String attendanceId = doc.id; // Unique identifier for attendance
           attendanceRecordsList.add({'date': date, 'id': attendanceId});
+
+          // Attendees list alli iro student_id ge put P else A
           List<String> attendees = List<String>.from(data['Attendees']);
           for (var user in users) {
             if (attendees.contains(user.email)) {
@@ -738,7 +829,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }
       }
-
       return attendanceRecordsList;
     } catch (e) {
       throw 'Failed to fetch attendance records: $e';
@@ -945,6 +1035,94 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                             ),
                                           ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Assign Teacher on leave
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, left: 10, right: 10),
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          flex:
+                                              2, // Adjust the flex value as needed
+                                          child: Align(
+                                            alignment: AlignmentDirectional
+                                                .centerStart,
+                                            child: Text(
+                                              "Assign Teacher:",
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex:
+                                              3, // Adjust the flex value as needed
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.white,
+                                              ),
+                                              padding: EdgeInsets.all(10),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton<String>(
+                                                  value:
+                                                      selectedTeacherForCourse[
+                                                              courseData
+                                                                  .CourseID] ??
+                                                          dropdownvalue_teachers[
+                                                              0],
+                                                  icon: const Icon(Icons
+                                                      .keyboard_arrow_down),
+                                                  isExpanded: true,
+                                                  items: dropdownvalue_teachers
+                                                      .map((String s) {
+                                                    return DropdownMenuItem(
+                                                      value: s,
+                                                      child: Text(s),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (String? newVal) {
+                                                    setState(() {
+                                                      selectedTeacherForCourse[
+                                                              courseData
+                                                                  .CourseID] =
+                                                          newVal!;
+                                                      updateNewTeacher(
+                                                          courseData.CourseID,
+                                                          newVal);
+
+                                                      displayAssignmentStatus(
+                                                          context, newVal);
+
+                                                      Timer(
+                                                          Duration(seconds: 3),
+                                                          () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Teachers_Dashboard()));
+                                                      });
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),

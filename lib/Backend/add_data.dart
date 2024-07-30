@@ -21,6 +21,7 @@ var Store_Course_Name,
     add_courses_map;
 
 remove_concurrency() async {
+  // Querying for a courses collection fro these particular
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("Courses")
       .where('Semester', isEqualTo: dropdownvalue_semester)
@@ -32,6 +33,8 @@ remove_concurrency() async {
   DocumentSnapshot get_concurrent_document;
   var remove_concurrent;
   var remove_list = [];
+
+  // if there is any concurrency
   if (querySnapshot.docs.isNotEmpty) {
     for (var course_id in querySnapshot.docs) {
       get_concurrent_document = await FirebaseFirestore.instance
@@ -40,9 +43,7 @@ remove_concurrency() async {
           .get();
 
       remove_concurrent = get_concurrent_document.data();
-
       remove_list.add(remove_concurrent['Time_of_adding']);
-      // print(course_id.id);
     }
 
     DateFormat format = DateFormat("HH:mm:ss");
@@ -60,23 +61,19 @@ remove_concurrency() async {
     print(sortedTime);
 
     QuerySnapshot get_removing_id;
-    // get_removing_id = await FirebaseFirestore.instance
-    //     .collection("Courses")
-    //     .where("Time_of_adding", isEqualTo: sortedTime[1])
-    //     .get();
-    // for (var i in get_removing_id.docs) print(i.id);
 
+    // Removing from index 1 to n teachers who have concurrently except first teacher
     for (int i = 1; i < sortedTime.length; i++) {
+      
+      // Querying Time stamp if it gets any list
+      // then deleting that document from course list to avoid concurrency
+
       get_removing_id = await FirebaseFirestore.instance
           .collection("Courses")
           .where("Time_of_adding", isEqualTo: sortedTime[i])
           .get();
 
-      // print(get_removing_id);
-
       for (var course_id in get_removing_id.docs) {
-        print(course_id.id);
-
         Timer(Duration(seconds: 5), () async {
           await FirebaseFirestore.instance
               .collection("Courses")
@@ -84,7 +81,6 @@ remove_concurrency() async {
               .delete();
         });
       }
-
     }
   }
 }
@@ -108,7 +104,6 @@ add_course_data(id) async {
   else
     Store_Course_Name = course_name.text.toString();
 
-
   add_courses_map = {
     "Course_id": id,
     "Course_Name": Store_Course_Name,
@@ -128,6 +123,8 @@ add_course_data(id) async {
       .set(add_courses_map)
       .then((value) => print("Course data inserted"));
 
+  // if two teachers added to same course con-currently then
+  // deleting the course id for teachers who has submitted last.
   Timer(Duration(seconds: 5), () {
     remove_concurrency();
   });
@@ -223,28 +220,9 @@ add_Teachers_data(flag) async {
   }
 }
 
-
-
-// Students Data
+// Students Data after joining the class
 get_Students_data(
     dropdownvalue_branch, dropdownvalue_semester, dropdownvalue_section) async {
-  // stud_id = uuid.v4();
-  print("add_student");
-  print(emailName);
-
-  // if (documentSnapshot.exists) {
-  // add_student_map = {
-  //   "status_of_joining": true,
-  //   "student_id": email,
-  //   "Student_name": emailName.toString(),
-  //   "Branch": "",
-  //   "Semester": "",
-  //   "Section": "",
-  //   "Courses_list": [],
-  // };
-
-  // await FirebaseFirestore.instance.collection("Students").doc(email).set(add_student_map);
-
   await FirebaseFirestore.instance
       .collection("Students")
       .doc(emailName)
@@ -255,6 +233,5 @@ get_Students_data(
     "Section": dropdownvalue_section
   });
 
-  
   print("students details updated");
 }
