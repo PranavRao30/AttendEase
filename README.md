@@ -57,9 +57,14 @@ The app supports a user-friendly interface, making it easy for educators to mana
 <section id = "team">
   <h2> The Team </h2>
   <h3> Pannaga R Bhat </h3>
-[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/pannaga-rj)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/your-linkedin-profile)
-
+<p align="left">
+  <a href="https://github.com/pannaga-rj">
+    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
+  </a>
+  <a href="https://www.linkedin.com/in/your-linkedin-profile">
+    <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
+  </a>
+</p>
   
 </section>
 
