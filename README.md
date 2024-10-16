@@ -41,6 +41,7 @@ The app supports a user-friendly interface, making it easy for educators to mana
   <h2> TECHSTACK - Built with </h2>
   Flutter, Dart, Firebase as BaaS
 
+
   Flutter: Flutter is Google's UI toolkit for building natively compiled apps for various platforms.
   
   Dart: Dart is a fast, modern programming language primarily used in Flutter development.
