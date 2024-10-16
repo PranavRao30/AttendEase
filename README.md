@@ -58,37 +58,40 @@ The app supports a user-friendly interface, making it easy for educators to mana
   <h2> The Team </h2>
   <h3> Pannaga R Bhat </h3>
 <p align="left">
-  <a href="https://github.com/pannaga-rj" style="text-decoration: none;">
+  <a href="https://github.com/pannaga-rj" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
   </a>
-  <a href="www.linkedin.com/in/pannaga-r-bhat-ba8bb6289" style="text-decoration: none;">
+  <a href="www.linkedin.com/in/pannaga-r-bhat-ba8bb6289" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
   </a>
 </p>
 
+<h3> Pradeep P T </h3>
 <p align="left">
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
   </a>
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
   </a>
 </p>
 
+<h3> Prajwal P </h3>
 <p align="left">
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
   </a>
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
   </a>
 </p>
 
+<h3> Pranav Anantha Rao </h3>
 <p align="left">
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
   </a>
-  <a href="" style="text-decoration: none;">
+  <a href="" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
   </a>
 </p>
