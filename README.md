@@ -65,7 +65,33 @@ The app supports a user-friendly interface, making it easy for educators to mana
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
   </a>
 </p>
-  
+
+<p align="left">
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
+  </a>
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
+  </a>
+</p>
+
+<p align="left">
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
+  </a>
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
+  </a>
+</p>
+
+<p align="left">
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
+  </a>
+  <a href="" style="text-decoration: none;">
+    <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
+  </a>
+</p>
 </section>
 
 
