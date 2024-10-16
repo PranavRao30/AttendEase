@@ -57,7 +57,11 @@ The app supports a user-friendly interface, making it easy for educators to mana
 <section id = "team">
   <h2> The Team </h2>
   <h3> Pannaga R Bhat </h3>
+  <p>
   <a href="https://github.com/pannaga-rj"><img src="https://camo.githubusercontent.com/df0826441f410847b44f7c36507e04e5f93fccfdb038739941b1a047b3964c8b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4769744875622d626c61636b3f7374796c653d666c6174266c6f676f3d676974687562" alt="GitHub" data-canonical-src="https://img.shields.io/badge/GitHub-black?style=flat&amp;logo=github" style="max-width: 100%;"></a>
+
+  <a href="https://www.linkedin.com/in/sanath-naik/" rel="nofollow"><img src="https://camo.githubusercontent.com/77c44f677ce347ee99fdfcf502f57be49878e0503933ec0dc5b230acf886aa5b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c696e6b6564496e2d626c75653f7374796c653d666c6174266c6f676f3d6c696e6b6564696e" alt="LinkedIn" data-canonical-src="https://img.shields.io/badge/LinkedIn-blue?style=flat&amp;logo=linkedin" style="max-width: 100%;"></a>
+  </p>
 </section>
 
 
