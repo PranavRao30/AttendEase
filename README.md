@@ -13,9 +13,9 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
    <li><a href="#prerequisites"> Prerequisites </a></li> 
    <li><a href="#installation"> Installation </a></li> 
   </ul>
-  <li> <a href = ""> TECH STACK USED </a></li>
-  <li> <a href = ""> Screenshots </a></li>
-  <li> <a href = ""> Team </a></li>
+  <li> <a href = "#tech_used"> TECH STACK USED </a></li>
+  <li> <a href = "#screenshots"> Screenshots </a></li>
+  <li> <a href = "#team"> Team </a></li>
 </ul>
 
 <section id = "About">
@@ -39,9 +39,7 @@ The app supports a user-friendly interface, making it easy for educators to mana
 
 <section id = "tech_used">
   <h2> TECHSTACK - Built with </h2>
-  Flutter, Dart, Firebase as BaaS
-
-
+  
   Flutter: Flutter is Google's UI toolkit for building natively compiled apps for various platforms.
   
   Dart: Dart is a fast, modern programming language primarily used in Flutter development.
@@ -50,11 +48,14 @@ The app supports a user-friendly interface, making it easy for educators to mana
 </section>
 
 
-<section id = "getting_started">
-  <h2> Getting Started </h2>
-  <h3 id = "prerequisites"> Prerequisites </h3>
-  
-  <h3 id = "installation"> Installation </h3>
+<section id = "screenshots">
+  <h2> Screenshots </h2>
+</section>
+
+
+
+<section id = "team">
+  <h2> Team behind the App </h2>
 </section>
 
 
