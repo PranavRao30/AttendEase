@@ -1,9 +1,7 @@
 # AttendEase - Your Automated Attendance Companion
-<br>
 AttendEase is a BLE-based mobile app designed to streamline attendance tracking for educators and students. It uses Bluetooth Low Energy (BLE) technology to automatically mark attendance by detecting students' proximity to the classroom. AttendEase simplifies attendance, reduces errors, and provides real-time data via export.
 
 <h2>Table of Contents</h2>
-<br>
 <ul>
   <li> <a href = "#About"> About </a></li>
   <ul>
@@ -22,7 +20,6 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <section id = "About">
   <h2> About </h2>
-  
   <h2 id = "wa"> What is AttendEase? </h2>
   In modern educational settings, efficient attendance management is crucial. Traditional methods can be time-consuming and prone to errors. AttendEase leverages BLE technology to automate the attendance process, ensuring that students are marked present only when they're physically in the classroom. With real-time data syncing via Firebase, AttendEase minimizes manual work, offering a seamless experience for both teachers and students.
 
