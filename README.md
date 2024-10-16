@@ -59,7 +59,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   <h3> Pannaga R Bhat </h3>
 <p align="left">
   <a href="https://github.com/pannaga-rj" style="text-decoration: none;" target="_blank" rel="nofollow">
-    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" />
+    <img src="https://img.shields.io/badge/GitHub-black?style=flat&logo=github" alt="GitHub" style="max-width: 100%;">
   </a>
   <a href="www.linkedin.com/in/pannaga-r-bhat-ba8bb6289" style="text-decoration: none;" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin" alt="LinkedIn" />
