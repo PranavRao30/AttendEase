@@ -42,7 +42,9 @@ The app supports a user-friendly interface, making it easy for educators to mana
   Flutter, Dart, Firebase as BaaS
 
   Flutter: Flutter is Google's UI toolkit for building natively compiled apps for various platforms.
+  
   Dart: Dart is a fast, modern programming language primarily used in Flutter development.
+  
   Firebase: Firebase is Google's mobile and web app development platform with a wide range of tools and services.
 </section>
 
