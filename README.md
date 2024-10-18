@@ -28,7 +28,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
   <h3 id = "features"> Features </h3>
  <ul>
-  <li>User-Friendly Interface: <p style="font-size: 12;">A clean and intuitive UI designed for easy navigation and a seamless user experience.</li>
+  <li>User-Friendly Interface: <p style="font-size: 12;">A clean and intuitive UI designed for easy navigation and a seamless user experience.</p></li>
   <li>Course Management: Teachers can maintain and manage courses efficiently, adhering to the latest National Education Policy (NEP) guidelines.</li>
   <li>Class-Wise Attendance Tracking: Attendance records are maintained on a class-wise basis, ensuring accurate tracking of student participation.</li>
   <li>Bluetooth BLE Attendance System: Utilizes Bluetooth Low Energy (BLE) technology to send and receive session-specific signals, automatically marking student attendance based on proximity.</li>
