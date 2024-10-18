@@ -128,7 +128,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
     <strong>Connect Android Device or Emulator</strong>: Ensure your Android device is connected to your computer via USB, and USB debugging is enabled in developer mode. Alternatively, you can use an emulator to test the app.
   </li>
   <li>
-    <p><strong>Launch the App</strong>: Run <code>flutter run</code> after selecting the target device or emulator. This command will install and launch the app on the specified device.</p>
+    <p><strong>Launch the App</strong>: Run the below command after selecting the target device or emulator. This command will install and launch the app on the specified device.</p>
     <pre><code>flutter run</code></pre>
   </li>
 </ul>
