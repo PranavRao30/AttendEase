@@ -54,7 +54,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   <img src="https://github.com/user-attachments/assets/94550299-4ffd-425a-b8c0-351cf29e965f" width="200" style="max-width: 100%;">
   <img src="https://github.com/user-attachments/assets/b250a8ce-1528-4d63-a171-ab7e06da5d28" width="200" style="max-width: 100%;">
   <img src="https://github.com/user-attachments/assets/dba81fb3-8a1b-411a-8302-3d54097f34ca" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/9f4b1cc6-bd74-4d49-930f-5b0fa85dd858" width="200" style="max-width: 100%;">
+  
   <img src="https://github.com/user-attachments/assets/4b02abca-c8fc-44b1-9a06-e0be8f8aac62" width="200" style="max-width: 100%;">
   <img src="https://github.com/user-attachments/assets/aec4acee-e153-416f-8f0b-270b58b7ed93" width="200" style="max-width: 100%;">
   
