@@ -28,19 +28,15 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
   <h3 id = "features"> Features </h3>
 <ul>
-  <li>
-  <em>User-Friendly Interface</em>: 
-  <span style="font-size: 0.9em;">A clean and intuitive UI designed for easy navigation and a seamless user experience.</span>
-</li>
-
-  <li><em>Course Management</em>: Teachers can maintain and manage courses efficiently, adhering to the latest National Education Policy (NEP) guidelines.</li>
-  <li><em>Class-Wise Attendance Tracking</em>: Attendance records are maintained on a class-wise basis, ensuring accurate tracking of student participation.</li>
-  <li><em>Bluetooth BLE Attendance System</em>: Utilizes Bluetooth Low Energy (BLE) technology to send and receive session-specific signals, automatically marking student attendance based on proximity.</li>
-  <li><em>Automatic Attendance Updates</em>: Students’ attendance is updated automatically when they receive BLE signals, reducing manual effort.</li>
-  <li><em>Manual Attendance Editing</em>: Teachers have the option to manually edit attendance records, ensuring flexibility and accuracy.</li>
-  <li><em>Real-Time Attendance Updation</em>: Students receive attendance data right after it’s taken.</li>
-  <li><em>Export Attendance Data</em>: Attendance data can be exported in various formats for reporting and further analysis.</li>
-  <li><em>Delegation</em>: Allow teachers to delegate attendance duties to a colleague during busy times.</li>
+    <li><em>User-Friendly Interface</em>: Intuitive design for seamless navigation.</li>
+    <li><em>Course Management</em>: Efficiently maintain courses per NEP guidelines.</li>
+    <li><em>Class-Wise Attendance Tracking</em>: Accurate attendance records by class.</li>
+    <li><em>Bluetooth BLE Attendance System</em>: Uses BLE technology to mark attendance based on proximity.</li>
+    <li><em>Automatic Attendance Updates</em>: Attendance auto-updated upon receiving BLE signals.</li>
+    <li><em>Manual Attendance Editing</em>: Teachers can adjust records for accuracy.</li>
+    <li><em>Real-Time Attendance Updation</em>: Immediate attendance data for students.</li>
+    <li><em>Export Attendance Data</em>: Attendance data exportable in multiple formats.</li>
+    <li><em>Delegation</em>: Teachers can delegate attendance duties when needed.</li>
 </ul>
 
 </section>
