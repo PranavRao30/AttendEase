@@ -114,9 +114,9 @@ flutter doctor
 
 <section id = "tech_used">
   <h2> TECHSTACK - Built with
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmcnqwd4r4L94Youz9rkGdXLBWF3d9wUpH9g&s" alt="Flutter" height="20" style="vertical-align: middle; filter: none;"/>
+    <img src="https://cdn.icon-icons.com/icons2/2530/PNG/512/flutter_button_icon_151957.png" alt="Flutter" height="20" style="vertical-align: middle; filter: none;"/>
    
-  <img src="https://i0.wp.com/www.braveterry.com/wp-content/uploads/2014/01/dart-logo.png?w=660" alt="Dart" height="20" style="vertical-align: middle; filter: none;"/>
+  <img src="https://cdn.icon-icons.com/icons2/2530/PNG/512/dart_colour_button_icon_151934.png" alt="Dart" height="20" style="vertical-align: middle; filter: none;"/>
   <img src="https://firebase.google.com/static/downloads/brand-guidelines/SVG/logo-standard.svg" alt="Firebase" height="20" style="vertical-align: middle; filter: none;"/>
   
   </h2>
