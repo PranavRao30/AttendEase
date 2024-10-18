@@ -28,18 +28,62 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
   <h3 id = "features"> Features </h3>
 <ul>
-    <li>
-  <em><span style="font-size: 2em;">User-Friendly Interface</span></em>: Intuitive design for seamless navigation.
-</li>
-    <li><em>Course Management</em>:     Efficiently maintain courses per NEP guidelines.</li>
-    <li><em>Class-Wise Attendance Tracking</em>:       Accurate attendance records by class.</li>
-    <li><em>Bluetooth BLE Attendance System</em>: Uses BLE technology to mark attendance based on proximity.</li>
-    <li><em>Automatic Attendance Updates</em>: Attendance auto-updated upon receiving BLE signals.</li>
-    <li><em>Manual Attendance Editing</em>: Teachers can adjust records for accuracy.</li>
-    <li><em>Real-Time Attendance Updation</em>: Immediate attendance data for students.</li>
-    <li><em>Export Attendance Data</em>: Attendance data exportable in multiple formats.</li>
-    <li><em>Delegation</em>: Teachers can delegate attendance duties when needed.</li>
+    <li><em>User-Friendly Interface</em>
+        <ul>
+            <li>Clean Design: Visually appealing layout minimizing clutter.</li>
+            <li>Intuitive Navigation: Simple paths to help users find what they need quickly.</li>
+        </ul>
+    </li>
+    <li><em>Course Management</em>
+        <ul>
+            <li>Efficient Course Creation: Tools for easy course updates per NEP guidelines.</li>
+            <li>Unique Session Creation: Create distinct sessions for organized learning.</li>
+        </ul>
+    </li>
+    <li><em>Class-Wise Attendance Tracking</em>
+        <ul>
+            <li>Class-Specific Records: Separate logs for each class for clarity.</li>
+            <li>Historical Data Access: Quick access to past attendance records.</li>
+        </ul>
+    </li>
+    <li><em>Bluetooth BLE Attendance System</em>
+        <ul>
+            <li>Proximity-Based Attendance: Marks students present within BLE range.</li>
+            <li>Session-Specific Signals: Unique identifiers for accurate attendance.</li>
+        </ul>
+    </li>
+    <li><em>Automatic Attendance Updates</em>
+        <ul>
+            <li>Real-Time Marking: Updates attendance immediately.</li>
+            <li>Immediate Data Availability: Records accessible instantly after marking.</li>
+        </ul>
+    </li>
+    <li><em>Manual Attendance Editing</em>
+        <ul>
+            <li>Flexible Editing Options: Teachers can adjust attendance records as needed.</li>
+            <li>Change Log Tracking: All edits logged for accurate record-keeping.</li>
+        </ul>
+    </li>
+    <li><em>Real-Time Attendance Updation</em>
+        <ul>
+            <li>Instant Feedback: Notifications of attendance status provided immediately.</li>
+            <li>User Dashboard Updates: Attendance reflected in student dashboards instantly.</li>
+        </ul>
+    </li>
+    <li><em>Export Attendance Data</em>
+        <ul>
+            <li>Excel Export: Attendance data exportable in Excel format.</li>
+            <li>Simple Access: Quick download of records without complex procedures.</li>
+        </ul>
+    </li>
+    <li><em>Delegation</em>
+        <ul>
+            <li>Temporary Role Assignment: Assign attendance duties during busy periods.</li>
+            <li>Access Control: Delegated teachers have necessary permissions.</li>
+        </ul>
+    </li>
 </ul>
+
 
 </section>
 
