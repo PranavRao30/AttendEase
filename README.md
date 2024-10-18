@@ -83,9 +83,8 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
         </ul>
     </li>
 </ul>
-
-
 </section>
+
 
 <section id = "getting_started">
   <h2> Getting Started </h2>
@@ -106,7 +105,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 </ul>
 
 <p>After installing Flutter and Android Studio, it's highly recommended to run the following command to check for any additional requirements or corrections in your Flutter environment:</p>
-
+<p>flutter doctor</p>
   
   <h3 id = "installation"> Installation </h3>
 
