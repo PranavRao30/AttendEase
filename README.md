@@ -27,7 +27,18 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   The app supports a user-friendly interface, making it easy for educators to manage attendance records and students to monitor their eligibility for exams. Security is paramount, and all data is securely stored and transmitted through Firebase's robust security features.
 
   <h3 id = "features"> Features </h3>
-  
+ <ul>
+  <li>User-Friendly Interface: A clean and intuitive UI designed for easy navigation and a seamless user experience.</li>
+  <li>Course Management: Teachers can maintain and manage courses efficiently, adhering to the latest National Education Policy (NEP) guidelines.</li>
+  <li>Class-Wise Attendance Tracking: Attendance records are maintained on a class-wise basis, ensuring accurate tracking of student participation.</li>
+  <li>Bluetooth BLE Attendance System: Utilizes Bluetooth Low Energy (BLE) technology to send and receive session-specific signals, automatically marking student attendance based on proximity.</li>
+  <li>Automatic Attendance Updates: Students’ attendance is updated automatically when they receive BLE signals, reducing manual effort.</li>
+  <li>Manual Attendance Editing: Teachers have the option to manually edit attendance records, ensuring flexibility and accuracy.</li>
+  <li>Real-Time Attendance Updation: Students receive attendance data right after it’s taken.</li>
+  <li>Export Attendance Data: Attendance data can be exported in various formats for reporting and further analysis.</li>
+  <li>Delegation: Allow teachers to delegate attendance duties to a colleague during busy times.</li>
+</ul>
+
 </section>
 
 <section id = "getting_started">
