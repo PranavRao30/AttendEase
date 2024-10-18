@@ -138,7 +138,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 
 <section id = "tech_used">
-  <h2> TECHSTACK - Built with
+  <h2> TechStack - Built with
     <img src="https://cdn.icon-icons.com/icons2/2530/PNG/512/flutter_button_icon_151957.png" alt="Flutter" height="20" style="vertical-align: middle; filter: none;"/>
    
   <img src="https://cdn.icon-icons.com/icons2/2530/PNG/512/dart_colour_button_icon_151934.png" alt="Dart" height="20" style="vertical-align: middle; filter: none;"/>
