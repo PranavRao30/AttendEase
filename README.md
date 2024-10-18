@@ -110,7 +110,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   <h3>Running the Server:</h3>
 <ul>
   <li>
-    <strong>Clone the Repository</strong>: Begin by cloning the cli-Mate repository from GitHub to your local machine. This step ensures you have the server's source code.
+    <p><strong>Clone the Repository</strong>: Begin by cloning the cli-Mate repository from GitHub to your local machine. This step ensures you have the server's source code.</p>
     <pre><code>git clone https://github.com/PranavRao30/AttendEase.git</code></pre>
   </li>
 </ul>
@@ -121,14 +121,14 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
     <strong>Navigate to App Directory</strong>: If you haven't already, navigate to the directory containing the Flutter app code. In this case, it appears to be in the "AttendEase" directory.
   </li>
   <li>
-    <strong>Get Dependencies</strong>: Run <code>flutter pub get</code> to fetch and install the necessary Flutter dependencies for the app. This step ensures that your app has access to required packages.
+   <p> <strong>Get Dependencies</strong>: Run the below command to fetch and install the necessary Flutter dependencies for the app. This step ensures that your app has access to required packages.</p>
     <pre><code>flutter pub get</code></pre>
   </li>
   <li>
     <strong>Connect Android Device or Emulator</strong>: Ensure your Android device is connected to your computer via USB, and USB debugging is enabled in developer mode. Alternatively, you can use an emulator to test the app.
   </li>
   <li>
-    <strong>Launch the App</strong>: Run <code>flutter run</code> after selecting the target device or emulator. This command will install and launch the app on the specified device.
+    <p><strong>Launch the App</strong>: Run <code>flutter run</code> after selecting the target device or emulator. This command will install and launch the app on the specified device.</p>
     <pre><code>flutter run</code></pre>
   </li>
 </ul>
