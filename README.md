@@ -6,7 +6,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   <li> <a href = "#About"> About </a></li>
   <ul>
    <li><a href="#wa"> What is AttendEase? </a></li> 
-   <li><a href=""> Features </a></li> 
+   <li><a href="#features"> Features </a></li> 
   </ul>
   <li> <a href = "#getting_started"> Getting Started </a></li>
   <ul>
