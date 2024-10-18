@@ -53,13 +53,14 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <section id = "tech_used">
   <h2> TECHSTACK - Built with </h2>
-    Flutter: Flutter is Google's UI toolkit for building natively compiled apps for various platforms.<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmcnqwd4r4L94Youz9rkGdXLBWF3d9wUpH9g&s" alt="Flutter" height="20" style="vertical-align: middle; filter: none;"/>
+      Flutter: Flutter is Google's UI toolkit for building natively compiled apps for various platforms.<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmcnqwd4r4L94Youz9rkGdXLBWF3d9wUpH9g&s" alt="Flutter" height="20" style="vertical-align: middle; filter: none;"/>
 
   
-  Dart: Dart is a fast, modern programming language primarily used in Flutter development.<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Dart_programming_language_logo.svg/1200px-Dart_programming_language_logo.svg.png" alt="Dart" height="20" style="vertical-align: middle; filter: none;"/>
+  Dart: Dart is a fast, modern programming language primarily used in Flutter development.<img src="https://i0.wp.com/www.braveterry.com/wp-content/uploads/2014/01/dart-logo.png?w=660" alt="Dart" height="20" style="vertical-align: middle; filter: none;"/>
 
   
   Firebase: Firebase is Google's mobile and web app development platform with a wide range of tools and services.<img src="https://firebase.google.com/static/downloads/brand-guidelines/SVG/logo-standard.svg" alt="Firebase" height="20" style="vertical-align: middle; filter: none;"/>
+  
   
 </section>
 
