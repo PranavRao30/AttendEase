@@ -90,20 +90,22 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 <section id = "getting_started">
   <h2> Getting Started </h2>
   <h3 id = "prerequisites"> Prerequisites </h3>
-  Before you begin, ensure that you have the following prerequisites installed on your development environment:
+  <p>Before you begin, ensure that you have the following prerequisites installed on your development environment:</p>
 
-Flutter with Android Studio: To build and run the attendease application, you must have Flutter and Android Studio installed. Follow the installation instructions for Flutter and Android Studio based on your operating system:
+<ul>
+  <li>
+    <strong>Flutter with Android Studio</strong>: To build and run the Attendease application, you must have Flutter and Android Studio installed. Follow the installation instructions for Flutter and Android Studio based on your operating system:
+    <ul>
+      <li><a href="https://flutter.dev/docs/get-started/install">Flutter Installation Guide</a></li>
+      <li><a href="https://developer.android.com/studio">Android Studio Installation Guide</a></li>
+    </ul>
+  </li>
+  <li>
+    <strong>Android SDK</strong>: Android Studio usually comes with the Android SDK, but it's essential to ensure it's correctly installed and configured. Android SDK is necessary for building and running Android applications with Flutter. Make sure all the required paths regarding Android SDK are added to PATH in the environment variables of your PC.
+  </li>
+</ul>
 
-Flutter Installation Guide
-Android Studio Installation Guide
-Android SDK: Android Studio usually comes with the Android SDK, but it's essential to ensure it's correctly installed and configured. Android SDK is necessary for building and running Android applications with Flutter.
-
-Make sure all the required paths regarding Android SDK are added to PATH in environment variables of you PC.
-
-After installing Flutter and Android Studio, it's highly recommended to run the following command to check for any additional requirements or corrections in your Flutter environment:
-
-
-flutter doctor
+<p>After installing Flutter and Android Studio, it's highly recommended to run the following command to check for any additional requirements or corrections in your Flutter environment:</p>
 
   
   <h3 id = "installation"> Installation </h3>
