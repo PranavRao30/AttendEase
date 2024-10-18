@@ -28,58 +28,66 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
   <h3 id = "features"> Features </h3>
 <ul>
-    <li><em>User-Friendly Interface</em>
+    <li><strong>User-Friendly Interface</strong>
         <ul>
-            <li>Clean Design: Visually appealing layout minimizing clutter.</li>
-            <li>Intuitive Navigation: Simple paths to help users find what they need quickly.</li>
+            <li>Clean Design provides a visually appealing layout that minimizes clutter.</li>
+            <li>Intuitive Navigation offers simple paths to help users quickly find what they need.</li>
         </ul>
     </li>
-    <li><em>Course Management</em>
+  <br>
+    <li><strong>Course Management</strong>
         <ul>
-            <li>Efficient Course Creation: Tools for easy course updates per NEP guidelines.</li>
-            <li>Unique Session Creation: Create distinct sessions for organized learning.</li>
+            <li>Efficient Course Creation allows teachers to easily update course details in compliance with NEP guidelines.</li>
+            <li>Unique Session Creation enables the creation of distinct sessions for organized learning.</li>
         </ul>
     </li>
-    <li><em>Class-Wise Attendance Tracking</em>
+  <br>
+    <li><strong>Class-Wise Attendance Tracking</strong>
         <ul>
-            <li>Class-Specific Records: Separate logs for each class for clarity.</li>
-            <li>Historical Data Access: Quick access to past attendance records.</li>
+            <li>Class-Specific Records maintain separate logs for each class to ensure clarity.</li>
+            <li>Historical Data Access provides quick access to past attendance records for review.</li>
         </ul>
     </li>
-    <li><em>Bluetooth BLE Attendance System</em>
+  <br>
+    <li><strong>Bluetooth BLE Attendance System</strong>
         <ul>
-            <li>Proximity-Based Attendance: Marks students present within BLE range.</li>
-            <li>Session-Specific Signals: Unique identifiers for accurate attendance.</li>
+            <li>Proximity-Based Attendance automatically marks students present when within BLE range.</li>
+            <li>Session-Specific Signals use unique identifiers for accurate attendance tracking.</li>
         </ul>
     </li>
-    <li><em>Automatic Attendance Updates</em>
+  <br>
+    <li><strong>Automatic Attendance Updates</strong>
         <ul>
-            <li>Real-Time Marking: Updates attendance immediately.</li>
-            <li>Immediate Data Availability: Records accessible instantly after marking.</li>
+            <li>Real-Time Marking updates attendance immediately to reflect student presence.</li>
+            <li>Immediate Data Availability ensures records are accessible instantly after marking.</li>
         </ul>
     </li>
-    <li><em>Manual Attendance Editing</em>
+  <br>
+    <li><strong>Manual Attendance Editing</strong>
         <ul>
-            <li>Flexible Editing Options: Teachers can adjust attendance records as needed.</li>
-            <li>Change Log Tracking: All edits logged for accurate record-keeping.</li>
+            <li>Flexible Editing Options allow teachers to adjust attendance records as needed.</li>
+            <li>Change Log Tracking logs all edits to maintain an accurate record of changes.</li>
         </ul>
     </li>
-    <li><em>Real-Time Attendance Updation</em>
+  <br>
+    <li><strong>Real-Time Attendance Updation</strong>
         <ul>
-            <li>Instant Feedback: Notifications of attendance status provided immediately.</li>
-            <li>User Dashboard Updates: Attendance reflected in student dashboards instantly.</li>
+            <li>Instant Feedback provides notifications of attendance status immediately.</li>
+            <li>User Dashboard Updates reflect attendance data in student dashboards instantly.</li>
         </ul>
     </li>
-    <li><em>Export Attendance Data</em>
+  <br>
+    <li><strong>Export Attendance Data</strong>
         <ul>
-            <li>Excel Export: Attendance data exportable in Excel format.</li>
-            <li>Simple Access: Quick download of records without complex procedures.</li>
+            <li>Excel Export enables attendance data to be exported in Excel format for reporting.</li>
+            <li>Simple Access allows teachers to quickly download records without complex procedures.</li>
         </ul>
     </li>
-    <li><em>Delegation</em>
+  <br>
+    <li><strong>Delegation</strong>
         <ul>
-            <li>Temporary Role Assignment: Assign attendance duties during busy periods.</li>
-            <li>Access Control: Delegated teachers have necessary permissions.</li>
+            <li>Temporary Role Assignment allows teachers to assign attendance duties during busy periods.</li>
+            <li>Access Control ensures that delegated teachers have the necessary permissions to manage attendance effectively.</li>
         </ul>
     </li>
 </ul>
