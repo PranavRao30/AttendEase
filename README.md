@@ -50,19 +50,21 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <section id = "screenshots">
   <h2> Screenshots </h2>
-<!--   ![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4294c441-159f-466e-9551-df6d4e3567f5)
-  ![Screenshot_2024-10-16-12-01-29-20_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/5db55f6b-9d00-4b51-b645-e2f46bfed02b)
-  ![image](https://github.com/user-attachments/assets/118d0923-cf93-4721-8f45-252d9cb2018e)
-  ![image](https://github.com/user-attachments/assets/7e668aff-d76f-4733-bc76-b663312bfb57)
-  ![image](https://github.com/user-attachments/assets/e975f1ed-3c09-4d8a-9389-cfed0da84b87)
-  ![image](https://github.com/user-attachments/assets/708e6c99-11c9-4800-bc78-c8aa30499ffe)
-  ![image](https://github.com/user-attachments/assets/7dd2871d-d514-420a-b598-4e6409fe76c9)
-  ![image](https://github.com/user-attachments/assets/ca39844e-6200-49a0-99b4-ba385d3ea2b7) -->
-  ![image](https://github.com/user-attachments/assets/5173ddb9-fe19-43ae-8c00-5270ebad95b0)
-<!--  ![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4294c441-159f-466e-9551-df6d4e3567f5) -->
-  
 
-![image](https://github.com/user-attachments/assets/822b62bf-d9e7-406a-bdaa-c0c79cb1b348)
+
+![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/94550299-4ffd-425a-b8c0-351cf29e965f)
+![Screenshot_2024-10-16-12-01-17-51_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/b250a8ce-1528-4d63-a171-ab7e06da5d28)
+![Screenshot_2024-10-16-12-01-29-20_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/dba81fb3-8a1b-411a-8302-3d54097f34ca)
+![Screenshot_2024-10-16-12-02-50-89_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/9f4b1cc6-bd74-4d49-930f-5b0fa85dd858)
+![Screenshot_2024-10-16-12-03-08-88_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4b02abca-c8fc-44b1-9a06-e0be8f8aac62)
+![Screenshot_2024-10-16-12-03-11-46_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/aec4acee-e153-416f-8f0b-270b58b7ed93)
+![Screenshot_2024-10-16-12-03-22-32_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/5cc8042f-47f8-44ed-9f5b-152613040c04)
+![Screenshot_2024-10-16-12-03-53-81_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/5a3755c8-ac55-469c-9b99-0bf3cb4b4922)
+![Screenshot_2024-10-16-12-04-26-85_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/dec48295-b98d-4661-bdae-851263aec479)
+![Screenshot_2024-10-16-12-04-48-50_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/07ed77e7-9495-4fdc-8dac-fe009ca6bae9)
+![Screenshot_2024-10-16-12-05-30-33_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/a71f0ca7-67e6-45d0-9a87-13913a80360f)
+![Screenshot_2024-10-16-12-06-24-33_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/80f52e61-75fb-4db9-a286-b5f3c6df0df2)
+
 
 
 Tea
