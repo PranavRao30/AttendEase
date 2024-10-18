@@ -50,7 +50,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <section id = "screenshots">
   <h2> Screenshots </h2>
-  ![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4294c441-159f-466e-9551-df6d4e3567f5)
+<!--   ![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4294c441-159f-466e-9551-df6d4e3567f5)
   ![Screenshot_2024-10-16-12-01-29-20_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/5db55f6b-9d00-4b51-b645-e2f46bfed02b)
   ![image](https://github.com/user-attachments/assets/118d0923-cf93-4721-8f45-252d9cb2018e)
   ![image](https://github.com/user-attachments/assets/7e668aff-d76f-4733-bc76-b663312bfb57)
@@ -58,7 +58,9 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   ![image](https://github.com/user-attachments/assets/708e6c99-11c9-4800-bc78-c8aa30499ffe)
   ![image](https://github.com/user-attachments/assets/7dd2871d-d514-420a-b598-4e6409fe76c9)
   ![image](https://github.com/user-attachments/assets/ca39844e-6200-49a0-99b4-ba385d3ea2b7)
-  ![image](https://github.com/user-attachments/assets/5173ddb9-fe19-43ae-8c00-5270ebad95b0)
+  ![image](https://github.com/user-attachments/assets/5173ddb9-fe19-43ae-8c00-5270ebad95b0) -->
+ ![Screenshot_2024-10-16-12-01-06-55_7ee12b364fc0a9bf0c0af600a44d15ee](https://github.com/user-attachments/assets/4294c441-159f-466e-9551-df6d4e3567f5)
+  
 
 ![image](https://github.com/user-attachments/assets/822b62bf-d9e7-406a-bdaa-c0c79cb1b348)
 
@@ -70,7 +72,7 @@ Tea
 ![image](https://github.com/user-attachments/assets/6543c660-3376-4f0a-8f09-49a225d824df)
 ![image](https://github.com/user-attachments/assets/2a588040-9152-42af-b05e-0e4c831863ff)
 ![image](https://github.com/user-attachments/assets/0bb538c1-9372-47a1-be10-dae311ebf8f5)
-![Uploading image.png…]()
+
 
 </section>
 
