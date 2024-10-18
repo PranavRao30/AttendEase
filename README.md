@@ -50,29 +50,44 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <section id="screenshots">
   <h2> Screenshots </h2>
-
+  <h3> Landing Page: </h3>   
   <img src="https://github.com/user-attachments/assets/94550299-4ffd-425a-b8c0-351cf29e965f" width="200" style="max-width: 100%;">
   <img src="https://github.com/user-attachments/assets/dba81fb3-8a1b-411a-8302-3d54097f34ca" width="200" style="max-width: 100%;">
+  <br>
+  <h3> Teachers Version: </h3> 
+  <img src="https://github.com/user-attachments/assets/a2d17bae-7cfa-4141-b9be-0bfdc9710a39" alt="Screenshot 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/b3269cb3-8f1f-4a17-bc70-3a7396baaf17" alt="Screenshot 2" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/41f4946d-4e4d-4f8c-ac5c-f66f48c19d9c" alt="Image 2" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/7bbf25e6-6d0d-48db-ba74-74bf7de1e481" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/cd40dc69-2145-42aa-a0e2-5e3608f8b072" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/e8962dd0-111c-4166-9563-34960a356120" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/0287b726-3a43-4005-b9bb-8b894811b420" alt="Image 1" width="400" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/595e38c0-d742-4db2-994a-65ef705d2aab" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/3e6905f2-d99c-4995-b6b1-4a2d801c42fc" alt="Image 1" width="200" style="max-width: 100%;">
   
-  <img src="https://github.com/user-attachments/assets/07ed77e7-9495-4fdc-8dac-fe009ca6bae9" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/a71f0ca7-67e6-45d0-9a87-13913a80360f" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/80f52e61-75fb-4db9-a286-b5f3c6df0df2" width="200" style="max-width: 100%;">
 
-  <img src="https://github.com/user-attachments/assets/d10799fd-dd69-4fd0-aaad-3b4b3c7ac356" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/ea3a94c1-06f3-4284-8120-acc6306e59a1" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/7b32a888-33fc-4fda-abe9-24c1e7ce35b8" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/6543c660-3376-4f0a-8f09-49a225d824df" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/2a588040-9152-42af-b05e-0e4c831863ff" width="200" style="max-width: 100%;">  
-  <img src="https://github.com/user-attachments/assets/dec48295-b98d-4661-bdae-851263aec479" width="200" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/0bb538c1-9372-47a1-be10-dae311ebf8f5" width="400" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/5cc8042f-47f8-44ed-9f5b-152613040c04" width="400" style="max-width: 100%;">
-  <img src="https://github.com/user-attachments/assets/5a3755c8-ac55-469c-9b99-0bf3cb4b4922" width="400" style="max-width: 100%;">
+
+  
+  <h3> Students Version: </h3>
+  <img src="https://github.com/user-attachments/assets/4ffbabbb-dd7f-4c12-aaf1-38e2dbd2620a" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/6f2f90f1-192f-4d48-818a-f81084593ff6" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/5c64be3e-ee95-4db8-8c00-ffceac434978" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/eb661c72-e198-4a38-a6d8-adf8d44ef07e" alt="Image 1" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/b3269cb3-8f1f-4a17-bc70-3a7396baaf17" alt="Screenshot 2" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/efc9de2a-6834-4918-bae1-ed679f367dbb" alt="Screenshot 2" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/e7998cf6-a5d1-49cb-be13-2822c708604e" alt="Screenshot 2" width="200" style="max-width: 100%;">
+  <img src="https://github.com/user-attachments/assets/91922491-e259-4578-8121-82a42ecdfc9f" alt="Screenshot 2" width="200" style="max-width: 100%;">
+
+ </section>
+
+  
+<section id="">
+  <h2> Attendance Process </h2>
+
+  <h3>Teacher Version</h3>
+  
+
 </section>
-
-
-
-
-
 <section id = "team">
   <h2> The Team </h2>
   <h3> Pannaga R Bhat </h3>
