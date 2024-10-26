@@ -215,7 +215,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 
 <h3>Student Version</h3>
 
-  [![Clear here to watch]()](https://github.com/user-attachments/assets/716a009c-b173-49c1-8c2b-00d714babfef)
+  [![Clear here to watch]](https://github.com/user-attachments/assets/716a009c-b173-49c1-8c2b-00d714babfef)
 
 </section>
 <section id = "team">
