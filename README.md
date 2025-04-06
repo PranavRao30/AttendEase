@@ -118,7 +118,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
   <h3>Running the Server:</h3>
 <ul>
   <li>
-    <p><strong>Clone the Repository</strong>: Begin by cloning the cli-Mate repository from GitHub to your local machine. This step ensures you have the server's source code.</p>
+    <p><strong>Clone the Repository</strong>: Begin by cloning the AttendEase repository from GitHub to your local machine. This step ensures you have the server's source code.</p>
     <pre><code>git clone https://github.com/PranavRao30/AttendEase.git</code></pre>
   </li>
 </ul>
@@ -211,6 +211,7 @@ AttendEase is a BLE-based mobile app designed to streamline attendance tracking 
 <h3>Student Version</h3>
 <button> <a href="https://github.com/user-attachments/assets/716a009c-b173-49c1-8c2b-00d714babfef" target="_blank">Clear here to watch</button></a>  
 </section>
+  
 <section id = "team">
   <h2> The Team </h2>
   <h3> Pannaga R Bhat </h3>
